@@ -1,0 +1,14 @@
+.welcome-mssg{
+    max-width: fit-content;
+    max-width: fit-content;
+    margin-inline: auto;
+    border: 5px;
+    text-align: center;
+}
+
+.welcome-mssg h1{
+    font-size: 72px;
+}
+.welcome-mssg h3{
+    font-size: 36px;
+}
