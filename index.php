@@ -23,8 +23,8 @@
 
     <!-- Header -->
      <div class="welcome-mssg">
-        <h1>Welcome to the Informatics E-Sports Club</h1>
-        <h3>Universitas Surabaya</h3>
+        <h1>Welcome to the Informatics E-Sport Club</h1>
+        <h3>By Universitas Surabaya</h3>
      </div>
 </body>
 
