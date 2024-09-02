@@ -31,3 +31,7 @@ body{
   background-color: violet;
   color: white;
 }
+.topnav a.logout {
+  background-color: red;
+  color: white;
+}

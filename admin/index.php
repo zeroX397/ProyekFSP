@@ -1,5 +1,11 @@
-<?php 
+<?php
 session_start();
+
+// Check if user is logged in and is an admin
+if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
+    header('Location: /'); // Redirect non-admins to the homepage
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +15,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="/assets/styles/teams.css">
+    <link rel="stylesheet" href="/assets/styles/[CHANGE LATER].css">
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -37,10 +43,7 @@ session_start();
         }
         ?>
     </div>
-    <!-- Team(s) list with button "Apply Member" -->
-    <section>
-        <!-- Diisi daftar team. Pakai for loop buat nampilin semua teams dari DB -->
-    </section>
+
 </body>
 
 </html>

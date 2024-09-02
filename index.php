@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,15 +21,28 @@
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">Become a Member</a>
-        <a class="active" href="/login.php">Login</a>
+        <a href="/become-member.php">Join a Team</a>
+        <?php
+        if (!isset($_SESSION['username'])) {
+            // User is not logged in
+            echo '<a class="active" href="/login.php">Login</a>';
+        } else {
+            // User is logged in
+            echo '<a class="active" href="/profile.php">My Profile</a>';
+            echo '<a class="logout" href="/logout.php">Logout</a>';
+            // To check wether is admin or not
+            if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
+                echo '<a href="/admin/">Admin Site</a>';
+            }
+        }
+        ?>
     </div>
 
     <!-- Header -->
-     <div class="welcome-mssg">
+    <div class="welcome-mssg">
         <h1>Welcome to the Informatics E-Sport Club</h1>
         <h3>By Universitas Surabaya</h3>
-     </div>
+    </div>
 </body>
 
 </html>
