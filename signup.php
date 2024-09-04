@@ -73,8 +73,8 @@ if (isset($_POST['submit'])) { // Check if form was submitted
         <form action="" class="signup-form" method="post">
             <input name="fname" type="text" placeholder="First Name" required>
             <input name="lname" type="text" placeholder="Last Name">
-            <input name="username" type="text" placeholder="username" required>
-            <input name="password" type="password" placeholder="password" required>
+            <input name="username" type="text" placeholder="Username" required>
+            <input name="password" type="password" placeholder="Password" required>
             <button name="submit" type="submit">Sign me up</button><br>
             <p style="margin-top: 30px;">Already have an account? <a href="/login.php">Log in here</a></p>
         </form>
