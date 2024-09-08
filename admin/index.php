@@ -15,7 +15,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin-home.css">
+    <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -43,16 +43,16 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
         }
         ?>
     </div>
+    <!-- Admin Navigation Bar -->
     <div class="topnav admin-nav">
         <a class="label">Administration Menus</a>
-        <a href="/manage-teams.php">Manage Teams</a>
-        <a href="/manage-members.php">Manage Members</a>
-        <a href="/manage-events.php">Manage Events</a>
-        <a href="/manage-games.php">Manage Games</a>
-        <a href="/manage-achievements.php">Join a Team</a>
-        
+        <a href="/admin/teams/">Manage Teams</a>
+        <a href="/admin/members/">Manage Members</a>
+        <a href="/admin/events/">Manage Events</a>
+        <a href="/admin/games/">Manage Games</a>
+        <a href="/admin/achievements/">Manage Achievements</a>
     </div>
-
+    
 </body>
 
 </html>

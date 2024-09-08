@@ -1,0 +1,42 @@
+.welcome-mssg {
+    text-align: center;
+}
+
+#btn-editdelete {
+    width: 70px;
+    height: 35px;
+    font-size: 14px;
+    color: antiquewhite;
+    text-align: center;
+    display: inline-block;
+    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+/* Button for Edit */
+#btn-editdelete.edit {
+    background-color: #2a9df4;
+    margin-right: 10px;
+}
+
+#btn-editdelete.edit:hover {
+    background-color: #1167b1;
+}
+
+#btn-editdelete.edit:active {
+    background-color: blue;
+}
+
+/* Button for Delete */
+#btn-editdelete.delete {
+    background-color: lightcoral;
+}
+
+#btn-editdelete.delete:hover {
+    background-color: #d72d27;
+}
+
+#btn-editdelete.delete:active {
+    background-color: red;
+}
