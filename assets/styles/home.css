@@ -1,4 +1,4 @@
-.welcome-mssg{
+.welcome-mssg {
     max-width: fit-content;
     max-width: fit-content;
     margin-inline: auto;
@@ -6,9 +6,10 @@
     text-align: center;
 }
 
-.welcome-mssg h1{
+.welcome-mssg h1 {
     font-size: 72px;
 }
-.welcome-mssg h3{
+
+.welcome-mssg h3 {
     font-size: 36px;
 }

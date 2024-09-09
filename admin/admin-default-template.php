@@ -15,6 +15,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/[CHANGE LATER].css">
     <title>Informatics E-Sport Club</title>
 </head>
@@ -27,7 +28,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">Join a Team</a>
+        <a href="/become-member.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             // User is not logged in

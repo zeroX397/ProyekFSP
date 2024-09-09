@@ -7,7 +7,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     header('Location: /'); // Redirect non-admins to the homepage
     exit();
 }
-$sql = "SELECT team.idteam, game.name AS game_name, team.name AS team_name FROM team INNER JOIN game ON game.idgame = team.idgame;";
+$sql = "SELECT team.idteam, game.name AS game_name, team.name AS team_name FROM team INNER JOIN game ON game.idgame = team.idgame ORDER BY team.idteam ASC;";
 $result = mysqli_query($connection, $sql);
 ?>
 
@@ -31,7 +31,7 @@ $result = mysqli_query($connection, $sql);
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">Join a Team</a>
+        <a href="/become-member.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             // User is not logged in
@@ -56,7 +56,8 @@ $result = mysqli_query($connection, $sql);
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
     </div>
-    <h1 class="welcome-mssg">You Can Manage or Add Teams from This Page</h1>
+    <!-- List of Teams to Edit or Delete -->
+    <h1 class="welcome-mssg">Manage or Add Teams</h1>
     <form action="add-team.php">
         <input type="submit" value="Add New Team">
     </form>
@@ -64,16 +65,18 @@ $result = mysqli_query($connection, $sql);
         <table>
             <tr>
                 <th>Team ID</th>
-                <th>Game</th>
                 <th>Team Name</th>
+                <th>Game</th>
+                <th>Edit Team</th>
+                <th>Delete Team</th>
             </tr>
             <?php
             if ($result && mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>";
                     echo "<td>" . $row['idteam'] . "</td>";
-                    echo "<td>" . $row['game_name'] . "</td>";
                     echo "<td>" . $row['team_name'] . "</td>";
+                    echo "<td>" . $row['game_name'] . "</td>";
                     echo "<td>";
                     echo "<form action='edit-team.php' method='post'>";
                     echo "<input type='hidden' name='id_urls' value='" . $row['idteam'] . "'>";

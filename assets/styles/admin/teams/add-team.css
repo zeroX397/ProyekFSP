@@ -1,9 +1,4 @@
-.login-page {
-  width: 360px;
-  margin: auto;
-}
-
-.form {
+form {
   position: relative;
   z-index: 1;
   background: #FFFFFF;
@@ -14,7 +9,8 @@
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
-.form input {
+.add-form select,
+.add-form input {
   outline: 0;
   background: #f2f2f2;
   width: 100%;
@@ -25,7 +21,7 @@
   font-size: 14px;
 }
 
-button {
+.add-form button {
   width: 200px;
   height: 50px;
   font-size: 24px;
@@ -39,12 +35,12 @@ button {
   box-shadow: 0 9px #999;
 }
 
-button:hover {
-  background-color: #3e8e41
-}
-
-button:active {
+.add-form button:hover,
+.add-form button:active {
   background-color: #3e8e41;
   box-shadow: 0 5px #666;
+}
+
+.add-form button:active {
   transform: translateY(4px);
 }

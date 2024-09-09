@@ -50,7 +50,7 @@ if (isset($_POST['submit'])) { // Check if form was submitted
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">Join a Team</a>
+        <a href="/become-member.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             // User is not logged in

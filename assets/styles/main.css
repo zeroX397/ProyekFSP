@@ -1,6 +1,8 @@
-body{
+body {
   background-image: url("/assets/img/bg.png");
+  background-attachment: fixed;
 }
+
 .topnav {
   background-color: #333;
   overflow: hidden;
@@ -27,11 +29,63 @@ body{
   background-color: #04AA6D;
   color: white;
 }
+
 .topnav a.login {
   background-color: violet;
   color: white;
 }
+
 .topnav a.logout {
   background-color: red;
   color: white;
+}
+
+/* Styles for default Table (Applied to whole site) */
+table {
+  margin: auto;
+  /* text-decoration-color: #04AA6D; */
+  text-align: center;
+  width: 800px;
+  border-collapse: collapse;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #000;
+}
+
+th {
+  /* text-align: left; */
+  color: #ddd;
+  background-color: #55608f;
+}
+
+
+tbody {
+  tr {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  td {
+    position: relative;
+
+    &:hover {
+      &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -9999px;
+        bottom: -9999px;
+        background-color: rgba(255, 255, 255, 0.2);
+        z-index: -1;
+      }
+    }
+  }
 }

@@ -1,13 +1,13 @@
-.application-form{
+.application-form {
     max-width: 1500px;
     width: auto;
     height: 700px;
     background-color: #FFFFFF;
     margin: 50px auto;
 }
-h3{
+
+h3 {
     margin-top: inherit;
 }
-.application-text{
-    
-}
+
+.application-text {}
