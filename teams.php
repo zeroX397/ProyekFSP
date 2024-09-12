@@ -7,7 +7,12 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     header('Location: /'); // Redirect non-admins to the homepage
     exit();
 }
-$sql = "select team.idteam, team.name as team_name, game.name as game_name FROM team INNER JOIN game ON team.idgame = team.idgame;";
+
+// Query to get teams ordered by game
+$sql = "SELECT team.idteam, team.name AS team_name, game.idgame, game.name AS game_name 
+        FROM team 
+        INNER JOIN game ON team.idgame = game.idgame 
+        ORDER BY game.idgame;";
 $result = mysqli_query($connection, $sql);
 ?>
 
@@ -39,7 +44,7 @@ $result = mysqli_query($connection, $sql);
             // User is logged in
             echo '<a class="active" href="/profile.php">My Profile</a>';
             echo '<a class="logout" href="/logout.php">Logout</a>';
-            // To check wether is admin or not
+            // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo '<a href="/admin/">Admin Site</a>';
             }
@@ -59,11 +64,20 @@ $result = mysqli_query($connection, $sql);
                 </tr>
                 <?php
                 if ($result && mysqli_num_rows($result) > 0) {
+                    $current_game_id = null;
+
                     while ($row = mysqli_fetch_assoc($result)) {
+                        // If the game changes, print a new game name header
+                        if ($current_game_id !== $row['idgame']) {
+                            $current_game_id = $row['idgame'];
+                            echo "<tr><td colspan='4'><strong>" . $row['game_name'] . "</strong></td></tr>";
+                        }
+
+                        // Print team data
                         echo "<tr>";
                         echo "<td>" . $row['idteam'] . "</td>";
-                        echo "<td>" . $row['game_name'] . "</td>";
                         echo "<td>" . $row['team_name'] . "</td>";
+                        echo "<td>" . $row['game_name'] . "</td>";
                         echo "<td>";
                         echo "<form action='join-team.php' method='post'>";
                         echo "<input type='hidden' name='id_urls' value='" . $row['idteam'] . "'>";
@@ -73,9 +87,11 @@ $result = mysqli_query($connection, $sql);
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='3'>No teams found</td></tr>";
+                    echo "<tr><td colspan='4'>No teams found</td></tr>";
                 }
                 ?>
+            </table>
+        </div>
     </section>
 </body>
 

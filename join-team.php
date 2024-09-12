@@ -39,10 +39,11 @@ session_start();
     </div>
 
     <!-- Form Apply to Join Team -->
-     <div class="application-form">
-        <h3>Tell us just a bit about yourself:</h3>
-        <input class="application-text" type="text" name="application-text" maxlength="100" size="50" width="50" placeholder="Your role in a game, or your main agents/heroes...\nMax. 100 characters.">
-     </div>
+    <div class="application-form">
+        <h3 text-align="center">Tell us just a bit about yourself:</h3>
+        <textarea class="application-text" name="application-text" maxlength="100" rows="4" cols="50" placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters."></textarea>
+        <br><input type="button" value="Apply">
+    </div>
 </body>
 
 </html>
