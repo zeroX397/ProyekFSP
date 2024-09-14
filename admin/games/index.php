@@ -57,7 +57,7 @@ $result = mysqli_query($connection, $sql);
         <a href="/admin/achievements/">Manage Achievements</a>
     </div>
     <h1 class="welcome-mssg">Manage Games</h1>
-    <form action="../../signup.php">
+    <form action="add-game.php">
         <input type="submit" value="Add New Game">
     </form>
     <div class="all-member">

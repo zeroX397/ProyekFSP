@@ -28,7 +28,7 @@ if (isset($_POST['submit'])) {
     mysqli_stmt_bind_param($stmt, 'is', $idgame, $team_name);
     $result = mysqli_stmt_execute($stmt);
     if ($result) {
-        echo "<script>alert('Team registration successful. You may see in Teams page.'); window.location.href='/admin/teams.php';</script>";
+        echo "<script>alert('Team registration successful. You may see in Teams page.'); window.location.href='/admin/teams/index.php';</script>";
     } else {
         $error = "Error during registration.";
     }

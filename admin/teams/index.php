@@ -56,6 +56,7 @@ $result = mysqli_query($connection, $sql);
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
     </div>
+
     <!-- List of Teams to Edit or Delete -->
     <h1 class="welcome-mssg">Manage or Add Teams</h1>
     <form action="add-team.php">

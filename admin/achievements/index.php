@@ -8,8 +8,11 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 $sql = "SELECT achievement.idachievement, team.name AS team_name, achievement.name AS achievement_name, achievement.date AS achievement_date, 
-        achievement.description AS achievement_description FROM achievement INNER JOIN team ON team.idteam = achievement.idachievement 
-        ORDER BY team.idteam ASC;";
+        achievement.description AS achievement_description 
+        FROM achievement 
+        INNER JOIN team ON team.idteam = achievement.idteam 
+        ORDER BY team.idteam ASC;
+";
 $result = mysqli_query($connection, $sql);
 ?>
 
@@ -60,7 +63,7 @@ $result = mysqli_query($connection, $sql);
     </div>
     <!-- List of Teams to Edit or Delete -->
     <h1 class="welcome-mssg">Manage or Add Achievement</h1>
-    <form action="add-team.php">
+    <form action="add-achievement.php">
         <input type="submit" value="Add New Team">
     </form>
     <div class="all-team">
