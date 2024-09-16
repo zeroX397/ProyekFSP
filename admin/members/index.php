@@ -20,9 +20,11 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
+    <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
+    <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
+
     <title>Informatics E-Sport Club</title>
 </head>
-
 <body>
     <!-- Top Navigation Bar -->
     <div class="topnav">
@@ -55,6 +57,7 @@ $result = mysqli_query($connection, $sql);
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
+        
     </div>
     <h1 class="welcome-mssg">Manage Members</h1>
     <form action="add-member.php">
@@ -79,10 +82,7 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['fname'] . "</td>";
                     echo "<td>" . $row['lname'] . "</td>";
                     echo "<td>";
-                    echo "<form action='edit-member.php' method='post'>";
-                    echo "<input type='hidden' name='id_urls' value='" . $row['id_member'] . "'>";
-                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
-                    echo "</form>";
+                    echo "<a href='edit-member.php?id_member=" . $row['id_member'] . "' class='btn-edit'>Edit</a>";
                     echo "</td>";
                     echo "<td>";
                     echo "<form action='delete-member.php' method='post'>";

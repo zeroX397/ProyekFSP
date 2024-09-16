@@ -20,9 +20,11 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
+    <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
+    <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
+
     <title>Informatics E-Sport Club</title>
 </head>
-
 <body>
     <!-- Top Navigation Bar -->
     <div class="topnav">
@@ -79,10 +81,8 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['date'] . "</td>";
                     echo "<td>" . $row['description'] . "</td>";
                     echo "<td>";
-                    echo "<form action='edit-event.php' method='post'>";
-                    echo "<input type='hidden' name='id_urls' value='" . $row['id_event'] . "'>";
-                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
-                    echo "</form>";
+                    echo "<a href='edit-event.php?id_event=" . $row['id_event'] . "' class='btn-edit'>Edit</a>";
+                    echo "</td>";
                     echo "</td>";
                     echo "<td>";
                     echo "<form action='delete-event.php' method='post'>";

@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 include("../../config.php");
@@ -20,6 +21,9 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
+    <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
+    <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
+
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -78,10 +82,11 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['idteam'] . "</td>";
                     echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>" . $row['game_name'] . "</td>";
-                    echo "<td>";
-                    echo "<form action='edit-team.php' method='post'>";
-                    echo "<input type='hidden' name='id_urls' value='" . $row['idteam'] . "'>";
-                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
+                    echo "<td>";  
+                    echo "<a href='edit-team.php?idteam=" . $row['idteam'] . "' class='btn-edit'>Edit</a>";
+                    // echo "<form action='edit-team.php' method='post'>";
+                    // echo "<input type='hidden' name='id_urls' value='" . $row['idteam'] . "'>";
+                    // echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
                     echo "</form>";
                     echo "</td>";
                     echo "<td>";
@@ -98,6 +103,7 @@ $result = mysqli_query($connection, $sql);
             ?>
         </table>
     </div>
+    
 </body>
 
 </html>
