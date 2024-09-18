@@ -25,15 +25,16 @@ $result = mysqli_query($connection, $sql);
 
     <title>Informatics E-Sport Club</title>
 </head>
+
 <body>
     <!-- Top Navigation Bar -->
-    <div class="topnav">
+    <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">How to Join</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             // User is not logged in
@@ -42,13 +43,13 @@ $result = mysqli_query($connection, $sql);
             // User is logged in
             echo '<a class="active" href="/profile.php">My Profile</a>';
             echo '<a class="logout" href="/logout.php">Logout</a>';
-            // To check wether is admin or not
+            // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo '<a href="/admin/">Admin Site</a>';
             }
         }
         ?>
-    </div>
+    </nav>
     <!-- Admin Navigation Bar -->
     <div class="topnav admin-nav">
         <a class="label">Administration Menus</a>
@@ -57,10 +58,10 @@ $result = mysqli_query($connection, $sql);
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
-        
+
     </div>
     <h1 class="welcome-mssg">Manage Members</h1>
-    <form action="add-member.php">
+    <form action="../../signup.php">
         <input type="submit" value="Add New Member">
     </form>
     <div class="all-member">

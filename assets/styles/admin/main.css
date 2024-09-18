@@ -1,3 +1,7 @@
+.welcome-mssg {
+  text-align: center;
+}
+
 .admin-nav {
   background-color: red;
 }
@@ -36,4 +40,95 @@
 .admin-nav a.logout {
   background-color: red;
   color: white;
+}
+
+
+#btn-editdelete {
+  width: 70px;
+  height: 35px;
+  font-size: 14px;
+  color: antiquewhite;
+  text-align: center;
+  display: inline-block;
+  margin-top: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+/* Button for Edit */
+#btn-editdelete.edit {
+  background-color: #2a9df4;
+  margin-right: 10px;
+}
+
+#btn-editdelete.edit:hover {
+  background-color: #1167b1;
+}
+
+#btn-editdelete.edit:active {
+  background-color: blue;
+}
+
+/* Button for Delete */
+#btn-editdelete.delete {
+  background-color: lightcoral;
+}
+
+#btn-editdelete.delete:hover {
+  background-color: #d72d27;
+}
+
+#btn-editdelete.delete:active {
+  background-color: red;
+}
+
+.btnsubmit {
+  display: inline-block;
+  padding: 10px 24px;
+  background-color: #fa1c1c;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 0px;
+  border: none;
+  cursor: pointer;
+}
+.btnsubmit:hover {
+  background-color: #bf1616;
+}
+
+.add-form select,
+.add-form input {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.add-form button {
+  width: 200px;
+  height: 50px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #04AA6D;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.add-form button:hover,
+.add-form button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+}
+
+.add-form button:active {
+  transform: translateY(4px);
 }

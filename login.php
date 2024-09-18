@@ -45,13 +45,13 @@ if (isset($_POST['submit'])) {
 
 <body>
     <!-- Top Navigation Bar -->
-    <div class="topnav">
+    <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">How to Join</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             // User is not logged in
@@ -60,18 +60,18 @@ if (isset($_POST['submit'])) {
             // User is logged in
             echo '<a class="active" href="/profile.php">My Profile</a>';
             echo '<a class="logout" href="/logout.php">Logout</a>';
-            // To check wether is admin or not
+            // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo '<a href="/admin/">Admin Site</a>';
             }
         }
         ?>
-    </div>
+    </nav>
     <div class="form">
         <?php if (isset($error)) : ?>
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
-        <form action="" class="login-form" method="post">
+        <form action="" class="login-page" method="post">
             <input name="username" type="text" placeholder="username" required>
             <input name="password" type="password" placeholder="password" required>
             <button name="submit" type="submit">Log In</button><br>

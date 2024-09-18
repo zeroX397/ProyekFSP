@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 include("../../config.php");
@@ -21,21 +20,18 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
-
     <title>Informatics E-Sport Club</title>
 </head>
 
 <body>
     <!-- Top Navigation Bar -->
-    <div class="topnav">
+    <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">How to Join</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             // User is not logged in
@@ -44,22 +40,22 @@ $result = mysqli_query($connection, $sql);
             // User is logged in
             echo '<a class="active" href="/profile.php">My Profile</a>';
             echo '<a class="logout" href="/logout.php">Logout</a>';
-            // To check wether is admin or not
+            // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo '<a href="/admin/">Admin Site</a>';
             }
         }
         ?>
-    </div>
+    </nav>
     <!-- Admin Navigation Bar -->
-    <div class="topnav admin-nav">
+    <nav class="topnav admin-nav">
         <a class="label">Administration Menus</a>
         <a href="/admin/teams/">Manage Teams</a>
         <a href="/admin/members/">Manage Members</a>
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
-    </div>
+    </nav>
 
     <!-- List of Teams to Edit or Delete -->
     <h1 class="welcome-mssg">Manage or Add Teams</h1>
@@ -82,7 +78,7 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['idteam'] . "</td>";
                     echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>" . $row['game_name'] . "</td>";
-                    echo "<td>";  
+                    echo "<td>";
                     echo "<a href='edit-team.php?idteam=" . $row['idteam'] . "' class='btn-edit'>Edit</a>";
                     // echo "<form action='edit-team.php' method='post'>";
                     // echo "<input type='hidden' name='id_urls' value='" . $row['idteam'] . "'>";
@@ -103,7 +99,7 @@ $result = mysqli_query($connection, $sql);
             ?>
         </table>
     </div>
-    
+
 </body>
 
 </html>

@@ -11,7 +11,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 // Get the event ID from the URL
 if (isset($_GET['id_event'])) {
     $idevent = mysqli_real_escape_string($connection, $_GET['id_event']);
-    
+
     // Fetch the event data to pre-fill the form
     $eventQuery = "SELECT * FROM event WHERE idevent = ?";
     $stmt = mysqli_prepare($connection, $eventQuery);
@@ -25,7 +25,6 @@ if (isset($_GET['id_event'])) {
         echo "<script>alert('Event not found.'); window.location.href='/admin/events/index.php';</script>";
         exit();
     }
-    
 } else {
     header('Location: /admin/events/index.php');
     exit();
@@ -59,34 +58,18 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
     <title>Informatics E-Sport Club - Edit Event</title>
 </head>
-<style>
-    .btnsubmit {
-        display: inline-block;
-        padding: 10px 24px;
-        background-color: #fa1c1c;
-        color: white;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 0px;
-        border: none;
-        cursor: pointer;
-    }
-    .btnsubmit:hover {
-        background-color: #bf1616;
-    }
-</style>
+
 <body>
     <!-- Top Navigation bars -->
-    <div class="topnav">
+    <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">How to Join</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             echo '<a class="active" href="/login.php">Login</a>';
@@ -98,17 +81,17 @@ if (isset($_POST['submit'])) {
             }
         }
         ?>
-    </div>
+    </nav>
 
     <!-- Admin Navigation Bar -->
-    <div class="topnav admin-nav">
+    <nav class="topnav admin-nav">
         <a class="label">Administration Menus</a>
         <a href="/admin/teams/">Manage Teams</a>
         <a href="/admin/members/">Manage Members</a>
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
-    </div>
+    </nav>
 
     <!-- Form to Edit Event -->
     <div class="form">
@@ -116,25 +99,25 @@ if (isset($_POST['submit'])) {
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" method="post" class="edit-form">
-        <br><br><br>
-        <table class="edit-table">
-            <tr>
-                <td><label for="name">Event Name</label></td>
-                <td><input name="name" type="text" placeholder="Event Name" value="<?php echo htmlspecialchars($event['name']); ?>" required></td>
-            </tr>
-            <tr>
-                <td><label for="date">Event Date</label></td>
-                <td><input name="date" type="date" value="<?php echo htmlspecialchars($event['date']); ?>" required></td>
-            </tr>
-            <tr>
-                <td><label for="description">Description</label></td>
-                <td><textarea name="description" placeholder="Event Description" required><?php echo htmlspecialchars($event['description']); ?></textarea></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><button name="submit" type="submit" class="btnsubmit">Update Event</button></td>
-            </tr>
-        </table>
+            <br><br><br>
+            <table class="edit-table">
+                <tr>
+                    <td><label for="name">Event Name</label></td>
+                    <td><input name="name" type="text" placeholder="Event Name" value="<?php echo htmlspecialchars($event['name']); ?>" required></td>
+                </tr>
+                <tr>
+                    <td><label for="date">Event Date</label></td>
+                    <td><input name="date" type="date" value="<?php echo htmlspecialchars($event['date']); ?>" required></td>
+                </tr>
+                <tr>
+                    <td><label for="description">Description</label></td>
+                    <td><textarea name="description" placeholder="Event Description" required><?php echo htmlspecialchars($event['description']); ?></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button name="submit" type="submit" class="btnsubmit">Update Event</button></td>
+                </tr>
+            </table>
         </form>
     </div>
 </body>

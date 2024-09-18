@@ -68,31 +68,16 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="/assets/styles/admin/teams/edit-team.css">
     <title>Edit Team - Informatics E-Sport Club</title>
 </head>
-<style>
-    .btnsubmit {
-    display: inline-block;
-    padding: 10px 24px;
-    background-color: #fa1c1c;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 0px;
-    border: none;
-    cursor: pointer;
-}
-.btnsubmit:hover {
-    background-color: #bf1616;
-}
-</style>
+
 <body>
     <!-- Top Navigation Bar -->
-    <div class="topnav">
+    <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">How to Join</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             echo '<a class="active" href="/login.php">Login</a>';
@@ -104,43 +89,43 @@ if (isset($_POST['submit'])) {
             }
         }
         ?>
-    </div>
+    </nav>
     <!-- Admin Navigation Bar -->
-    <div class="topnav admin-nav">
+    <nav class="topnav admin-nav">
         <a class="label">Administration Menus</a>
         <a href="/admin/teams/">Manage Teams</a>
         <a href="/admin/members/">Manage Members</a>
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
-    </div>
+    </nav>
     <!-- Form to Edit Team -->
     <div class="form">
         <?php if (isset($error)) : ?>
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" class="edit-form" method="post">
-        <br><br><br><br><br><br>
-        <table class="edit-table">
-            <tr>
-                <td><label for="idgame">Select Game</label></td>
-                <td><select name="idgame" required>
-                <?php foreach ($games as $game): ?>
-                    <option value="<?= $game['idgame'] ?>" <?= $team['idgame'] == $game['idgame'] ? 'selected' : '' ?>>
-                        <?= $game['name'] ?>
-                    </option>
-                <?php endforeach; ?>
-            </select></td>
-            </tr>
-            <tr>
-                <td><label for="team_name">Team Name</label></td>
-                <td><input name="team_name" type="text" placeholder="Team Name" value="<?= $team['name'] ?>" required></td>
-            </tr>
-            <tr>
-            <td></td>
-            <td><button name="submit" type="submit" class = 'btnsubmit'>Update</button></td>
-            </tr>
-        </table>
+            <br><br><br><br><br><br>
+            <table class="edit-table">
+                <tr>
+                    <td><label for="idgame">Select Game</label></td>
+                    <td><select name="idgame" required>
+                            <?php foreach ($games as $game): ?>
+                                <option value="<?= $game['idgame'] ?>" <?= $team['idgame'] == $game['idgame'] ? 'selected' : '' ?>>
+                                    <?= $game['name'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select></td>
+                </tr>
+                <tr>
+                    <td><label for="team_name">Team Name</label></td>
+                    <td><input name="team_name" type="text" placeholder="Team Name" value="<?= $team['name'] ?>" required></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button name="submit" type="submit" class='btnsubmit'>Update</button></td>
+                </tr>
+            </table>
         </form>
     </div>
 </body>

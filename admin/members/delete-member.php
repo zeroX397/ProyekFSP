@@ -16,7 +16,7 @@ if (isset($_POST['deletebtn']) && isset($_POST['id_urls'])) {
     $sql = "DELETE FROM member WHERE idmember = ?";
     $stmt = mysqli_prepare($connection, $sql);
     mysqli_stmt_bind_param($stmt, "i", $member_id);
-    
+
     if (mysqli_stmt_execute($stmt)) {
         // Success delete member
         echo "<script>alert('Success delete member'); window.location.href='/admin/members/index.php';</script>";

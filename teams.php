@@ -29,13 +29,13 @@ $result = mysqli_query($connection, $sql);
 
 <body>
     <!-- Top Navigation Bar -->
-    <div class="topnav">
+    <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">How to Join</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             // User is not logged in
@@ -50,7 +50,7 @@ $result = mysqli_query($connection, $sql);
             }
         }
         ?>
-    </div>
+    </nav>
     <!-- Team(s) list with button "Apply Member" -->
     <section>
         <h1 class="hello-mssg">Hello! You can see full list of teams and join them.</h1>

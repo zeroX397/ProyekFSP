@@ -15,13 +15,13 @@ session_start();
 
 <body>
     <!-- Top Navigation Bar -->
-    <div class="topnav">
+    <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">How to Join</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             // User is not logged in
@@ -30,13 +30,13 @@ session_start();
             // User is logged in
             echo '<a class="active" href="/profile.php">My Profile</a>';
             echo '<a class="logout" href="/logout.php">Logout</a>';
-            // To check wether is admin or not
+            // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo '<a href="/admin/">Admin Site</a>';
             }
         }
         ?>
-    </div>
+    </nav>
 
     <!-- Form Apply to Join Team -->
     <div class="application-form">

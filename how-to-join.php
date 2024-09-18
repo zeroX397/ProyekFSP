@@ -38,6 +38,9 @@ session_start();
         ?>
     </nav>
 
+    <section>
+        How to join a team
+    </section>
 </body>
 
 </html>

@@ -11,7 +11,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 // Get the member ID from the URL
 if (isset($_GET['id_member'])) {
     $idmember = mysqli_real_escape_string($connection, $_GET['id_member']);
-    
+
     // Fetch the member data to pre-fill the form
     $memberQuery = "SELECT * FROM member WHERE idmember = ?";
     $stmt = mysqli_prepare($connection, $memberQuery);
@@ -25,9 +25,8 @@ if (isset($_GET['id_member'])) {
         echo "<script>alert('Member not found.'); window.location.href='/admin/members/index.php';</script>";
         exit();
     }
-    
 } else {
-    
+
     header('Location: /admin/members/index.php');
     exit();
 }
@@ -67,13 +66,13 @@ if (isset($_POST['submit'])) {
 
 <body>
     <!-- Top Navigation bars -->
-    <div class="topnav">
+    <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">How to Join</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             echo '<a class="active" href="/login.php">Login</a>';
@@ -85,48 +84,48 @@ if (isset($_POST['submit'])) {
             }
         }
         ?>
-    </div>
+    </nav>
     <!-- Admin Navigation Bar -->
-    <div class="topnav admin-nav">
+    <nav class="topnav admin-nav">
         <a class="label">Administration Menus</a>
         <a href="/admin/teams/">Manage Teams</a>
         <a href="/admin/members/">Manage Members</a>
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
-    </div>
+    </nav>
     <!-- Form to Edit Member -->
     <div class="form">
         <?php if (isset($error)) : ?>
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" method="post" class="edit-form">
-        <br><br><br>
-        <table class="edit-table">
-            <tr>
-                <td><label for="username">Username</label></td>
-                <td><input name="username" type="text" placeholder="Username" value="<?php echo htmlspecialchars($member['username']); ?>" required></td>
-            </tr>
-            <tr>
-                <td><label for="fname">First Name</label></td>
-                <td><input name="fname" type="text" placeholder="First Name" value="<?php echo htmlspecialchars($member['fname']); ?>" required></td>
-            </tr>
-            <tr>
-                <td><label for="lname">Last Name</label></td>
-                <td><input name="lname" type="text" placeholder="Last Name" value="<?php echo htmlspecialchars($member['lname']); ?>" required></td>
-            </tr>
-            <tr>
-                <td><label for="password">Password</label></td>
-                <td><input name="password" type="password" placeholder="Password" value="<?php echo htmlspecialchars($member['password']); ?>" required></td>
-            </tr>
-            <tr>
-            <td></td>
-            <td><button name="submit" type="submit" class = 'btnsubmit'>Update</button></td>
-            </tr>
-        </table>
+            <br><br><br>
+            <table class="edit-table">
+                <tr>
+                    <td><label for="username">Username</label></td>
+                    <td><input name="username" type="text" placeholder="Username" value="<?php echo htmlspecialchars($member['username']); ?>" required></td>
+                </tr>
+                <tr>
+                    <td><label for="fname">First Name</label></td>
+                    <td><input name="fname" type="text" placeholder="First Name" value="<?php echo htmlspecialchars($member['fname']); ?>" required></td>
+                </tr>
+                <tr>
+                    <td><label for="lname">Last Name</label></td>
+                    <td><input name="lname" type="text" placeholder="Last Name" value="<?php echo htmlspecialchars($member['lname']); ?>" required></td>
+                </tr>
+                <tr>
+                    <td><label for="password">Password</label></td>
+                    <td><input name="password" type="password" placeholder="Password" value="<?php echo htmlspecialchars($member['password']); ?>" required></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button name="submit" type="submit" class='btnsubmit'>Update</button></td>
+                </tr>
+            </table>
         </form>
     </div>
-    
+
 
 </body>
 

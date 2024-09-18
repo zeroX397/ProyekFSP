@@ -62,30 +62,17 @@ if (isset($_POST['submit'])) {
     <title>Informatics E-Sport Club - Edit Game</title>
 </head>
 <style>
-    .btnsubmit {
-        display: inline-block;
-        padding: 10px 24px;
-        background-color: #fa1c1c;
-        color: white;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 0px;
-        border: none;
-        cursor: pointer;
-    }
-    .btnsubmit:hover {
-        background-color: #bf1616;
-    }
+    
 </style>
 <body>
     <!-- Top Navigation Bar -->
-    <div class="topnav">
+    <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
-        <a href="/become-member.php">How to Join</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
             echo '<a class="active" href="/login.php">Login</a>';
@@ -97,17 +84,17 @@ if (isset($_POST['submit'])) {
             }
         }
         ?>
-    </div>
+    </nav>
     
     <!-- Admin Navigation Bar -->
-    <div class="topnav admin-nav">
+    <nav class="topnav admin-nav">
         <a class="label">Administration Menus</a>
         <a href="/admin/teams/">Manage Teams</a>
         <a href="/admin/members/">Manage Members</a>
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
-    </div>
+    </nav>
     
     <!-- Form to Edit Game -->
     <div class="form">
