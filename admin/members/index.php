@@ -19,8 +19,7 @@ $result = mysqli_query($connection, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
+    <link rel="stylesheet" href="/assets/styles/admin/members/home.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
 
     <title>Informatics E-Sport Club</title>
@@ -41,8 +40,9 @@ $result = mysqli_query($connection, $sql);
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
             // User is logged in
-            echo '<a class="active" href="/profile.php">My Profile</a>';
+            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php">Logout</a>';
+            echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo '<a href="/admin/">Admin Site</a>';
@@ -83,12 +83,12 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['fname'] . "</td>";
                     echo "<td>" . $row['lname'] . "</td>";
                     echo "<td>";
-                    echo "<a href='edit-member.php?id_member=" . $row['id_member'] . "' class='btn-edit'>Edit</a>";
+                    echo "<a href='edit-member.php?id_member=" . $row['id_member'] . "' id='btn-editdelete' class='edit'>Edit</a>";
                     echo "</td>";
                     echo "<td>";
                     echo "<form action='delete-member.php' method='post'>";
                     echo "<input type='hidden' name='id_urls' value='" . $row['id_member'] . "'>";
-                    echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
+                    echo "<button type='submit' name='deletebtn' id='btn-editdelete' id='btn-editdelete' class='delete'>Delete</button>";
                     echo "</form>";
                     echo "</td>";
                     echo "</tr>";

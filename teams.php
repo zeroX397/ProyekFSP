@@ -2,12 +2,6 @@
 session_start();
 include("config.php");
 
-// Check if user is logged in and is an admin
-if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
-    header('Location: /'); // Redirect non-admins to the homepage
-    exit();
-}
-
 // Query to get teams ordered by game
 $sql = "SELECT team.idteam, team.name AS team_name, game.idgame, game.name AS game_name 
         FROM team 
@@ -42,8 +36,9 @@ $result = mysqli_query($connection, $sql);
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
             // User is logged in
-            echo '<a class="active" href="/profile.php">My Profile</a>';
+            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php">Logout</a>';
+            echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo '<a href="/admin/">Admin Site</a>';
@@ -72,7 +67,6 @@ $result = mysqli_query($connection, $sql);
                             $current_game_id = $row['idgame'];
                             echo "<tr><td colspan='4'><strong>" . $row['game_name'] . "</strong></td></tr>";
                         }
-
                         // Print team data
                         echo "<tr>";
                         echo "<td>" . $row['idteam'] . "</td>";
@@ -80,8 +74,8 @@ $result = mysqli_query($connection, $sql);
                         echo "<td>" . $row['game_name'] . "</td>";
                         echo "<td>";
                         echo "<form action='join-team.php' method='post'>";
-                        echo "<input type='hidden' name='id_urls' value='" . $row['idteam'] . "'>";
-                        echo "<button type='submit' name='joinbtn' id='btn-join' class='edit'>Apply</button>";
+                        echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
+                        echo "<input type='submit' name='joinbtn' id='btn-join' class='button' value='Apply'>";
                         echo "</form>";
                         echo "</td>";
                         echo "</tr>";

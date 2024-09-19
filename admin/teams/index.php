@@ -79,7 +79,7 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>" . $row['game_name'] . "</td>";
                     echo "<td>";
-                    echo "<a href='edit-team.php?idteam=" . $row['idteam'] . "' class='btn-edit'>Edit</a>";
+                    echo "<a href='edit-team.php?idteam=" . $row['idteam'] . "' id='btn-editdelete' class='edit'>Edit</a>";
                     // echo "<form action='edit-team.php' method='post'>";
                     // echo "<input type='hidden' name='id_urls' value='" . $row['idteam'] . "'>";
                     // echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";

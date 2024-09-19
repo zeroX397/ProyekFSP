@@ -1,5 +1,33 @@
 <?php
 session_start();
+include("config.php");
+
+
+// Check if the form has been submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_SESSION['idmember'], $_POST['idmember'], $_POST['idteam'], $_POST['application-text'])) {
+        $idmember = mysqli_real_escape_string($connection, $_SESSION['idmember']);
+        $idteam = mysqli_real_escape_string($connection, $_POST['idteam']);
+        $description = mysqli_real_escape_string($connection, $_POST['application-text']);
+        $status = "waiting";  // Default status
+
+        $sql = "INSERT INTO join_proposal (idmember, idteam, description, status) VALUES (?, ?, ?, ?)";
+        $stmt = mysqli_prepare($connection, $sql);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "iiss", $idmember, $idteam, $description, $status);
+            if (mysqli_stmt_execute($stmt)) {
+                echo "<script>alert('Application submitted successfully. Track your status in \"My Profile\"'); window.location.href='/';</script>";
+            } else {
+                $error = "Error during registration: " . mysqli_error($connection);
+            }
+            mysqli_stmt_close($stmt);
+        } else {
+            $error = 'Error preparing the statement: ' . mysqli_error($connection);
+        }
+    } else {
+        $error = 'All fields are required and must be valid.';
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,22 +56,31 @@ session_start();
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
             // User is logged in
-            echo '<a class="active" href="/profile.php">My Profile</a>';
+            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php">Logout</a>';
+            echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo '<a href="/admin/">Admin Site</a>';
             }
         }
+        echo $_SESSION['idmember'];
         ?>
     </nav>
 
     <!-- Form Apply to Join Team -->
-    <div class="application-form">
-        <h3 text-align="center">Tell us just a bit about yourself:</h3>
+    <form class="application-form" method="post">
+        <?php if (isset($_SESSION['idmember'])): ?>
+            <input type="hidden" name="idmember" value="<?php echo $_SESSION['idmember']; ?>">
+        <?php else: 
+            echo $error;?>
+            <p>Error</p>
+        <?php endif; ?>
+        <input type="hidden" name="idteam" value="<?php echo isset($_POST['idteam']) ? $_POST['idteam'] : 'default_value'; ?>">
+        <h3 class="welcome-mssg">Tell us just a bit about yourself:</h3>
         <textarea class="application-text" name="application-text" maxlength="100" rows="4" cols="50" placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters."></textarea>
-        <br><input type="button" value="Apply">
-    </div>
+        <br><input type="submit" value="Apply">
+    </form>
 </body>
 
 </html>

@@ -8,7 +8,7 @@ if (isset($_POST['submit'])) {
     $password = mysqli_real_escape_string($connection, $_POST['password']);
 
     // Prepared statement to avoid SQL injection
-    $sql = "SELECT username, password, profile FROM `fsp-project`.member WHERE username=? AND password=?";
+    $sql = "SELECT idmember, username, password, profile FROM `fsp-project`.member WHERE username=? AND password=?";
     $stmt = mysqli_prepare($connection, $sql);
     mysqli_stmt_bind_param($stmt, 'ss', $username, $password);
     mysqli_stmt_execute($stmt);
@@ -16,6 +16,7 @@ if (isset($_POST['submit'])) {
 
     if ($result->num_rows > 0) {
         $row = mysqli_fetch_assoc($result);
+        $_SESSION['idmember'] = $row['idmember'];
         $_SESSION['username'] = $row['username'];
         $_SESSION['profile'] = $row['profile']; // Store user profile in session
 
@@ -58,8 +59,9 @@ if (isset($_POST['submit'])) {
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
             // User is logged in
-            echo '<a class="active" href="/profile.php">My Profile</a>';
+            $displayName = "My Profile " . $_SESSION['idmember'] . " " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php">Logout</a>';
+            echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo '<a href="/admin/">Admin Site</a>';
