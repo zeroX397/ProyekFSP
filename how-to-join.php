@@ -9,7 +9,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="/assets/styles/[CHANGE LATER].css">
+    <link rel="stylesheet" href="/assets/styles/how-to-join.css">
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -39,8 +39,19 @@ session_start();
         ?>
     </nav>
 
-    <section>
-        How to join a team
+    <section class="join-instructions">
+        <h1>How to join a team</h1>
+        <p>If you wonder how to join a team, here some steps:</p>
+        <ol class="steps-lists">
+            <li>If you do not have an account, register one through <a href="/signup.php">this link</a>. But if you already have, do login <a href="/login.php">here</a>.</li>
+            <li>Go to the <a href="/teams.php">teams page</a>, and find a team you desired.</li>
+            <li>You can check the team details first. It contains every detail of the team, including its members.</li>
+            <li>If you happy enough, click the join button.</li>
+            <li>You will be asked to describe yourself. Provide useful information about you: e.g. your main heroes or agents, or you favorite roles. <br><em>Note: max. 100 characters.</em></li>
+            <li>Click the Apply button. And please kindly wait for admin to decide your application.</li>
+        </ol>
+        <p>You may join more than 1 (one) team. So after you submit first application, you can submit another application to different team. But please take a note that admin can either <strong>accept or reject</strong> you application.</p>
+        <p style="background-color: yellow;">Warning: Do not repeatedly send application, or admin will <strong>BANS</strong> and <strong>DELETE</strong> your account.</p>
     </section>
 </body>
 

@@ -2,6 +2,10 @@
 session_start();
 include("config.php");
 
+if (!isset($_SESSION['username'])) {
+    header('Location: /login.php');
+    echo "<script>alert('Please login before applying to Team.');</script>";
+}
 
 // Check if the form has been submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -72,14 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form class="application-form" method="post">
         <?php if (isset($_SESSION['idmember'])): ?>
             <input type="hidden" name="idmember" value="<?php echo $_SESSION['idmember']; ?>">
-        <?php else: 
-            echo $error;?>
+        <?php else:
+            echo $error; ?>
             <p>Error</p>
         <?php endif; ?>
         <input type="hidden" name="idteam" value="<?php echo isset($_POST['idteam']) ? $_POST['idteam'] : 'default_value'; ?>">
-        <h3 class="welcome-mssg">Tell us just a bit about yourself:</h3>
-        <textarea class="application-text" name="application-text" maxlength="100" rows="4" cols="50" placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters."></textarea>
-        <br><input type="submit" value="Apply">
+        <h1>Tell us just a bit about yourself:</h1>
+        <textarea class="application-text" name="application-text" maxlength="100" rows="4" cols="30" placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters."></textarea>
+        <br><button type="submit">Apply</button>
     </form>
 </body>
 

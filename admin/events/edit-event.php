@@ -9,8 +9,8 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Get the event ID from the URL
-if (isset($_GET['id_event'])) {
-    $idevent = mysqli_real_escape_string($connection, $_GET['id_event']);
+if (isset($_POST['id_event'])) {
+    $idevent = mysqli_real_escape_string($connection, $_POST['id_event']);
 
     // Fetch the event data to pre-fill the form
     $eventQuery = "SELECT * FROM event WHERE idevent = ?";

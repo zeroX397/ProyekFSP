@@ -19,8 +19,8 @@ if ($teamResult) {
 }
 
 // Get the achievement ID from the URL
-if (isset($_GET['idachievement'])) {
-    $idachievement = mysqli_real_escape_string($connection, $_GET['idachievement']);
+if (isset($_POST['idachievement'])) {
+    $idachievement = mysqli_real_escape_string($connection, $_POST['idachievement']);
 
     // Fetch the achievement data to pre-fill the form
     $achievementQuery = "SELECT * FROM achievement WHERE idachievement = ?";

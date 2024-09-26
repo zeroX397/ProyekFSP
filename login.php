@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
             // User is logged in
-            $displayName = "My Profile " . $_SESSION['idmember'] . " " . $_SESSION['username']; // Append ID and username
+            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php">Logout</a>';
             echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not

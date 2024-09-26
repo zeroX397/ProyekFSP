@@ -31,44 +31,48 @@ $result = mysqli_query($connection, $sql);
 </head>
 
 <body>
-    <!-- Top Navigation Bar -->
-    <nav class="topnav">
-        <a class="active" href="/">Homepage</a>
-        <a href="/teams.php">Teams</a>
-        <a href="/members.php">Members</a>
-        <a href="/events.php">Events</a>
-        <a href="/about.php">About Us</a>
-        <a href="/how-to-join.php">How to Join</a>
-        <?php
-        if (!isset($_SESSION['username'])) {
-            // User is not logged in
-            echo '<a class="active" href="/login.php">Login</a>';
-        } else {
-            // User is logged in
-            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
-            echo '<a class="logout" href="/logout.php">Logout</a>';
-            echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
-            // To check whether is admin or not
-            if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo '<a href="/admin/">Admin Site</a>';
+    <header>
+        <!-- Top Navigation Bar -->
+        <nav class="topnav">
+            <a class="active" href="/">Homepage</a>
+            <a href="/teams.php">Teams</a>
+            <a href="/members.php">Members</a>
+            <a href="/events.php">Events</a>
+            <a href="/about.php">About Us</a>
+            <a href="/how-to-join.php">How to Join</a>
+            <?php
+            if (!isset($_SESSION['username'])) {
+                // User is not logged in
+                echo '<a class="active" href="/login.php">Login</a>';
+            } else {
+                // User is logged in
+                $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
+                echo '<a class="logout" href="/logout.php">Logout</a>';
+                echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
+                // To check whether is admin or not
+                if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
+                    echo '<a href="/admin/">Admin Site</a>';
+                }
             }
-        }
-        ?>
-    </nav>
-    <!-- Admin Navigation Bar -->
-    <nav class="topnav admin-nav">
-        <a class="label">Administration Menus</a>
-        <a href="/admin/teams/">Manage Teams</a>
-        <a href="/admin/members/">Manage Members</a>
-        <a href="/admin/events/">Manage Events</a>
-        <a href="/admin/games/">Manage Games</a>
-        <a href="/admin/achievements/">Manage Achievements</a>
-    </nav>
-    <!-- List of Teams to Edit or Delete -->
-    <h1 class="welcome-mssg">Manage or Add Achievement</h1>
-    <form action="add-achievement.php">
-        <input type="submit" value="Add New Achievement">
-    </form>
+            ?>
+        </nav>
+        <!-- Admin Navigation Bar -->
+        <nav class="topnav admin-nav">
+            <a class="label">Administration Menus</a>
+            <a href="/admin/teams/">Manage Teams</a>
+            <a href="/admin/members/">Manage Members</a>
+            <a href="/admin/events/">Manage Events</a>
+            <a href="/admin/games/">Manage Games</a>
+            <a href="/admin/achievements/">Manage Achievements</a>
+        </nav>
+        <div class="header-content">
+            <h1 class="welcome-mssg">Manage or Add Achievement</h1>
+            <form action="add-achievement.php" class="add-new">
+                <button type="submit">Add Achievement</button>
+            </form>
+        </div>
+    </header>
+
     <div class="all-team">
         <table>
             <tr>
@@ -90,18 +94,22 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['achievement_description'] . "</td>";
                     echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>";
-                    echo "<a href='edit-achievement.php?idachievement=" . $row['idachievement'] . "' id='btn-editdelete' class='edit'>Edit</a>";
+                    echo "<form method='post' action='edit-achievement.php'>";
+                    echo "<input type='hidden' name='idachievement' value='" . $row['idachievement'] . "'>";
+                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
+                    echo "</form>";
+                    echo "</td>";
                     echo "</td>";
                     echo "<td>";
                     echo "<form action='delete-achievement.php' method='post'>";
-                    echo "<input type='hidden' name='id_urls' value='" . $row['idachievement'] . "'>";
+                    echo "<input type='hidden' name='idachievement' value='" . $row['idachievement'] . "'>";
                     echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
                     echo "</form>";
                     echo "</td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='3'>No teams found</td></tr>";
+                echo "<tr><td colspan='3'>No achievement found</td></tr>";
             }
             ?>
         </table>

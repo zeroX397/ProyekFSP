@@ -2,11 +2,8 @@
 session_start();
 include("config.php");
 
-// Query to get teams ordered by game
-$sql = "SELECT team.idteam, team.name AS team_name, game.idgame, game.name AS game_name 
-        FROM team 
-        INNER JOIN game ON team.idgame = game.idgame 
-        ORDER BY game.idgame;";
+// Query to get member ordered by game
+$sql = "SELECT member.idmember, member.username, CONCAT(member.fname, ' ', member.lname) as member_name FROM member;";
 $result = mysqli_query($connection, $sql);
 ?>
 
@@ -17,7 +14,7 @@ $result = mysqli_query($connection, $sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="/assets/styles/teams.css">
+    <link rel="stylesheet" href="/assets/styles/[CHANGE LATER].css">
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -46,17 +43,15 @@ $result = mysqli_query($connection, $sql);
         }
         ?>
     </nav>
-    <!-- Team(s) list with button "Apply Member" -->
     <section>
-        <h1 class="hello-mssg">Hello! You can see full list of teams and join them.</h1>
-        <div class="all-team">
+        <h1 class="hello-mssg">Hello! You can see full list of all members.</h1>
+        <div class="all-member">
             <table>
                 <tr>
-                    <th>Team ID</th>
-                    <th>Team Name</th>
-                    <th>Game Played</th>
-                    <th>Join Team</th>
-                    <th>View Detail</th>
+                    <th>Member ID</th>
+                    <th>Username</th>
+                    <th>Member Name</th>
+                    <th>Detail</th>
                 </tr>
                 <?php
                 if ($result && mysqli_num_rows($result) > 0) {
@@ -64,32 +59,26 @@ $result = mysqli_query($connection, $sql);
 
                     while ($row = mysqli_fetch_assoc($result)) {
                         // If the game changes, print a new game name header
-                        if ($current_game_id !== $row['idgame']) {
-                            $current_game_id = $row['idgame'];
-                            echo "<tr><td colspan='5'><strong>" . $row['game_name'] . "</strong></td></tr>";
+                        if ($current_game_id !== $row['idmember']) {
+                            $current_game_id = $row['idmember'];
+                            // echo "<tr><td colspan='5'><strong>" . $row['idmember'] . "</strong></td></tr>";
                         }
-                        // Print team data
+                        // Print member data
                         echo "<tr>";
-                        echo "<td>" . $row['idteam'] . "</td>";
-                        echo "<td>" . $row['team_name'] . "</td>";
-                        echo "<td>" . $row['game_name'] . "</td>";
+                        echo "<td>" . $row['idmember'] . "</td>";
+                        echo "<td>" . $row['username'] . "</td>";
+                        echo "<td>" . $row['member_name'] . "</td>";
+                        // View Member Details
                         echo "<td>";
-                        echo "<form action='join-team.php' method='post'>";
-                        echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
-                        echo "<input type='submit' name='joinbtn' id='btn-join' class='button' value='Apply'>";
-                        echo "</form>";
-                        echo "</td>";
-                        // View Teams Details
-                        echo "<td>";
-                        echo "<form action='team-detail.php' method='post'>";
-                        echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
+                        echo "<form action='member-detail.php' method='post'>";
+                        echo "<input type='hidden' name='idmember' value='" . $row['idmember'] . "'>";
                         echo "<input type='submit' name='joinbtn' id='btn-join' class='button' value='Details'>";
                         echo "</form>";
                         echo "</td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='5'>No teams found</td></tr>";
+                    echo "<tr><td colspan='5'>No members found</td></tr>";
                 }
                 ?>
             </table>

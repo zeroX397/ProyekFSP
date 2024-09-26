@@ -9,8 +9,8 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Get the game ID from the URL
-if (isset($_GET['id_game'])) {
-    $idgame = mysqli_real_escape_string($connection, $_GET['id_game']);
+if (isset($_POST['id_game'])) {
+    $idgame = mysqli_real_escape_string($connection, $_POST['id_game']);
     
     // Fetch the game data to pre-fill the form
     $gameQuery = "SELECT * FROM game WHERE idgame = ?";

@@ -1,5 +1,20 @@
-.welcome-mssg {
+.header-content {
   text-align: center;
+  padding: 10px;
+}
+
+.header-content .welcome-mssg {
+  margin-bottom: 20px;
+}
+
+.add-new {
+  margin-bottom: 20px;
+}
+
+.add-button {
+  max-width: 200px;
+  max-height: 100px;
+
 }
 
 .admin-nav {
@@ -92,6 +107,7 @@
   border: none;
   cursor: pointer;
 }
+
 .btnsubmit:hover {
   background-color: #bf1616;
 }
@@ -130,4 +146,24 @@
 
 .add-form button:active {
   transform: translateY(4px);
+}
+
+@media (max-width: 600px) {
+  .header-content {
+    flex-direction: column;
+    /* Stack them vertically on small screens */
+  }
+
+  .header-content .welcome-mssg,
+  .add-member-form {
+    width: 100%;
+    /* Full width for small screens */
+    text-align: center;
+    /* Center the content */
+  }
+
+  .add-member-form {
+    margin-top: 10px;
+    /* Add some space between the elements */
+  }
 }

@@ -19,8 +19,8 @@ if ($gameResult) {
 }
 
 // Check if team ID is set
-if (isset($_GET['idteam'])) {
-    $idteam = mysqli_real_escape_string($connection, $_GET['idteam']);
+if (isset($_POST['idteam'])) {
+    $idteam = mysqli_real_escape_string($connection, $_POST['idteam']);
 
     // Fetch the existing team data to pre-fill the form
     $teamQuery = "SELECT * FROM team WHERE idteam = ?";
@@ -31,11 +31,12 @@ if (isset($_GET['idteam'])) {
     $team = mysqli_fetch_assoc($teamResult);
 
     if (!$team) {
-        echo "<script>alert('Team not found.'); window.location.href='/admin/teams/index.php';</script>";
+        echo "<script>alert('Team not found.'); window.location.href='/admin/teams/';</script>";
         exit();
     }
 } else {
-    header('Location: /admin/teams/index.php');
+    // header('Location: /admin/teams/');
+    echo "<script>alert('Salah')</script>";
     exit();
 }
 
@@ -50,7 +51,7 @@ if (isset($_POST['submit'])) {
     $result = mysqli_stmt_execute($stmt);
 
     if ($result) {
-        echo "<script>alert('Team updated successfully.'); window.location.href='/admin/teams/index.php';</script>";
+        echo "<script>alert('Team updated successfully.'); window.location.href='/admin/teams/';</script>";
     } else {
         $error = "Error updating team.";
     }

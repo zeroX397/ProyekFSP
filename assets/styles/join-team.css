@@ -1,13 +1,30 @@
-.application-form {
-    max-width: 1500px;
-    width: auto;
-    height: 700px;
-    background-color: #FFFFFF;
-    margin: 50px auto;
+form {
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    max-width: fit-content;
+    margin: 75px auto 100px;
+    padding: 50px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
-h3 {
-    margin-top: inherit;
+form input {
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
 }
 
-.application-text {}
+textarea {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 24px;
+    width: inherit;
+    height: inherit;
+    border-radius: 5px;
+}

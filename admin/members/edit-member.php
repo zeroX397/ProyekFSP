@@ -9,8 +9,8 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Get the member ID from the URL
-if (isset($_GET['id_member'])) {
-    $idmember = mysqli_real_escape_string($connection, $_GET['id_member']);
+if (isset($_POST['id_member'])) {
+    $idmember = mysqli_real_escape_string($connection, $_POST['id_member']);
 
     // Fetch the member data to pre-fill the form
     $memberQuery = "SELECT * FROM member WHERE idmember = ?";
