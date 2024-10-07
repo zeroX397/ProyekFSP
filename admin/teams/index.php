@@ -7,7 +7,27 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     header('Location: /'); // Redirect non-admins to the homepage
     exit();
 }
-$sql = "SELECT team.idteam, game.name AS game_name, team.name AS team_name FROM team INNER JOIN game ON game.idgame = team.idgame ORDER BY team.idteam ASC;";
+
+// Paging configuration
+$perpage = 5; // Number sql per page
+if (isset($_GET['p'])) {
+    $page = $_GET['p'];
+} else {
+    $page = 1; 
+}
+$start = ($page - 1) * $perpage; 
+
+$sql_count = "SELECT COUNT(*) AS total FROM team";
+$result_count = mysqli_query($connection, $sql_count);
+$row_count = mysqli_fetch_assoc($result_count);
+$totaldata = $row_count['total'];
+$totalpage = ceil($totaldata / $perpage);
+
+$sql = "SELECT team.idteam, game.name AS game_name, team.name AS team_name 
+        FROM team 
+        INNER JOIN game ON game.idgame = team.idgame 
+        ORDER BY team.idteam ASC 
+        LIMIT $start, $perpage";
 $result = mysqli_query($connection, $sql);
 ?>
 
@@ -19,6 +39,7 @@ $result = mysqli_query($connection, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
+    <link rel="stylesheet" href="/assets/styles/admin/paging.css">
     <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
     <title>Informatics E-Sport Club</title>
 </head>
@@ -103,6 +124,28 @@ $result = mysqli_query($connection, $sql);
         </table>
     </div>
 
+    <!-- Paging -->
+    <div class="paging">
+        <?php
+        if ($page > 1) {
+            $prev = $page - 1;
+            echo "<a href='index.php?p=$prev'>Prev</a>"; // Previous page 
+        }
+
+        for ($i = 1; $i <= $totalpage; $i++) {
+            if ($i == $page) {
+                echo "<strong>$i</strong>"; // Current page 
+            } else {
+                echo "<a href='index.php?p=$i'>$i</a>"; // Other page 
+            }
+        }
+
+        if ($page < $totalpage) {
+            $next = $page + 1;
+            echo "<a href='index.php?p=$next'>Next</a>"; // Next page 
+        }
+        ?>
+    </div>
 </body>
 
 </html>
