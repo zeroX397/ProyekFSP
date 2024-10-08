@@ -51,7 +51,7 @@ session_start();
             <li>Click the Apply button. And please kindly wait for admin to decide your application.</li>
         </ol>
         <p>You may join more than 1 (one) team. So after you submit first application, you can submit another application to different team. But please take a note that admin can either <strong>accept or reject</strong> you application.</p>
-        <p style="background-color: yellow;">Warning: Do not repeatedly send application, or admin will <strong>BANS</strong> and <strong>DELETE</strong> your account.</p>
+        <p style="background-color: yellow;">Warning: Do not repeatedly send application, or admin will <strong>BAN</strong> and <strong>DELETE</strong> your account.</p>
     </section>
 </body>
 

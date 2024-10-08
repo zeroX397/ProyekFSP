@@ -113,3 +113,43 @@ button:active {
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
+
+/* For paging-button style */
+
+.paging {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.paging a {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 0 5px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #04AA6D;
+  border-radius: 5px;
+}
+
+.paging a:hover {
+  background-color: #3e8e41;
+  color: #fff;
+}
+
+.paging strong {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 0 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #f1c40f;
+  border-radius: 5px;
+}
+
+.paging a.disabled {
+  background-color: #ddd;
+  color: #aaa;
+}

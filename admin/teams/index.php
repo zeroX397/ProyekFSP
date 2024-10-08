@@ -39,7 +39,6 @@ $result = mysqli_query($connection, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/paging.css">
     <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
     <title>Informatics E-Sport Club</title>
 </head>

@@ -2,8 +2,26 @@
 session_start();
 include("config.php");
 
+
+// Paging configuration
+$perpage = 5; // Number sql per page
+if (isset($_GET['p'])) {
+    $page = $_GET['p'];
+} else {
+    $page = 1;
+}
+$start = ($page - 1) * $perpage;
+
+$sql_count = "SELECT COUNT(*) AS total FROM member";
+$result_count = mysqli_query($connection, $sql_count);
+$row_count = mysqli_fetch_assoc($result_count);
+$totaldata = $row_count['total'];
+$totalpage = ceil($totaldata / $perpage);
+
 // Query to get member ordered by game
-$sql = "SELECT member.idmember, member.username, CONCAT(member.fname, ' ', member.lname) as member_name FROM member;";
+$sql = "SELECT member.idmember, member.username, CONCAT(member.fname, ' ', member.lname) as member_name 
+        FROM member
+        LIMIT $start, $perpage;";
 $result = mysqli_query($connection, $sql);
 ?>
 
@@ -82,6 +100,28 @@ $result = mysqli_query($connection, $sql);
                 }
                 ?>
             </table>
+        </div>
+        <!-- Paging -->
+        <div class="paging">
+            <?php
+            if ($page > 1) {
+                $prev = $page - 1;
+                echo "<a href='index.php?p=$prev'>Prev</a>"; // Previous page 
+            }
+
+            for ($i = 1; $i <= $totalpage; $i++) {
+                if ($i == $page) {
+                    echo "<strong>$i</strong>"; // Current page 
+                } else {
+                    echo "<a href='index.php?p=$i'>$i</a>"; // Other page 
+                }
+            }
+
+            if ($page < $totalpage) {
+                $next = $page + 1;
+                echo "<a href='index.php?p=$next'>Next</a>"; // Next page 
+            }
+            ?>
         </div>
     </section>
 </body>

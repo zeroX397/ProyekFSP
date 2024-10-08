@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 include("config.php");
 
@@ -6,7 +6,9 @@ if (isset($_POST['submit'])) { // Check if form was submitted
     $fname = mysqli_real_escape_string($connection, $_POST['fname']);
     $lname = mysqli_real_escape_string($connection, $_POST['lname']);
     $username = mysqli_real_escape_string($connection, $_POST['username']);
-    $password = mysqli_real_escape_string($connection, $_POST['password']); 
+    $password = mysqli_real_escape_string($connection, $_POST['password']);
+
+    $hashedPassword = hash('sha256', $password);
 
     // Check if username already exists
     $checkUser = "SELECT * FROM `fsp-project`.member WHERE username=?";
@@ -20,7 +22,7 @@ if (isset($_POST['submit'])) { // Check if form was submitted
         // Insert new user
         $sql = "INSERT INTO `fsp-project`.member (fname, lname, username, password, profile) VALUES (?, ?, ?, ?, 'member')";
         $stmt = mysqli_prepare($connection, $sql);
-        mysqli_stmt_bind_param($stmt, 'ssss', $fname, $lname, $username, $password);
+        mysqli_stmt_bind_param($stmt, 'ssss', $fname, $lname, $username, $hashedPassword);
         $result = mysqli_stmt_execute($stmt);
         if ($result) {
             echo "<script>alert('Registration successful! You can now log in.'); window.location.href='/login.php';</script>";
@@ -75,11 +77,23 @@ if (isset($_POST['submit'])) { // Check if form was submitted
             <input name="fname" type="text" placeholder="First Name" required>
             <input name="lname" type="text" placeholder="Last Name">
             <input name="username" type="text" placeholder="Username" required>
-            <input name="password" type="password" placeholder="Password" required>
+            <input name="password" id="password" type="password" placeholder="Password" required>
+            <input name="confirm_password" id="confirm_password" type="password" placeholder="Confirm Password" required>
+            <div style="margin-bottom: 20px;" id="message"></div>
             <button name="submit" type="submit">Sign me up</button><br>
             <p style="margin-top: 30px;">Already have an account? <a href="/login.php">Log in here</a></p>
         </form>
     </div>
+    <script src="/jquery-3.7.1.js"></script>
+    <script>
+        $('#password, #confirm_password').on('keyup', function() {
+            if ($('#password').val() == $('#confirm_password').val()) {
+                $('#message').html('Matching').css('color', 'green');
+            } else
+                $('#message').html('Not Matching').css('color', 'red');
+        });
+    </script>
+
 </body>
 
 </html>

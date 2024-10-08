@@ -13,9 +13,9 @@ $perpage = 5; // Number sql per page
 if (isset($_GET['p'])) {
     $page = $_GET['p'];
 } else {
-    $page = 1; 
+    $page = 1;
 }
-$start = ($page - 1) * $perpage; 
+$start = ($page - 1) * $perpage;
 
 $sql_count = "SELECT COUNT(*) AS total FROM member";
 $result_count = mysqli_query($connection, $sql_count);
@@ -23,7 +23,7 @@ $row_count = mysqli_fetch_assoc($result_count);
 $totaldata = $row_count['total'];
 $totalpage = ceil($totaldata / $perpage);
 
-$sql = "SELECT member.idmember as id_member, member.username, member.fname, member.lname 
+$sql = "SELECT member.idmember as id_member, member.username, CONCAT(member.fname, ' ', member.lname) as member_name 
         FROM `member` 
         ORDER BY member.idmember ASC 
         LIMIT $start, $perpage";
@@ -38,7 +38,6 @@ $result = mysqli_query($connection, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/paging.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/home.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
 
@@ -94,8 +93,7 @@ $result = mysqli_query($connection, $sql);
             <tr>
                 <th>User ID</th>
                 <th>Username</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>Member Name</th>
                 <th>Edit Member</th>
                 <th>Delete Member</th>
             </tr>
@@ -105,8 +103,7 @@ $result = mysqli_query($connection, $sql);
                     echo "<tr>";
                     echo "<td>" . $row['id_member'] . "</td>";
                     echo "<td>" . $row['username'] . "</td>";
-                    echo "<td>" . $row['fname'] . "</td>";
-                    echo "<td>" . $row['lname'] . "</td>";
+                    echo "<td>" . $row['member_name'] . "</td>";
                     echo "<td>";
                     echo "<form action='edit-member.php' method='post'>";
                     echo "<input type='hidden' name='id_member' value='" . $row['id_member'] . "'>";

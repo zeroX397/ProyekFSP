@@ -7,10 +7,12 @@ if (isset($_POST['submit'])) {
     $username = mysqli_real_escape_string($connection, $_POST['username']);
     $password = mysqli_real_escape_string($connection, $_POST['password']);
 
+    $hashedPassword = hash('sha256', $password);
+
     // Prepared statement to avoid SQL injection
     $sql = "SELECT idmember, username, password, profile FROM `fsp-project`.member WHERE username=? AND password=?";
     $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, 'ss', $username, $password);
+    mysqli_stmt_bind_param($stmt, 'ss', $username, $hashedPassword);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
