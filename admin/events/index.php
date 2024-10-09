@@ -23,8 +23,15 @@ $row_count = mysqli_fetch_assoc($result_count);
 $totaldata = $row_count['total'];
 $totalpage = ceil($totaldata / $perpage);
 
-$sql = "SELECT event.idevent as id_event, event.name, event.date, event.description 
-        FROM `event` 
+// $sql = "SELECT event.idevent as id_event, event.name, event.date, event.description 
+//         FROM `event` 
+//         ORDER BY event.idevent ASC 
+//         LIMIT $start, $perpage";
+$sql = "SELECT event.idevent as id_event, event.name, event.date, event.description, 
+               team.name as team_name
+        FROM `event`
+        JOIN event_teams ON event.idevent = event_teams.idevent
+        JOIN team ON event_teams.idteam = team.idteam
         ORDER BY event.idevent ASC 
         LIMIT $start, $perpage";
 $result = mysqli_query($connection, $sql);
@@ -95,6 +102,7 @@ $result = mysqli_query($connection, $sql);
                 <th>Name</th>
                 <th>Date</th>
                 <th>Description</th>
+                <th>Team</th>
                 <th>Edit Member</th>
                 <th>Delete Member</th>
             </tr>
@@ -106,6 +114,7 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['name'] . "</td>";
                     echo "<td>" . $row['date'] . "</td>";
                     echo "<td>" . $row['description'] . "</td>";
+                    echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>";
                     echo "<form action='edit-event.php' method='post'>";
                     echo "<input type='hidden' name='id_event' value='" . $row['id_event'] . "'>";

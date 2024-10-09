@@ -13,18 +13,29 @@ if (isset($_POST['submit'])) {
     $name = mysqli_real_escape_string($connection, $_POST['name']);
     $date = mysqli_real_escape_string($connection, string: $_POST['date']);
     $desc = mysqli_real_escape_string($connection, $_POST['description']); 
+    $team_id = mysqli_real_escape_string($connection, $_POST['team']); 
 
     $sql = "INSERT INTO `event`(`name`, `date`, `description`) VALUES (?, ?, ?);";
     $stmt = mysqli_prepare($connection, $sql);
     mysqli_stmt_bind_param($stmt, 'sss', $name, $date, $desc);
     $result = mysqli_stmt_execute($stmt);
 
+
+    $lasteventid = mysqli_insert_id($connection);
+
+
+    $sqlevent_team = "INSERT INTO `event_teams`(`idevent`, `idteam`) VALUES (?, ?)";
+    $stmtevent_team = mysqli_prepare($connection, $sqlevent_team);
+    mysqli_stmt_bind_param($stmtevent_team, 'ii', $lasteventid, $team_id);
+    $resultevent_team = mysqli_stmt_execute($stmtevent_team);
     if ($result) {
         echo "<script>alert('Game registration successful. You may see it on the event page.'); window.location.href='/admin/events/index.php';</script>";
     } else {
         $error = "Error during game registration.";
     }
 }
+$team_sql = "SELECT idteam, name FROM team";
+$team_result = mysqli_query($connection, $team_sql);
 ?>
 
 <!DOCTYPE html>
@@ -72,17 +83,28 @@ if (isset($_POST['submit'])) {
         <a href="/admin/achievements/">Manage Achievements</a>
     </nav>
     
-    <!-- Form to Add New Games -->
+    <!-- Form to Add New Event -->
+    
     <div class="form">
         <?php if (isset($error)) : ?>
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" class="add-form" method="post">
-            <input name="name" type="text" placeholder="Name" required>
-            <input type="date" name="date" id="" required> 
-            <textarea class="application-text" name="description" maxlength="100" rows="4" cols="50"
-            placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters." required></textarea>
-            <button name="submit" type="submit">Save Game</button><br>
+            <input name="name" type="text" placeholder="Event Name" required>
+            <input type="date" name="date" required>
+            <textarea class="application-text" name="description" maxlength="100" rows="4" placeholder="Event Description" required></textarea>
+            <select name="team" required>
+                <option value="">Select Team</option>
+                <?php
+                if ($team_result && mysqli_num_rows($team_result) > 0) {
+                    while ($team_row = mysqli_fetch_assoc($team_result)) {
+                        echo "<option value='" . $team_row['idteam'] . "'>" . $team_row['name'] . "</option>";
+                    }
+                }
+                ?>
+            </select>
+
+            <button name="submit" type="submit">Save Event</button><br>
         </form>
     </div>
 </body>

@@ -25,6 +25,16 @@ if (isset($_POST['id_event'])) {
         echo "<script>alert('Event not found.'); window.location.href='/admin/events/index.php';</script>";
         exit();
     }
+    $teamQuery = "SELECT idteam FROM event_teams WHERE idevent = ?";
+    $stmt_team = mysqli_prepare($connection, $teamQuery);
+    mysqli_stmt_bind_param($stmt_team, 'i', $idevent);
+    mysqli_stmt_execute($stmt_team);
+    $teamResult = mysqli_stmt_get_result($stmt_team);
+    $current_team = mysqli_fetch_assoc($teamResult)['idteam'];
+
+    // Fetch all teams for the dropdown
+    $allTeamsQuery = "SELECT idteam, name FROM team";
+    $teamsResult = mysqli_query($connection, $allTeamsQuery);
 } else {
     header('Location: /admin/events/index.php');
     exit();
@@ -35,12 +45,17 @@ if (isset($_POST['submit'])) {
     $name = mysqli_real_escape_string($connection, $_POST['name']);
     $date = mysqli_real_escape_string($connection, $_POST['date']);
     $description = mysqli_real_escape_string($connection, $_POST['description']);
-
+    $team_id = mysqli_real_escape_string($connection, $_POST['team']);
     // Update the event data in the database
     $updateQuery = "UPDATE event SET name = ?, date = ?, description = ? WHERE idevent = ?";
     $stmt = mysqli_prepare($connection, $updateQuery);
     mysqli_stmt_bind_param($stmt, 'sssi', $name, $date, $description, $idevent);
     $result = mysqli_stmt_execute($stmt);
+
+    $updateTeamQuery =  "UPDATE event_teams SET idteam = ? WHERE idevent = ?";
+    $stmt_team = mysqli_prepare($connection, $updateTeamQuery);
+    mysqli_stmt_bind_param($stmt_team, 'ii', $team_id, $idevent);
+    $result_team = mysqli_stmt_execute($stmt_team);
 
     if ($result) {
         echo "<script>alert('Event updated successfully.'); window.location.href='/admin/events/index.php';</script>";
@@ -113,6 +128,19 @@ if (isset($_POST['submit'])) {
                 <tr>
                     <td><label for="description">Description</label></td>
                     <td><textarea name="description" placeholder="Event Description" required><?php echo htmlspecialchars($event['description']); ?></textarea></td>
+                </tr>
+                <tr>
+                    <td><label for="team">Team</label></td>
+                    <td>
+                        <select name="team" required>
+                            <?php
+                            while ($team = mysqli_fetch_assoc($teamsResult)) {
+                                $selected = ($team['idteam'] == $current_team) ? 'selected' : '';
+                                echo "<option value='" . $team['idteam'] . "' $selected>" . $team['name'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
