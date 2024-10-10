@@ -17,9 +17,27 @@ if (isset($_GET['p'])) {
 }
 $start = ($page - 1) * $perpage; 
 
+// Handle achievement filtering
+$team_filter = "";
+if (isset($_GET['team'])) {
+    $team_filter = mysqli_real_escape_string($connection, $_GET['team']);
+}
+
+// SQL Filtering
+$teamQuery = "SELECT DISTINCT team.name as team_name, team.idteam as team_id 
+              FROM team 
+              JOIN event_teams ON team.idteam = event_teams.idteam";
+$teamResult = mysqli_query($connection, $teamQuery);
+
+// SQL Total Count 
 $sql_count = "SELECT COUNT(DISTINCT achievement.idachievement) AS total 
               FROM achievement
               INNER JOIN team ON team.idteam = achievement.idteam";
+
+if (!empty($team_filter)) {
+    $sql_count .= " WHERE team.idteam = '$team_filter'";
+}
+
 $result_count = mysqli_query($connection, $sql_count);
 $row_count = mysqli_fetch_assoc($result_count);
 $totaldata = $row_count['total'];
@@ -28,10 +46,18 @@ $totalpage = ceil($totaldata / $perpage);
 $sql = "SELECT achievement.idachievement, team.name AS team_name, achievement.name AS achievement_name, achievement.date AS achievement_date, 
         achievement.description AS achievement_description 
         FROM achievement 
-        INNER JOIN team ON team.idteam = achievement.idteam 
-        ORDER BY team.idteam ASC 
-        LIMIT $start, $perpage";
+        INNER JOIN team ON team.idteam = achievement.idteam";
+
 $result = mysqli_query($connection, $sql);
+
+if (!empty($team_filter)) {
+    $sql .= " WHERE team.idteam = '$team_filter'";
+}
+
+$sql .= " ORDER BY team.idteam ASC 
+          LIMIT $start, $perpage";
+$result = mysqli_query($connection, $sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +108,6 @@ $result = mysqli_query($connection, $sql);
             <a href="/admin/events/">Manage Events</a>
             <a href="/admin/games/">Manage Games</a>
             <a href="/admin/achievements/">Manage Achievements</a>
-            <a href="/admin/event_teams/">Manage Event Teams</a>
         </nav>
         <div class="header-content">
             <h1 class="welcome-mssg">Manage or Add Achievement</h1>
@@ -91,6 +116,23 @@ $result = mysqli_query($connection, $sql);
             </form>
         </div>
     </header>
+
+    <div class="all-member">
+        <!-- Filter by Team -->
+        <form method="get" action="index.php">
+            <label for="team">Filter by Team:</label>
+            <select name="team" id="team" onchange="this.form.submit()">
+                <option value="">All Teams</option>
+                <?php
+                if ($teamResult && mysqli_num_rows($teamResult) > 0) {
+                    while ($team = mysqli_fetch_assoc($teamResult)) {
+                        $selected = ($team_filter == $team['team_id']) ? 'selected' : '';
+                        echo "<option value='" . $team['team_id'] . "' $selected>" . $team['team_name'] . "</option>";
+                    }
+                }
+                ?>
+            </select>
+        </form>
 
     <div class="all-team">
         <table>
