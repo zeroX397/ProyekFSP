@@ -8,9 +8,9 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Check if the delete button was clicked and if id_urls is set
-if (isset($_POST['deletebtn']) && isset($_POST['id_urls'])) {
-    $member_id = $_POST['id_urls'];
+// Check if the delete button was clicked and if id_member is set
+if (isset($_POST['deletebtn']) && isset($_POST['id_member'])) {
+    $member_id = $_POST['id_member'];
 
     // Delete member from the database
     $sql = "DELETE FROM member WHERE idmember = ?";

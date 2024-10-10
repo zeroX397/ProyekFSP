@@ -8,9 +8,9 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Check if the delete button was clicked and if id_urls is set
-if (isset($_POST['deletebtn']) && isset($_POST['id_urls'])) {
-    $achievement_id = $_POST['id_urls'];
+// Check if the delete button was clicked and if id_achievement is set
+if (isset($_POST['deletebtn']) && isset($_POST['idachievement'])) {
+    $achievement_id = $_POST['idachievement'];
 
     // Delete achievement from the database
     $sql = "DELETE FROM achievement WHERE idachievement = ?";
