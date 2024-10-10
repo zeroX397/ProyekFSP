@@ -52,6 +52,8 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
+        <a href="/admin/event_teams/">Manage Event Teams</a>
+        
     </nav>
     
 </body>

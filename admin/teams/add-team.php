@@ -80,6 +80,7 @@ if (isset($_POST['submit'])) {
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
+        <a href="/admin/event_teams/">Manage Event Teams</a>
     </nav>
     <!-- Form to Add New Team -->
     <div class="form">

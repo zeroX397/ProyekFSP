@@ -71,7 +71,6 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
-    
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -110,12 +109,12 @@ $result = mysqli_query($connection, $sql);
             <a href="/admin/games/">Manage Games</a>
             <a href="/admin/achievements/">Manage Achievements</a>
             <a href="/admin/event_teams/">Manage Event Teams</a>
-
+        
         </nav>
         <div class="header-content">
-            <h1 class="welcome-mssg">Manage Events</h1>
+            <h1 class="welcome-mssg">Manage Event Teams</h1>
             <form action="add-event.php" class="add-new">
-                <button type="submit">Add Event</button>
+                <button type="submit">Add Event Teams</button>
             </form>
         </div>
     </header>
@@ -139,31 +138,30 @@ $result = mysqli_query($connection, $sql);
 
         <table>
             <tr>
-                <th>Event ID</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Team</th>
-                <th>Edit Event</th>
-                <th>Delete Event</th>
+                
+                <th>Event</th>
+                
+                
+                <th>Teams</th>
+                <th>Edit Event Teams</th>
+                <th>Delete Event Teams</th>
             </tr>
             <?php
             if ($result && mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>";
-                    echo "<td>" . $row['id_event'] . "</td>";
+                    
                     echo "<td>" . $row['name'] . "</td>";
-                    echo "<td>" . $row['date'] . "</td>";
-                    echo "<td>" . $row['description'] . "</td>";
+                    
                     echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>";
-                    echo "<form action='edit-event.php' method='post'>";
+                    echo "<form action='edit-event_teams.php' method='post'>";
                     echo "<input type='hidden' name='id_event' value='" . $row['id_event'] . "'>";
                     echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
                     echo "</form>";
                     echo "</td>";
                     echo "<td>";
-                    echo "<form action='delete-event.php' method='post'>";
+                    echo "<form action='delete-event_teams.php' method='post'>";
                     echo "<input type='hidden' name='id_event' value='" . $row['id_event'] . "'>";
                     echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
                     echo "</form>";

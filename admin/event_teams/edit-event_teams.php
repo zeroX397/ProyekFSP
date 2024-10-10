@@ -42,16 +42,15 @@ if (isset($_POST['id_event'])) {
 
 // Handle the form submission for updating the event
 if (isset($_POST['submit'])) {
-    $name = mysqli_real_escape_string($connection, $_POST['name']);
-    $date = mysqli_real_escape_string($connection, $_POST['date']);
-    $description = mysqli_real_escape_string($connection, $_POST['description']);
-    // Update the event data in the database
-    $updateQuery = "UPDATE event SET name = ?, date = ?, description = ? WHERE idevent = ?";
-    $stmt = mysqli_prepare($connection, $updateQuery);
-    mysqli_stmt_bind_param($stmt, 'sssi', $name, $date, $description, $idevent);
-    $result = mysqli_stmt_execute($stmt);
+    
+    $team_id = mysqli_real_escape_string($connection, $_POST['team']);
 
-    if ($result) {
+    $updateTeamQuery = "UPDATE event_teams SET idteam = ? WHERE idevent = ?";
+    $stmt_team = mysqli_prepare($connection, $updateTeamQuery);
+    mysqli_stmt_bind_param($stmt_team, 'ii', $team_id, $idevent);
+    $result_team = mysqli_stmt_execute($stmt_team);
+
+    if ($result_team) {
         echo "<script>alert('Event updated successfully.'); window.location.href='/admin/events/index.php';</script>";
     } else {
         $error = "Error during event update.";
@@ -67,7 +66,7 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <title>Informatics E-Sport Club - Edit Event</title>
+    <title>Informatics E-Sport Club - Edit Event Teams</title>
 </head>
 
 <body>
@@ -107,24 +106,29 @@ if (isset($_POST['submit'])) {
 
     <!-- Form to Edit Event -->
     <div class="form">
-        <?php if (isset($error)) : ?>
+        <?php if (isset($error)): ?>
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" method="post" class="edit-form">
             <br><br><br>
             <table class="edit-table">
-                <tr>
+                
                     <td><label for="name">Event Name</label></td>
-                    <td><input name="name" type="text" placeholder="Event Name" value="<?php echo htmlspecialchars($event['name']); ?>" required></td>
+                    <td><span><?php echo htmlspecialchars($event['name']); ?></span></td>
                     <input type="hidden" name="id_event" value="<?php echo htmlspecialchars($idevent); ?>">
-                </tr>
+
                 <tr>
-                    <td><label for="date">Event Date</label></td>
-                    <td><input name="date" type="date" value="<?php echo htmlspecialchars($event['date']); ?>" required></td>
-                </tr>
-                <tr>
-                    <td><label for="description">Description</label></td>
-                    <td><textarea style="width: 500px;" name="description" placeholder="Event Description" rows="10" required><?php echo htmlspecialchars($event['description']); ?></textarea></td>
+                    <td><label for="team">Team</label></td>
+                    <td>
+                        <select name="team" class="dropdown-menu" required>
+                            <?php
+                            while ($team = mysqli_fetch_assoc($teamsResult)) {
+                                $selected = ($team['idteam'] == $current_team) ? 'selected' : '';
+                                echo "<option value='" . $team['idteam'] . "' $selected>" . $team['name'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
