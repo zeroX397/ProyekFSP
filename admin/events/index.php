@@ -17,22 +17,46 @@ if (isset($_GET['p'])) {
 }
 $start = ($page - 1) * $perpage;
 
+// Handle team filtering
+$team_filter = "";
+if (isset($_GET['team'])) {
+    $team_filter = mysqli_real_escape_string($connection, $_GET['team']);
+}
+
+// SQL Filtering
+$teamQuery = "SELECT DISTINCT team.name as team_name, team.idteam as team_id 
+              FROM team 
+              JOIN event_teams ON team.idteam = event_teams.idteam";
+$teamResult = mysqli_query($connection, $teamQuery);
+
+// Total Count 
 $sql_count = "SELECT COUNT(DISTINCT event.idevent) AS total 
               FROM event
               INNER JOIN event_teams ON event.idevent = event_teams.idevent
               INNER JOIN team ON event_teams.idteam = team.idteam";
+
+if (!empty($team_filter)) {
+    $sql_count .= " WHERE team.idteam = '$team_filter'";
+}
+
 $result_count = mysqli_query($connection, $sql_count);
 $row_count = mysqli_fetch_assoc($result_count);
 $totaldata = $row_count['total'];
 $totalpage = ceil($totaldata / $perpage);
 
+// Query for event list (with optional team filter)
 $sql = "SELECT event.idevent as id_event, event.name, event.date, event.description, 
                team.name as team_name
         FROM `event`
         JOIN event_teams ON event.idevent = event_teams.idevent
-        JOIN team ON event_teams.idteam = team.idteam
-        ORDER BY event.idevent ASC 
-        LIMIT $start, $perpage";
+        JOIN team ON event_teams.idteam = team.idteam";
+
+if (!empty($team_filter)) {
+    $sql .= " WHERE team.idteam = '$team_filter'";
+}
+
+$sql .= " ORDER BY event.idevent ASC 
+          LIMIT $start, $perpage";
 $result = mysqli_query($connection, $sql);
 ?>
 
@@ -47,7 +71,6 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
-
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -95,6 +118,22 @@ $result = mysqli_query($connection, $sql);
     </header>
 
     <div class="all-member">
+        <!-- Filter by Team -->
+        <form method="get" action="index.php">
+            <label for="team">Filter by Team:</label>
+            <select name="team" id="team" onchange="this.form.submit()">
+                <option value="">All Teams</option>
+                <?php
+                if ($teamResult && mysqli_num_rows($teamResult) > 0) {
+                    while ($team = mysqli_fetch_assoc($teamResult)) {
+                        $selected = ($team_filter == $team['team_id']) ? 'selected' : '';
+                        echo "<option value='" . $team['team_id'] . "' $selected>" . $team['team_name'] . "</option>";
+                    }
+                }
+                ?>
+            </select>
+        </form>
+
         <table>
             <tr>
                 <th>Event ID</th>
@@ -140,20 +179,20 @@ $result = mysqli_query($connection, $sql);
         <?php
         if ($page > 1) {
             $prev = $page - 1;
-            echo "<a href='index.php?p=$prev'>Prev</a>"; // Previous page 
+            echo "<a href='index.php?p=$prev&team=$team_filter'>Prev</a>"; // Previous page 
         }
 
         for ($i = 1; $i <= $totalpage; $i++) {
             if ($i == $page) {
                 echo "<strong>$i</strong>"; // Current page 
             } else {
-                echo "<a href='index.php?p=$i'>$i</a>"; // Other page 
+                echo "<a href='index.php?p=$i&team=$team_filter'>$i</a>"; // Other page 
             }
         }
 
         if ($page < $totalpage) {
             $next = $page + 1;
-            echo "<a href='index.php?p=$next'>Next</a>"; // Next page 
+            echo "<a href='index.php?p=$next&team=$team_filter'>Next</a>"; // Next page 
         }
         ?>
     </div>
