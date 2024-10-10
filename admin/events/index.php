@@ -9,24 +9,23 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5; // Number sql per page
+$perpage = 5; // Number of results per page
 if (isset($_GET['p'])) {
     $page = $_GET['p'];
 } else {
     $page = 1; 
 }
-$start = ($page - 1) * $perpage; 
+$start = ($page - 1) * $perpage;
 
-$sql_count = "SELECT COUNT(*) AS total FROM event";
+$sql_count = "SELECT COUNT(DISTINCT event.idevent) AS total 
+              FROM `event`
+              INNER JOIN event_teams ON event.idevent = event_teams.idevent
+              INNER JOIN team ON event_teams.idteam = team.idteam";
 $result_count = mysqli_query($connection, $sql_count);
 $row_count = mysqli_fetch_assoc($result_count);
 $totaldata = $row_count['total'];
 $totalpage = ceil($totaldata / $perpage);
 
-// $sql = "SELECT event.idevent as id_event, event.name, event.date, event.description 
-//         FROM `event` 
-//         ORDER BY event.idevent ASC 
-//         LIMIT $start, $perpage";
 $sql = "SELECT event.idevent as id_event, event.name, event.date, event.description, 
                team.name as team_name
         FROM `event`
@@ -103,8 +102,8 @@ $result = mysqli_query($connection, $sql);
                 <th>Date</th>
                 <th>Description</th>
                 <th>Team</th>
-                <th>Edit Member</th>
-                <th>Delete Member</th>
+                <th>Edit Event</th>
+                <th>Delete Event</th>
             </tr>
             <?php
             if ($result && mysqli_num_rows($result) > 0) {
@@ -121,7 +120,6 @@ $result = mysqli_query($connection, $sql);
                     echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
                     echo "</form>";
                     echo "</td>";
-                    echo "</td>";
                     echo "<td>";
                     echo "<form action='delete-event.php' method='post'>";
                     echo "<input type='hidden' name='id_event' value='" . $row['id_event'] . "'>";
@@ -131,7 +129,7 @@ $result = mysqli_query($connection, $sql);
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='3'>No event found</td></tr>";
+                echo "<tr><td colspan='7'>No event found</td></tr>";
             }
             ?>
         </table>
