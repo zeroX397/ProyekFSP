@@ -18,7 +18,7 @@ if (isset($_GET['p'])) {
 $start = ($page - 1) * $perpage;
 
 $sql_count = "SELECT COUNT(DISTINCT event.idevent) AS total 
-              FROM `event`
+              FROM event
               INNER JOIN event_teams ON event.idevent = event_teams.idevent
               INNER JOIN team ON event_teams.idteam = team.idteam";
 $result_count = mysqli_query($connection, $sql_count);

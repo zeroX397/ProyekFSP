@@ -17,7 +17,9 @@ if (isset($_GET['p'])) {
 }
 $start = ($page - 1) * $perpage; 
 
-$sql_count = "SELECT COUNT(*) AS total FROM achievement";
+$sql_count = "SELECT COUNT(DISTINCT achievement.idachievement) AS total 
+              FROM achievement
+              INNER JOIN team ON team.idteam = achievement.idteam";
 $result_count = mysqli_query($connection, $sql_count);
 $row_count = mysqli_fetch_assoc($result_count);
 $totaldata = $row_count['total'];

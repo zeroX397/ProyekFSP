@@ -17,7 +17,8 @@ if (isset($_GET['p'])) {
 }
 $start = ($page - 1) * $perpage;
 
-$sql_count = "SELECT COUNT(*) AS total FROM member";
+$sql_count = "SELECT COUNT(DISTINCT member.idmember) AS total 
+              FROM member";
 $result_count = mysqli_query($connection, $sql_count);
 $row_count = mysqli_fetch_assoc($result_count);
 $totaldata = $row_count['total'];
