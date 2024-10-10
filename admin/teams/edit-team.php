@@ -22,7 +22,6 @@ if ($gameResult) {
 if (isset($_POST['idteam'])) {
     $idteam = mysqli_real_escape_string($connection, $_POST['idteam']);
 
-    // Fetch the existing team data to pre-fill the form
     $teamQuery = "SELECT * FROM team WHERE idteam = ?";
     $stmt = mysqli_prepare($connection, $teamQuery);
     mysqli_stmt_bind_param($stmt, 'i', $idteam);
@@ -35,8 +34,7 @@ if (isset($_POST['idteam'])) {
         exit();
     }
 } else {
-    // header('Location: /admin/teams/');
-    echo "<script>alert('Salah')</script>";
+    echo "<script>alert('Team ID not provided.'); window.location.href='/admin/teams/';</script>";
     exit();
 }
 
@@ -53,7 +51,7 @@ if (isset($_POST['submit'])) {
     if ($result) {
         echo "<script>alert('Team updated successfully.'); window.location.href='/admin/teams/';</script>";
     } else {
-        $error = "Error updating team.";
+        $error = "Error updating team: " . mysqli_error($connection);
     }
 }
 ?>
@@ -107,6 +105,8 @@ if (isset($_POST['submit'])) {
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" class="edit-form" method="post">
+            <!-- Hidden input for team ID -->
+            <input type="hidden" name="idteam" value="<?= htmlspecialchars($team['idteam']) ?>">
             <br><br><br><br><br><br>
             <table class="edit-table">
                 <tr>
@@ -114,14 +114,14 @@ if (isset($_POST['submit'])) {
                     <td><select name="idgame" required>
                             <?php foreach ($games as $game): ?>
                                 <option value="<?= $game['idgame'] ?>" <?= $team['idgame'] == $game['idgame'] ? 'selected' : '' ?>>
-                                    <?= $game['name'] ?>
+                                    <?= htmlspecialchars($game['name']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select></td>
                 </tr>
                 <tr>
                     <td><label for="team_name">Team Name</label></td>
-                    <td><input name="team_name" type="text" placeholder="Team Name" value="<?= $team['name'] ?>" required></td>
+                    <td><input name="team_name" type="text" placeholder="Team Name" value="<?= htmlspecialchars($team['name']) ?>" required></td>
                 </tr>
                 <tr>
                     <td></td>

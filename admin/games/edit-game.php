@@ -8,11 +8,10 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Get the game ID from the URL
+// Get the game ID from the URL or form submission
 if (isset($_POST['id_game'])) {
     $idgame = mysqli_real_escape_string($connection, $_POST['id_game']);
     
-    // Fetch the game data to pre-fill the form
     $gameQuery = "SELECT * FROM game WHERE idgame = ?";
     $stmt = mysqli_prepare($connection, $gameQuery);
     mysqli_stmt_bind_param($stmt, 'i', $idgame);
@@ -25,14 +24,15 @@ if (isset($_POST['id_game'])) {
         echo "<script>alert('Game not found.'); window.location.href='/admin/games/index.php';</script>";
         exit();
     }
-    
+
 } else {
     header('Location: /admin/games/index.php');
     exit();
 }
 
 // Handle the form submission for updating the game
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit']) && isset($_POST['id_game'])) {
+    $idgame = mysqli_real_escape_string($connection, $_POST['id_game']);
     $name = mysqli_real_escape_string($connection, $_POST['name']);
     $desc = mysqli_real_escape_string($connection, $_POST['description']);
 
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
     if ($result) {
         echo "<script>alert('Game updated successfully.'); window.location.href='/admin/games/index.php';</script>";
     } else {
-        $error = "Error during game update.";
+        $error = "Error during game update: " . mysqli_error($connection); // Detail error dari MySQL
     }
 }
 ?>
@@ -61,9 +61,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="/assets/styles/admin/games/edit-game.css">
     <title>Informatics E-Sport Club - Edit Game</title>
 </head>
-<style>
-    
-</style>
+
 <body>
     <!-- Top Navigation Bar -->
     <nav class="topnav">
@@ -103,7 +101,9 @@ if (isset($_POST['submit'])) {
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" method="post" class="edit-form">
-        <br><br><br>
+            <!-- Hidden input for game ID -->
+            <input type="hidden" name="id_game" value="<?php echo htmlspecialchars($game['idgame']); ?>">
+            <br><br><br>
             <table class="edit-table">
                 <tr>
                     <td><label for="name">Game Name</label></td>

@@ -8,7 +8,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Get the member ID from the URL
+// Get the member ID from the form (via POST)
 if (isset($_POST['id_member'])) {
     $idmember = mysqli_real_escape_string($connection, $_POST['id_member']);
 
@@ -26,7 +26,6 @@ if (isset($_POST['id_member'])) {
         exit();
     }
 } else {
-
     header('Location: /admin/members/index.php');
     exit();
 }
@@ -38,16 +37,23 @@ if (isset($_POST['submit'])) {
     $lname = mysqli_real_escape_string($connection, $_POST['lname']);
     $password = mysqli_real_escape_string($connection, $_POST['password']);
 
+    // Check if password needs to be updated
+    if (!empty($password)) {
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Secure password hashing
+    } else {
+        $hashed_password = $member['password']; // Keep existing password if unchanged
+    }
+
     // Update the member data in the database
     $updateQuery = "UPDATE member SET username = ?, fname = ?, lname = ?, password = ? WHERE idmember = ?";
     $stmt = mysqli_prepare($connection, $updateQuery);
-    mysqli_stmt_bind_param($stmt, 'ssssi', $username, $fname, $lname, $password, $idmember);
+    mysqli_stmt_bind_param($stmt, 'ssssi', $username, $fname, $lname, $hashed_password, $idmember);
     $result = mysqli_stmt_execute($stmt);
 
     if ($result) {
         echo "<script>alert('Member updated successfully.'); window.location.href='/admin/members/index.php';</script>";
     } else {
-        $error = "Error during member update.";
+        $error = "Error during member update: " . mysqli_error($connection);
     }
 }
 ?>
@@ -101,6 +107,8 @@ if (isset($_POST['submit'])) {
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" method="post" class="edit-form">
+            <!-- Hidden input for member ID -->
+            <input type="hidden" name="id_member" value="<?php echo htmlspecialchars($member['idmember']); ?>">
             <br><br><br>
             <table class="edit-table">
                 <tr>
@@ -117,7 +125,7 @@ if (isset($_POST['submit'])) {
                 </tr>
                 <tr>
                     <td><label for="password">Password</label></td>
-                    <td><input name="password" type="password" placeholder="Password" value="<?php echo htmlspecialchars($member['password']); ?>" required></td>
+                    <td><input name="password" type="password" placeholder="Enter new password (leave blank to keep current password)"></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -126,8 +134,6 @@ if (isset($_POST['submit'])) {
             </table>
         </form>
     </div>
-
-
 </body>
 
 </html>
