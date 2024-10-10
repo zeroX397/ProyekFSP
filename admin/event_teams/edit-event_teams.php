@@ -22,7 +22,7 @@ if (isset($_POST['id_event'])) {
 
     // If event not found, redirect back
     if (!$event) {
-        echo "<script>alert('Event not found.'); window.location.href='/admin/events/index.php';</script>";
+        echo "<script>alert('Event not found.'); window.location.href='/admin/event_teams/index.php';</script>";
         exit();
     }
     $teamQuery = "SELECT idteam FROM event_teams WHERE idevent = ?";
@@ -36,7 +36,7 @@ if (isset($_POST['id_event'])) {
     $allTeamsQuery = "SELECT idteam, name FROM team";
     $teamsResult = mysqli_query($connection, $allTeamsQuery);
 } else {
-    header('Location: /admin/events/index.php');
+    header('Location: /admin/event_teams/index.php');
     exit();
 }
 
@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
     $result_team = mysqli_stmt_execute($stmt_team);
 
     if ($result_team) {
-        echo "<script>alert('Event updated successfully.'); window.location.href='/admin/events/index.php';</script>";
+        echo "<script>alert('Event updated successfully.'); window.location.href='/admin/event_teams/index.php';</script>";
     } else {
         $error = "Error during event update.";
     }
@@ -132,7 +132,7 @@ if (isset($_POST['submit'])) {
                 </tr>
                 <tr>
                     <td></td>
-                    <td><button name="submit" type="submit" class="btnsubmit">Update Event</button></td>
+                    <td><button name="submit" type="submit" class="btnsubmit">Update Event Teams</button></td>
                 </tr>
             </table>
         </form>
