@@ -153,3 +153,62 @@ button:active {
   background-color: #ddd;
   color: #aaa;
 }
+
+/* Text area styling. Mostly for inputting categories' name */
+/* #NiceAndSimple: Input and Dropdown Menu - https://codepen.io/tomsoderlund/pen/GNBbWz */
+input,
+.input,
+textarea,
+select {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  width: inherit;
+  height: inherit;
+
+  background-color: white;
+  color: inherit;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+  border-radius: 0.2em;
+  border: 1px solid lightgray;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: inherit;
+  padding: 0.6em;
+  /* margin-right: 0.6em; */
+  min-width: 15em;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: lightgray;
+}
+
+input:hover:not(:disabled):not(:focus),
+.input:hover:not(:disabled):not(:focus),
+textarea:hover:not(:disabled):not(:focus),
+select:hover:not(:disabled):not(:focus) {
+  border-color: silver;
+}
+
+input:focus,
+.input:focus,
+textarea:focus,
+select:focus {
+  border-color: darkgray;
+}
+
+input:read-only,
+textarea:read-only {
+  color: darkgray;
+}
+
+input:disabled,
+.input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: whitesmoke;
+  color: darkgray;
+}

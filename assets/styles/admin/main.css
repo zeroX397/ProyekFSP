@@ -99,7 +99,7 @@
 .btnsubmit {
   display: inline-block;
   padding: 10px 24px;
-  background-color: #fa1c1c;
+  background-color: #04AA6D;
   color: white;
   text-align: center;
   text-decoration: none;
@@ -109,7 +109,7 @@
 }
 
 .btnsubmit:hover {
-  background-color: #bf1616;
+  background-color: #3e8e41;
 }
 
 .add-form select,

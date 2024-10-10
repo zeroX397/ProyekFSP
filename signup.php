@@ -84,7 +84,7 @@ if (isset($_POST['submit'])) { // Check if form was submitted
             <p style="margin-top: 30px;">Already have an account? <a href="/login.php">Log in here</a></p>
         </form>
     </div>
-    <script src="/jquery-3.7.1.js"></script>
+    <script src="/assets/js/jquery-3.7.1.js"></script>
     <script>
         $('#password, #confirm_password').on('keyup', function() {
             if ($('#password').val() == $('#confirm_password').val()) {

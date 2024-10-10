@@ -120,6 +120,7 @@ if (isset($_POST['submit'])) {
                 <tr>
                     <td><label for="idteam">Team</label></td>
                     <td>
+                    <input type="hidden" name="idachievement" value="<?php echo htmlspecialchars($idachievement); ?>">
                         <select name="idteam" required>
                             <option value="">Select Team</option>
                             <?php foreach ($teams as $team): ?>

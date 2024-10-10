@@ -120,6 +120,7 @@ if (isset($_POST['submit'])) {
                 <tr>
                     <td><label for="name">Event Name</label></td>
                     <td><input name="name" type="text" placeholder="Event Name" value="<?php echo htmlspecialchars($event['name']); ?>" required></td>
+                    <input type="hidden" name="id_event" value="<?php echo htmlspecialchars($idevent); ?>">
                 </tr>
                 <tr>
                     <td><label for="date">Event Date</label></td>
@@ -127,12 +128,12 @@ if (isset($_POST['submit'])) {
                 </tr>
                 <tr>
                     <td><label for="description">Description</label></td>
-                    <td><textarea name="description" placeholder="Event Description" required><?php echo htmlspecialchars($event['description']); ?></textarea></td>
+                    <td><textarea style="width: 500px;" name="description" placeholder="Event Description" rows="10" required><?php echo htmlspecialchars($event['description']); ?></textarea></td>
                 </tr>
                 <tr>
                     <td><label for="team">Team</label></td>
                     <td>
-                        <select name="team" required>
+                        <select name="team" class="dropdown-menu" required>
                             <?php
                             while ($team = mysqli_fetch_assoc($teamsResult)) {
                                 $selected = ($team['idteam'] == $current_team) ? 'selected' : '';
