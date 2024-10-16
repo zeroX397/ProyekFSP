@@ -8,6 +8,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/how-to-join.css">
     <title>Informatics E-Sport Club</title>
@@ -33,7 +34,30 @@ session_start();
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo '<a href="/admin/">Admin Site</a>';
+                echo
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="dd-admin-page">
+                        <a href="/admin/teams/">Manage Teams</a>
+                        <a href="/admin/members/">Manage Members</a>
+                        <a href="/admin/events/">Manage Events</a>
+                        <a href="/admin/games/">Manage Games</a>
+                        <a href="/admin/achievements/">Manage Achievements</a>
+                        <a href="/admin/event_teams/">Manage Event-Teams</a>
+                    </div>
+                </div>';
+                echo
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="proposalPage">
+                        <a href="/admin/proposal/waiting.php">Waiting Approval</a>
+                        <a href="/admin/proposal/responded.php">Responded</a>
+                    </div>
+                </div>';
             }
         }
         ?>
@@ -47,12 +71,13 @@ session_start();
             <li>Go to the <a href="/teams.php">teams page</a>, and find a team you desired.</li>
             <li>You can check the team details first. It contains every detail of the team, including its members.</li>
             <li>If you happy enough, click the join button.</li>
-            <li>You will be asked to describe yourself. Provide useful information about you: e.g. your main heroes or agents, or you favorite roles. <br><em>Note: max. 100 characters.</em></li>
-            <li>Click the Apply button. And please kindly wait for admin to decide your application.</li>
+            <li>You will be asked to describe yourself. Provide useful information about you: e.g. your main heroes or agents, or you favorite roles. <br><em>Note: maximum <strong>100 characters.</strong></em></li>
+            <li>Click the <strong>Apply</strong> button. And please kindly wait for admin to decide your application.</li>
         </ol>
         <p>You may join more than 1 (one) team. So after you submit first application, you can submit another application to different team. But please take a note that admin can either <strong>accept or reject</strong> you application.</p>
-        <p style="background-color: yellow;">Warning: Do not repeatedly send application, or admin will <strong>BAN</strong> and <strong>DELETE</strong> your account.</p>
+        <p style="background-color: yellow;">Warning: Do not repeatedly send application (spamming), or admin will <strong>BAN</strong> and <strong>DELETE</strong> your account.</p>
     </section>
+    <script src="/assets/js/dropdown.js"></script>
 </body>
 
 </html>

@@ -70,7 +70,7 @@ $result = mysqli_query($connection, $sql);
                 if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                     echo 
                     '<div class="dropdown">
-                        <a class="dropbtn" onclick="dropdownFunction()">Admin Sites
+                        <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <div class="dropdown-content" id="dd-admin-page">
@@ -80,6 +80,16 @@ $result = mysqli_query($connection, $sql);
                             <a href="/admin/games/">Manage Games</a>
                             <a href="/admin/achievements/">Manage Achievements</a>
                             <a href="/admin/event_teams/">Manage Event-Teams</a>
+                        </div>
+                    </div>';
+                    echo
+                    '<div class="dropdown">
+                        <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <div class="dropdown-content" id="proposalPage">
+                            <a href="/admin/proposal/waiting.php">Waiting Approval</a>
+                            <a href="/admin/proposal/responded.php">Responded</a>
                         </div>
                     </div>';
                 }

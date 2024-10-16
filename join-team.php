@@ -7,6 +7,14 @@ if (!isset($_SESSION['username'])) {
     echo "<script>alert('Please login before applying to Team.');</script>";
 }
 
+// Get the team name from prev. page
+$tn_sql = "SELECT team.name FROM `team` WHERE idteam = ?;";
+$tn_stmt = mysqli_prepare($connection, $tn_sql);
+mysqli_stmt_bind_param($tn_stmt, 'i', $idteam);
+mysqli_stmt_execute($tn_stmt);
+$tn_result = mysqli_stmt_get_result($tn_stmt);
+$team_name = mysqli_fetch_assoc($tn_result);
+
 // Check if the form has been submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_SESSION['idmember'], $_POST['idmember'], $_POST['idteam'], $_POST['application-text'])) {
@@ -66,9 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo 
+                echo
                 '<div class="dropdown">
-                    <a class="dropbtn" onclick="dropdownFunction()">Admin Sites
+                    <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
                     </a>
                     <div class="dropdown-content" id="dd-admin-page">
@@ -78,6 +86,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a href="/admin/games/">Manage Games</a>
                         <a href="/admin/achievements/">Manage Achievements</a>
                         <a href="/admin/event_teams/">Manage Event-Teams</a>
+                    </div>
+                </div>';
+                echo
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="proposalPage">
+                        <a href="/admin/proposal/waiting.php">Waiting Approval</a>
+                        <a href="/admin/proposal/responded.php">Responded</a>
                     </div>
                 </div>';
             }
@@ -96,6 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
         <input type="hidden" name="idteam" value="<?php echo isset($_POST['idteam']) ? $_POST['idteam'] : 'default_value'; ?>">
         <h1>Tell us just a bit about yourself:</h1>
+        <h3>You are applying for: <?php $team_name?></h3>
         <textarea class="application-text" name="application-text" maxlength="100" rows="4" cols="30" placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters."></textarea>
         <br><button type="submit">Apply</button>
     </form>

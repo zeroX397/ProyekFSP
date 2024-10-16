@@ -70,7 +70,7 @@ $team_result = mysqli_query($connection, $team_sql);
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo 
                 '<div class="dropdown">
-                    <a class="dropbtn" onclick="dropdownFunction()">Admin Sites
+                    <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
                     </a>
                     <div class="dropdown-content" id="dd-admin-page">
@@ -82,23 +82,20 @@ $team_result = mysqli_query($connection, $team_sql);
                         <a href="/admin/event_teams/">Manage Event-Teams</a>
                     </div>
                 </div>';
+                echo 
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="proposalPage">
+                        <a href="/admin/proposal/waiting.php">Waiting Approval</a>
+                        <a href="/admin/proposal/responded.php">Responded</a>
+                    </div>
+                </div>';
             }
         }
         ?>
     </nav>
-    
-    <!-- Admin Navigation Bar -->
-    <nav class="topnav admin-nav">
-        <a class="label">Administration Menus</a>
-        <a href="/admin/teams/">Manage Teams</a>
-        <a href="/admin/members/">Manage Members</a>
-        <a href="/admin/events/">Manage Events</a>
-        <a href="/admin/games/">Manage Games</a>
-        <a href="/admin/achievements/">Manage Achievements</a>
-        <a href="/admin/event_teams/">Manage Event-Teams</a>
-
-    </nav>
-    
     <!-- Form to Add New Event -->
     <div class="form">
         <?php if (isset($error)) : ?>
@@ -124,6 +121,7 @@ $team_result = mysqli_query($connection, $team_sql);
             <button name="submit" type="submit">Save Event</button><br>
         </form>
     </div>
+    <script src="/assets/js/dropdown.js"></script>
 </body>
 
 </html>

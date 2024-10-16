@@ -1,9 +1,8 @@
 .join-instructions {
     position: relative;
-    z-index: 1;
     background: #FFFFFF;
     max-width: 800px;
-    margin: 75px auto 100px;
+    margin: 50px auto 10px;
     padding: 20px 40px 40px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }

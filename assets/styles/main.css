@@ -223,35 +223,3 @@ select {
   /* margin-right: 0.6em; */
   min-width: 15em;
 }
-
-/* input::placeholder,
-textarea::placeholder {
-  color: lightgray;
-} 
-
-input:hover:not(:disabled):not(:focus),
-.input:hover:not(:disabled):not(:focus),
-textarea:hover:not(:disabled):not(:focus),
-select:hover:not(:disabled):not(:focus) {
-  border-color: silver;
-}
-
-input:focus,
-.input:focus,
-textarea:focus,
-select:focus {
-  border-color: darkgray;
-}
-
-input:read-only,
-textarea:read-only {
-  color: darkgray;
-}
-
-input:disabled,
-.input:disabled,
-textarea:disabled,
-select:disabled {
-  background-color: whitesmoke;
-  color: darkgray;
-} */

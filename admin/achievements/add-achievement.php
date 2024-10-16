@@ -46,6 +46,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
+    <link rel="stylesheet" href="/assets/styles/admin/achievements/add-achievement.css">
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -71,7 +72,7 @@ if (isset($_POST['submit'])) {
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo 
                 '<div class="dropdown">
-                    <a class="dropbtn" onclick="dropdownFunction()">Admin Sites
+                    <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
                     </a>
                     <div class="dropdown-content" id="dd-admin-page">
@@ -81,6 +82,16 @@ if (isset($_POST['submit'])) {
                         <a href="/admin/games/">Manage Games</a>
                         <a href="/admin/achievements/">Manage Achievements</a>
                         <a href="/admin/event_teams/">Manage Event-Teams</a>
+                    </div>
+                </div>';
+                echo 
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="proposalPage">
+                        <a href="/admin/proposal/waiting.php">Waiting Approval</a>
+                        <a href="/admin/proposal/responded.php">Responded</a>
                     </div>
                 </div>';
             }
@@ -101,8 +112,8 @@ if (isset($_POST['submit'])) {
             </select>
             <input name="achievement_name" type="text" placeholder="Achievement Name" required>
             <input type="date" name="achievement_date" id="" required>
-            <textarea class="application-text" name="achievement_description" maxlength="100" rows="4" cols="50"
-                placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters." required></textarea>
+            <textarea class="achievement-text" name="achievement_description" maxlength="100" rows="4" cols="50"
+                placeholder="Achievement's description" required></textarea>
             <button name="submit" type="submit">Save Team</button><br>
         </form>
     </div>
