@@ -9,25 +9,30 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5; // Number sql per page
+$perpage = 5; // Number of entries per page
 if (isset($_GET['p'])) {
     $page = $_GET['p'];
 } else {
-    $page = 1;
+    $page = 1; 
 }
 $start = ($page - 1) * $perpage;
 
-// $sql_count = "SELECT COUNT(*) AS total FROM game";
-$sql_count = "SELECT COUNT(DISTINCT game.idgame) AS total 
-              FROM game";
+// Count total join proposals
+$sql_count = "SELECT COUNT(DISTINCT join_proposal.idjoin_proposal) AS total 
+              FROM join_proposal
+              INNER JOIN team ON team.idteam = join_proposal.idteam
+              INNER JOIN member ON member.idmember = join_proposal.idmember";
 $result_count = mysqli_query($connection, $sql_count);
 $row_count = mysqli_fetch_assoc($result_count);
 $totaldata = $row_count['total'];
 $totalpage = ceil($totaldata / $perpage);
 
-$sql = "SELECT game.idgame as id_game, game.name, game.description
-        FROM `game` 
-        ORDER BY game.idgame ASC 
+// Fetch join proposals data
+$sql = "SELECT join_proposal.idjoin_proposal, member.fname, member.lname, team.name AS team_name, join_proposal.description, join_proposal.status
+        FROM join_proposal 
+        INNER JOIN team ON team.idteam = join_proposal.idteam
+        INNER JOIN member ON member.idmember = join_proposal.idmember
+        ORDER BY join_proposal.idjoin_proposal ASC 
         LIMIT $start, $perpage";
 $result = mysqli_query($connection, $sql);
 ?>
@@ -41,14 +46,12 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
-    <title>Informatics E-Sport Club</title>
+    <title>Manage Join Proposals</title>
 </head>
 
 <body>
     <header>
+        <!-- Top Navigation Bar -->
         <nav class="topnav">
             <a class="active" href="/">Homepage</a>
             <a href="/teams.php">Teams</a>
@@ -58,18 +61,15 @@ $result = mysqli_query($connection, $sql);
             <a href="/how-to-join.php">How to Join</a>
             <?php
             if (!isset($_SESSION['username'])) {
-                // User is not logged in
                 echo '<a class="active" href="/login.php">Login</a>';
             } else {
-                // User is logged in
-                $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
+                $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username'];
                 echo '<a class="logout" href="/logout.php">Logout</a>';
                 echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
-                // To check whether is admin or not
                 if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                    echo
+                    echo 
                     '<div class="dropdown">
-                        <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
+                        <a class="dropbtn" onclick="dropdownFunction()">Admin Sites
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <div class="dropdown-content" id="dd-admin-page">
@@ -79,17 +79,7 @@ $result = mysqli_query($connection, $sql);
                             <a href="/admin/games/">Manage Games</a>
                             <a href="/admin/achievements/">Manage Achievements</a>
                             <a href="/admin/event_teams/">Manage Event-Teams</a>
-                            <a href="/admin/join_proposals/">Manage Proposal</a>
-                        </div>
-                    </div>';
-                    echo
-                    '<div class="dropdown">
-                        <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
-                            <i class="fa fa-caret-down"></i>
-                        </a>
-                        <div class="dropdown-content" id="proposalPage">
-                            <a href="/admin/proposal/waiting.php">Waiting Approval</a>
-                            <a href="/admin/proposal/responded.php">Responded</a>
+                            <a href="/admin/join_proposals/">Manage Join Proposals</a>
                         </div>
                     </div>';
                 }
@@ -97,46 +87,55 @@ $result = mysqli_query($connection, $sql);
             ?>
         </nav>
         <div class="header-content">
-            <h1 class="welcome-mssg">Manage Games</h1>
-            <form action="add-game.php" class="add-new">
-                <button type="submit" class="">Add New Game</button>
-            </form>
+            <h1 class="welcome-mssg">Manage Join Proposals</h1>
         </div>
     </header>
-    <!-- Top Navigation Bar -->
 
-    <div class="all-member">
+    <div class="all-proposals">
         <table>
             <tr>
-                <th>Game ID</th>
-                <th>Name</th>
+                <th>Proposal ID</th>
+                <th>Member Name</th>
+                <th>Team Name</th>
                 <th>Description</th>
-                <th>Edit Member</th>
-                <th>Delete Member</th>
+                <th>Status</th>
+                <th>Accept Proposal</th>
+                <th>Reject Proposal</th>
             </tr>
             <?php
             if ($result && mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>";
-                    echo "<td>" . $row['id_game'] . "</td>";
-                    echo "<td>" . $row['name'] . "</td>";
+                    echo "<td>" . $row['idjoin_proposal'] . "</td>";
+                    echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
+                    echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>" . $row['description'] . "</td>";
-                    echo "<td>";
-                    echo "<form method='post' action='edit-game.php'>";
-                    echo "<input type='hidden' name='id_game' value='" . $row['id_game'] . "'>";
-                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "<td>";
-                    echo "<form action='delete-game.php' method='post'>";
-                    echo "<input type='hidden' name='id_game' value='" . $row['id_game'] . "'>";
-                    echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
-                    echo "</form>";
-                    echo "</td>";
+                    echo "<td>" . $row['status'] . "</td>";
+
+                    if ($row['status'] == 'waiting') {
+                        // Accept button column
+                        echo "<td>";
+                        echo "<form method='post' action='process-proposal.php'>";
+                        echo "<input type='hidden' name='idjoin_proposal' value='" . $row['idjoin_proposal'] . "'>";
+                        echo "<button type='submit' name='accept' class='accept'>Accept</button>";
+                        echo "</form>";
+                        echo "</td>";
+
+                        // Reject button column
+                        echo "<td>";
+                        echo "<form method='post' action='process-proposal.php'>";
+                        echo "<input type='hidden' name='idjoin_proposal' value='" . $row['idjoin_proposal'] . "'>";
+                        echo "<button type='submit' name='reject' class='reject'>Reject</button>";
+                        echo "</form>";
+                        echo "</td>";
+                    } else {
+                        // Display the final status if not waiting in both columns
+                        echo "<td colspan='2'>" . $row['status'] . "</td>";
+                    }
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='3'>No game found</td></tr>";
+                echo "<tr><td colspan='7'>No proposals found</td></tr>";
             }
             ?>
         </table>
@@ -147,20 +146,20 @@ $result = mysqli_query($connection, $sql);
         <?php
         if ($page > 1) {
             $prev = $page - 1;
-            echo "<a href='index.php?p=$prev'>Prev</a>"; // Previous page 
+            echo "<a href='index.php?p=$prev'>Prev</a>"; 
         }
 
         for ($i = 1; $i <= $totalpage; $i++) {
             if ($i == $page) {
-                echo "<strong>$i</strong>"; // Current page 
+                echo "<strong>$i</strong>"; 
             } else {
-                echo "<a href='index.php?p=$i'>$i</a>"; // Other page 
+                echo "<a href='index.php?p=$i'>$i</a>"; 
             }
         }
 
         if ($page < $totalpage) {
             $next = $page + 1;
-            echo "<a href='index.php?p=$next'>Next</a>"; // Next page 
+            echo "<a href='index.php?p=$next'>Next</a>"; 
         }
         ?>
     </div>
