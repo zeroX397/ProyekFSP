@@ -11,7 +11,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 // Get the game ID from the URL or form submission
 if (isset($_POST['id_game'])) {
     $idgame = mysqli_real_escape_string($connection, $_POST['id_game']);
-    
+
     $gameQuery = "SELECT * FROM game WHERE idgame = ?";
     $stmt = mysqli_prepare($connection, $gameQuery);
     mysqli_stmt_bind_param($stmt, 'i', $idgame);
@@ -24,7 +24,6 @@ if (isset($_POST['id_game'])) {
         echo "<script>alert('Game not found.'); window.location.href='/admin/games/index.php';</script>";
         exit();
     }
-
 } else {
     header('Location: /admin/games/index.php');
     exit();
@@ -56,6 +55,7 @@ if (isset($_POST['submit']) && isset($_POST['id_game'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/games/edit-game.css">
@@ -77,25 +77,26 @@ if (isset($_POST['submit']) && isset($_POST['id_game'])) {
         } else {
             $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php">Logout</a>';
-            echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
+            echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo '<a href="/admin/">Admin Site</a>';
+                echo
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="dropdownFunction()">Admin Sites
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="dd-admin-page">
+                        <a href="/admin/teams/">Manage Teams</a>
+                        <a href="/admin/members/">Manage Members</a>
+                        <a href="/admin/events/">Manage Events</a>
+                        <a href="/admin/games/">Manage Games</a>
+                        <a href="/admin/achievements/">Manage Achievements</a>
+                        <a href="/admin/event_teams/">Manage Event-Teams</a>
+                    </div>
+                </div>';
             }
         }
         ?>
     </nav>
-    
-    <!-- Admin Navigation Bar -->
-    <nav class="topnav admin-nav">
-        <a class="label">Administration Menus</a>
-        <a href="/admin/teams/">Manage Teams</a>
-        <a href="/admin/members/">Manage Members</a>
-        <a href="/admin/events/">Manage Events</a>
-        <a href="/admin/games/">Manage Games</a>
-        <a href="/admin/achievements/">Manage Achievements</a>
-        <a href="/admin/event_teams/">Manage Event Teams</a>
-    </nav>
-    
     <!-- Form to Edit Game -->
     <div class="form">
         <?php if (isset($error)) : ?>
@@ -104,23 +105,14 @@ if (isset($_POST['submit']) && isset($_POST['id_game'])) {
         <form action="" method="post" class="edit-form">
             <!-- Hidden input for game ID -->
             <input type="hidden" name="id_game" value="<?php echo htmlspecialchars($game['idgame']); ?>">
-            <br><br><br>
-            <table class="edit-table">
-                <tr>
-                    <td><label for="name">Game Name</label></td>
-                    <td><input name="name" type="text" placeholder="Game Name" value="<?php echo htmlspecialchars($game['name']); ?>" required></td>
-                </tr>
-                <tr>
-                    <td><label for="description">Game Description</label></td>
-                    <td><textarea name="description" rows="4" cols="50" placeholder="Game Description" required><?php echo htmlspecialchars($game['description']); ?></textarea></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><button name="submit" type="submit" class="btnsubmit">Update</button></td>
-                </tr>
-            </table>
+            <form action="" class="add-form" method="post">
+                <input name="name" type="text" placeholder="Game Name" value="<?php echo htmlspecialchars($game['name']); ?>" required>
+                <textarea name="description" rows="10" placeholder="Game Description" required><?php echo htmlspecialchars($game['description']); ?></textarea>
+                <button name="submit" type="submit" class="btnsubmit">Update</button>
+            </form>
         </form>
     </div>
+    <script src="/assets/js/dropdown.js"></script>
 </body>
 
 </html>

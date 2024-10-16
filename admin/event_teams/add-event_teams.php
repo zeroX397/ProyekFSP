@@ -1,12 +1,14 @@
 <?php
 session_start();
+include("../../config.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
-    header('Location: /'); // Redirect non-admins to the homepage
+    header('Location: /');
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,11 +18,11 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <title>Informatics E-Sport Club</title>
+    <title>Informatics E-Sport Club - Edit Event Teams</title>
 </head>
 
 <body>
-    <!-- Top Navigation Bar -->
+    <!-- Top Navigation bars -->
     <nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
@@ -30,16 +32,13 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
         <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
-            // User is not logged in
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
-            // User is logged in
             $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
-            // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="dropdownFunction()">Admin Sites
                         <i class="fa fa-caret-down"></i>
@@ -57,6 +56,11 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
         }
         ?>
     </nav>
+
+    <!-- Form to Add Event-Team -->
+    <div class="form">
+        
+    </div>
     <script src="/assets/js/dropdown.js"></script>
 </body>
 

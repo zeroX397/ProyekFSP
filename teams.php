@@ -16,6 +16,7 @@ $result = mysqli_query($connection, $sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/teams.css">
     <title>Informatics E-Sport Club</title>
@@ -38,10 +39,23 @@ $result = mysqli_query($connection, $sql);
             // User is logged in
             $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php">Logout</a>';
-            echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
+            echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo '<a href="/admin/">Admin Site</a>';
+                echo 
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="dropdownFunction()">Admin Sites
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="dd-admin-page">
+                        <a href="/admin/teams/">Manage Teams</a>
+                        <a href="/admin/members/">Manage Members</a>
+                        <a href="/admin/events/">Manage Events</a>
+                        <a href="/admin/games/">Manage Games</a>
+                        <a href="/admin/achievements/">Manage Achievements</a>
+                        <a href="/admin/event_teams/">Manage Event-Teams</a>
+                    </div>
+                </div>';
             }
         }
         ?>
@@ -95,6 +109,7 @@ $result = mysqli_query($connection, $sql);
             </table>
         </div>
     </section>
+    <script src="/assets/js/dropdown.js"></script>
 </body>
 
 </html>

@@ -44,6 +44,7 @@ $team_result = mysqli_query($connection, $team_sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/add-member.css">
@@ -65,9 +66,22 @@ $team_result = mysqli_query($connection, $team_sql);
         } else {
             $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php">Logout</a>';
-            echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
+            echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo '<a href="/admin/">Admin Site</a>';
+                echo 
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="dropdownFunction()">Admin Sites
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="dd-admin-page">
+                        <a href="/admin/teams/">Manage Teams</a>
+                        <a href="/admin/members/">Manage Members</a>
+                        <a href="/admin/events/">Manage Events</a>
+                        <a href="/admin/games/">Manage Games</a>
+                        <a href="/admin/achievements/">Manage Achievements</a>
+                        <a href="/admin/event_teams/">Manage Event-Teams</a>
+                    </div>
+                </div>';
             }
         }
         ?>
@@ -81,20 +95,21 @@ $team_result = mysqli_query($connection, $team_sql);
         <a href="/admin/events/">Manage Events</a>
         <a href="/admin/games/">Manage Games</a>
         <a href="/admin/achievements/">Manage Achievements</a>
-        <a href="/admin/event_teams/">Manage Event Teams</a>
+        <a href="/admin/event_teams/">Manage Event-Teams</a>
 
     </nav>
     
     <!-- Form to Add New Event -->
-    
     <div class="form">
         <?php if (isset($error)) : ?>
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" class="add-form" method="post">
+            <p>Enter Event Name</p>
             <input name="name" type="text" placeholder="Event Name" required>
-            <input type="date" name="date" required>
-            <textarea class="application-text" name="description" maxlength="100" rows="4" placeholder="Event Description" required></textarea>
+            <p>Enter Event Date</p>
+            <input type="date" name="date" placeholder="Enter Event's Date" required>
+            <textarea class="application-text" name="description" maxlength="100" rows="5" placeholder="Event Description" required></textarea>
             <select name="team" required>
                 <option value="">Select Team</option>
                 <?php
