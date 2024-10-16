@@ -1,11 +1,36 @@
 <?php
 session_start();
+include("../../config.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     header('Location: /'); // Redirect non-admins to the homepage
     exit();
 }
+
+// Paging configuration
+$perpage = 5; // Number of entries per page
+$page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
+$start = ($page - 1) * $perpage;
+
+// Count total responded join proposals (approved + rejected)
+$sql_count = "SELECT COUNT(DISTINCT join_proposal.idjoin_proposal) AS total 
+              FROM join_proposal
+              WHERE join_proposal.status IN ('approved', 'rejected')";
+$result_count = mysqli_query($connection, $sql_count);
+$row_count = mysqli_fetch_assoc($result_count);
+$totaldata = $row_count['total'];
+$totalpage = ceil($totaldata / $perpage);
+
+// Fetch responded join proposals data
+$sql = "SELECT join_proposal.idjoin_proposal, member.fname, member.lname, team.name AS team_name, join_proposal.description, join_proposal.status
+        FROM join_proposal 
+        INNER JOIN team ON team.idteam = join_proposal.idteam
+        INNER JOIN member ON member.idmember = join_proposal.idmember
+        WHERE join_proposal.status IN ('approved', 'rejected')
+        ORDER BY join_proposal.idjoin_proposal ASC 
+        LIMIT $start, $perpage";
+$result = mysqli_query($connection, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -69,6 +94,61 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
         }
         ?>
     </nav>
+
+    <div class="header-content">
+        <h1 class="welcome-mssg">Manage Join Proposals - Responded</h1>
+    </div>
+
+    <div class="all-proposals">
+        <table>
+            <tr>
+                <th>Proposal ID</th>
+                <th>Member Name</th>
+                <th>Team Name</th>
+                <th>Description</th>
+                <th>Status</th>
+            </tr>
+            <?php
+            if ($result && mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['idjoin_proposal'] . "</td>";
+                    echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
+                    echo "<td>" . $row['team_name'] . "</td>";
+                    echo "<td>" . $row['description'] . "</td>";
+                    echo "<td>" . $row['status'] . "</td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='5'>No proposals found</td></tr>";
+            }
+            ?>
+        </table>
+    </div>
+
+    <!-- Paging -->
+    <div class="paging">
+        <?php
+        if ($page > 1) {
+            $prev = $page - 1;
+            echo "<a href='responded.php?p=$prev'>Prev</a>"; 
+        }
+
+        for ($i = 1; $i <= $totalpage; $i++) {
+            if ($i == $page) {
+                echo "<strong>$i</strong>"; 
+            } else {
+                echo "<a href='responded.php?p=$i'>$i</a>"; 
+            }
+        }
+
+        if ($page < $totalpage) {
+            $next = $page + 1;
+            echo "<a href='responded.php?p=$next'>Next</a>"; 
+        }
+        ?>
+    </div>
+
     <script src="/assets/js/dropdown.js"></script>
 </body>
 

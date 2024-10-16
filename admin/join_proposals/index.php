@@ -10,11 +10,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 
 // Paging configuration
 $perpage = 5; // Number of entries per page
-if (isset($_GET['p'])) {
-    $page = $_GET['p'];
-} else {
-    $page = 1; 
-}
+$page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
 // Count total join proposals
@@ -113,23 +109,23 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['status'] . "</td>";
 
                     if ($row['status'] == 'waiting') {
-                        // Accept button column
+                        // Accept button 
                         echo "<td>";
-                        echo "<form method='post' action='process-proposal.php'>";
+                        echo "<form method='post' action='approve-proposal.php'>"; 
                         echo "<input type='hidden' name='idjoin_proposal' value='" . $row['idjoin_proposal'] . "'>";
                         echo "<button type='submit' name='accept' class='accept'>Accept</button>";
                         echo "</form>";
                         echo "</td>";
 
-                        // Reject button column
+                        // Reject button
                         echo "<td>";
-                        echo "<form method='post' action='process-proposal.php'>";
+                        echo "<form method='post' action='reject-proposal.php'>"; 
                         echo "<input type='hidden' name='idjoin_proposal' value='" . $row['idjoin_proposal'] . "'>";
                         echo "<button type='submit' name='reject' class='reject'>Reject</button>";
                         echo "</form>";
                         echo "</td>";
                     } else {
-                        // Display the final status if not waiting in both columns
+                        // Display approved or rejected
                         echo "<td colspan='2'>" . $row['status'] . "</td>";
                     }
                     echo "</tr>";

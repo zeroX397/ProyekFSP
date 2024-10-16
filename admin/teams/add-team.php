@@ -80,7 +80,6 @@ if (isset($_POST['submit'])) {
                         <a href="/admin/games/">Manage Games</a>
                         <a href="/admin/achievements/">Manage Achievements</a>
                         <a href="/admin/event_teams/">Manage Event-Teams</a>
-                        <a href="/admin/join_proposals/">Manage Proposal</a>
                     </div>
                 </div>';
                 echo
