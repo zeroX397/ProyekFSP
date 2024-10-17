@@ -121,7 +121,7 @@ $team_result = mysqli_query($connection, $team_sql);
             <button name="submit" type="submit">Save Event</button><br>
         </form>
     </div>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

@@ -68,7 +68,7 @@ session_start();
         <h1>Welcome to the Informatics E-Sport Club</h1>
         <h3>By Universitas Surabaya</h3>
     </div>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

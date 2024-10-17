@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <textarea class="application-text" name="application-text" maxlength="100" rows="4" cols="30" placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters."></textarea>
         <br><button type="submit">Apply</button>
     </form>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

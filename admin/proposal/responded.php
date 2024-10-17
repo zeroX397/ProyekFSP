@@ -149,7 +149,7 @@ $result = mysqli_query($connection, $sql);
         ?>
     </div>
 
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

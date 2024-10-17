@@ -71,7 +71,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     <div class="form">
         
     </div>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

@@ -122,7 +122,7 @@ if (isset($_POST['submit']) && isset($_POST['id_game'])) {
             </form>
         </form>
     </div>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

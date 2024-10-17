@@ -97,7 +97,7 @@ if (isset($_POST['submit'])) {
             <button name="submit" type="submit">Save Game</button><br>
         </form>
     </div>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

@@ -68,7 +68,7 @@ session_start();
 
         </h1>
     </main>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

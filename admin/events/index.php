@@ -17,46 +17,49 @@ if (isset($_GET['p'])) {
 }
 $start = ($page - 1) * $perpage;
 
-// Handle team filtering
-$team_filter = "";
-if (isset($_GET['team'])) {
-    $team_filter = mysqli_real_escape_string($connection, $_GET['team']);
-}
+// // Handle team filtering
+// $team_filter = "";
+// if (isset($_GET['team'])) {
+//     $team_filter = mysqli_real_escape_string($connection, $_GET['team']);
+// }
 
-// SQL Filtering
-$teamQuery = "SELECT DISTINCT team.name as team_name, team.idteam as team_id 
-              FROM team 
-              JOIN event_teams ON team.idteam = event_teams.idteam";
-$teamResult = mysqli_query($connection, $teamQuery);
+// // SQL Filtering
+// $teamQuery = "SELECT DISTINCT team.name as team_name, team.idteam as team_id 
+//               FROM team 
+//               JOIN event_teams ON team.idteam = event_teams.idteam";
+// $teamResult = mysqli_query($connection, $teamQuery);
 
 // Total Count 
-$sql_count = "SELECT COUNT(DISTINCT event.idevent) AS total 
-              FROM event
-              INNER JOIN event_teams ON event.idevent = event_teams.idevent
-              INNER JOIN team ON event_teams.idteam = team.idteam";
+// $sql_count = "SELECT COUNT(DISTINCT event.idevent) AS total 
+//               FROM event
+//               INNER JOIN event_teams ON event.idevent = event_teams.idevent
+//               INNER JOIN team ON event_teams.idteam = team.idteam";
 
-if (!empty($team_filter)) {
-    $sql_count .= " WHERE team.idteam = '$team_filter'";
-}
+// if (!empty($team_filter)) {
+//     $sql_count .= " WHERE team.idteam = '$team_filter'";
+// }
 
-$result_count = mysqli_query($connection, $sql_count);
-$row_count = mysqli_fetch_assoc($result_count);
-$totaldata = $row_count['total'];
-$totalpage = ceil($totaldata / $perpage);
+// $result_count = mysqli_query($connection, $sql_count);
+// $row_count = mysqli_fetch_assoc($result_count);
+// $totaldata = $row_count['total'];
+// $totalpage = ceil($totaldata / $perpage);
 
 // Query for event list (with optional team filter)
-$sql = "SELECT event.idevent as id_event, event.name, event.date, event.description, 
-               team.name as team_name
-        FROM `event`
-        JOIN event_teams ON event.idevent = event_teams.idevent
-        JOIN team ON event_teams.idteam = team.idteam";
+// $sql = "SELECT event.idevent as id_event, event.name, event.date, event.description, 
+//                team.name as team_name
+//         FROM `event`
+//         JOIN event_teams ON event.idevent = event_teams.idevent
+//         JOIN team ON event_teams.idteam = team.idteam";
+// if (!empty($team_filter)) {
+//     $sql .= " WHERE team.idteam = '$team_filter'";
+// }
 
-if (!empty($team_filter)) {
-    $sql .= " WHERE team.idteam = '$team_filter'";
-}
+// $sql .= " ORDER BY event.idevent ASC 
+//           LIMIT $start, $perpage";
 
-$sql .= " ORDER BY event.idevent ASC 
-          LIMIT $start, $perpage";
+$sql = "SELECT event.idevent as id_event, event.name, event.date, event.description
+        FROM `event`";
+
 $result = mysqli_query($connection, $sql);
 ?>
 
@@ -134,29 +137,13 @@ $result = mysqli_query($connection, $sql);
     </header>
 
     <div class="all-member">
-        <!-- Filter by Team -->
-        <form method="get" action="index.php">
-            <label for="team">Filter by Team:</label>
-            <select name="team" id="team" onchange="this.form.submit()">
-                <option value="">All Teams</option>
-                <?php
-                if ($teamResult && mysqli_num_rows($teamResult) > 0) {
-                    while ($team = mysqli_fetch_assoc($teamResult)) {
-                        $selected = ($team_filter == $team['team_id']) ? 'selected' : '';
-                        echo "<option value='" . $team['team_id'] . "' $selected>" . $team['team_name'] . "</option>";
-                    }
-                }
-                ?>
-            </select>
-        </form>
-
         <table>
             <tr>
                 <th>Event ID</th>
                 <th>Name</th>
                 <th>Date</th>
                 <th>Description</th>
-                <th>Team</th>
+                <!-- <th>Team</th> -->
                 <th>Edit Event</th>
                 <th>Delete Event</th>
             </tr>
@@ -168,7 +155,7 @@ $result = mysqli_query($connection, $sql);
                     echo "<td>" . $row['name'] . "</td>";
                     echo "<td>" . $row['date'] . "</td>";
                     echo "<td>" . $row['description'] . "</td>";
-                    echo "<td>" . $row['team_name'] . "</td>";
+                    // echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>";
                     echo "<form action='edit-event.php' method='post'>";
                     echo "<input type='hidden' name='id_event' value='" . $row['id_event'] . "'>";
@@ -176,7 +163,7 @@ $result = mysqli_query($connection, $sql);
                     echo "</form>";
                     echo "</td>";
                     echo "<td>";
-                    echo "<form action='delete-event.php' method='post'>";
+                    echo "<form action='delete-event.php' method='post' onsubmit='return confirmDelete()'>";
                     echo "<input type='hidden' name='id_event' value='" . $row['id_event'] . "'>";
                     echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
                     echo "</form>";
@@ -212,7 +199,7 @@ $result = mysqli_query($connection, $sql);
         }
         ?>
     </div>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

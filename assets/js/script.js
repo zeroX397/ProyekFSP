@@ -1,3 +1,5 @@
+// DROPDOWN FUNCTION FOR ADMIN AND JOIN PROPOSAL
+
 /* When the user clicks on the button, 
 toggle between hiding and showing the dropdown content */
 function adminpageDropdown() {
@@ -20,4 +22,11 @@ window.onclick = function (e) {
 
 function proposalDropdown() {
     document.getElementById("proposalPage").classList.toggle("show");
+}
+
+
+// DELETE CONFIRMATION WHEN DELETING DATA
+
+function confirmDelete() {
+    return confirm("Are you sure you want to delete this data?\nThis action cannot be undone!");
 }

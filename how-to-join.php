@@ -77,7 +77,7 @@ session_start();
         <p>You may join more than 1 (one) team. So after you submit first application, you can submit another application to different team. But please take a note that admin can either <strong>accept or reject</strong> you application.</p>
         <p style="background-color: yellow;">Warning: Do not repeatedly send application (spamming), or admin will <strong>BAN</strong> and <strong>DELETE</strong> your account.</p>
     </section>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

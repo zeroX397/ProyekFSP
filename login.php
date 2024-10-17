@@ -106,7 +106,7 @@ if (isset($_POST['submit'])) {
             <p style="margin-top: 30px;">Don't have an account? <a href="/signup.php">Sign up here</a></p>
         </form>
     </div>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

@@ -10,7 +10,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="/assets/styles/[CHANGE LATER].css">
+    <link rel="stylesheet" href="/assets/styles/about.css">
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -62,6 +62,11 @@ session_start();
         }
         ?>
     </nav>
+
+    <article class="about">
+        <p>Informatics E-Sport is a club where every college student from Universitas Surabaya gather to grind their skill in e-sport competition.</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolores delectus hic et nisi! Enim asperiores odio atque minima, eum non beatae, quo id doloremque voluptates, ullam aspernatur odit dolor? Quasi nobis enim magni facilis dolore pariatur iusto, error aut commodi, odit, quos distinctio tempore ad? Nobis praesentium aperiam quis nisi.</p>
+    </article>
     <script src="/assets/js/script.js"></script>
 </body>
 

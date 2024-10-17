@@ -145,7 +145,7 @@ if (isset($_POST['submit'])) {
             </table>
         </form>
     </div>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

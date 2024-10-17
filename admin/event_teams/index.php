@@ -168,7 +168,7 @@ $result = mysqli_query($connection, $sql);
                     echo "</form>";
                     echo "</td>";
                     echo "<td>";
-                    echo "<form action='delete-event_teams.php' method='post'>";
+                    echo "<form action='delete-event_teams.php' method='post' onsubmit='return confirmDelete()'>";
                     echo "<input type='hidden' name='id_event' value='" . $row['id_event'] . "'>";
                     echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
                     echo "</form>";
@@ -202,7 +202,7 @@ $result = mysqli_query($connection, $sql);
         }
         ?>
     </div>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

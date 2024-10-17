@@ -109,7 +109,7 @@ if (isset($_POST['submit'])) { // Check if form was submitted
         </form>
     </div>
     <script src="/assets/js/jquery-3.7.1.js"></script>
-    <script src="/assets/js/dropdown.js"></script>
+    <script src="/assets/js/script.js"></script>
     <script>
         $('#password, #confirm_password').on('keyup', function() {
             if ($('#password').val() == $('#confirm_password').val()) {
