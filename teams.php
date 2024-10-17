@@ -105,7 +105,7 @@ $result = mysqli_query($connection, $sql);
                         echo "</td>";
                         // View Teams Details
                         echo "<td>";
-                        echo "<form action='team-detail.php' method='post'>";
+                        echo "<form action='team-detail.php' method='get'>";
                         echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
                         echo "<input type='submit' name='joinbtn' id='btn-join' class='button' value='Details'>";
                         echo "</form>";

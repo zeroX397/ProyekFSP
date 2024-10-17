@@ -122,7 +122,6 @@ if (isset($_POST['submit'])) {
         <form action="" class="edit-form" method="post">
             <!-- Hidden input for team ID -->
             <input type="hidden" name="idteam" value="<?= htmlspecialchars($team['idteam']) ?>">
-            <br><br><br><br><br><br>
             <table class="edit-table">
                 <tr>
                     <td><label for="idgame">Select Game</label></td>

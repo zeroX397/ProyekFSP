@@ -64,8 +64,11 @@ session_start();
     </nav>
 
     <article class="about">
+        <h1>Who we are?</h1>
         <p>Informatics E-Sport is a club where every college student from Universitas Surabaya gather to grind their skill in e-sport competition.</p>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolores delectus hic et nisi! Enim asperiores odio atque minima, eum non beatae, quo id doloremque voluptates, ullam aspernatur odit dolor? Quasi nobis enim magni facilis dolore pariatur iusto, error aut commodi, odit, quos distinctio tempore ad? Nobis praesentium aperiam quis nisi.</p>
+        <h1>Our contacts</h1>
+        <p><a href="mailto:s160422040@student.ubaya.ac.id">Email Admin</a></p>
+        <p><a href="https://instagram.com/ubayaofficial">Instagram</a></p>
     </article>
     <script src="/assets/js/script.js"></script>
 </body>
