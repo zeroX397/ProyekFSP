@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // User is logged in
             $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
-            echo '<a class="logout" href="/logout.php">Logout</a>';
+            echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="hidden" name="idteam" value="<?php echo isset($_POST['idteam']) ? $_POST['idteam'] : 'default_value'; ?>">
         <h1>Tell us just a bit about yourself:</h1>
         <h3>You are applying for: <?php $team_name?></h3>
-        <textarea class="application-text" name="application-text" maxlength="100" rows="4" cols="30" placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters."></textarea>
+        <textarea class="application-text" name="application-text" maxlength="100" rows="4" cols="30" placeholder="Your role in a game, or your main agents/heroes...&#10;Max. 100 characters." required></textarea>
         <br><button type="submit">Apply</button>
     </form>
     <script src="/assets/js/script.js"></script>

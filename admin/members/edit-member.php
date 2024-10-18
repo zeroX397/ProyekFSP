@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
             $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
-            echo '<a class="logout" href="/logout.php">Logout</a>';
+            echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo 
