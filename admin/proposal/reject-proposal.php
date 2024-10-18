@@ -12,21 +12,20 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 if (isset($_POST['idjoin_proposal'])) {
     $idJoinProposal = $_POST['idjoin_proposal'];
 
-    mysqli_begin_transaction($connection);
-    try {
-        // Update status
-        $sql_update = "UPDATE join_proposal SET status = 'rejected' WHERE idjoin_proposal = ?";
-        $stmt = mysqli_prepare($connection, $sql_update);
+    // Update status to 'rejected'
+    $sql_update = "UPDATE join_proposal SET status = 'rejected' WHERE idjoin_proposal = ?";
+    $stmt = mysqli_prepare($connection, $sql_update);
+    if ($stmt) {
         mysqli_stmt_bind_param($stmt, 'i', $idJoinProposal);
         mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
 
-        mysqli_commit($connection);
-
+        // Redirect to the waiting page with status 'rejected'
         header("Location: waiting.php?status=rejected");
         exit();
-    } catch (Exception $e) {
-        mysqli_rollback($connection);
-        echo "Error: " . $e->getMessage();
+    } else {
+        echo "Error updating proposal status: " . mysqli_error($connection);
+        exit();
     }
 } else {
     header("Location: waiting.php");
