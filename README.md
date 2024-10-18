@@ -45,7 +45,7 @@ Also if you want to get the SQL script of relational database, you can get it he
 
 ## Part III: How does the system work?
 
-[For admin documentation](/admin-doc/README.md)
+For documentation read [here](/documentation/README.md)
 
 We must clarify at first that this is **Full-Stack** Programming, NOT **Web-Framework** Programming. So there is no Laravel, CakePHP, CodeIgniter, or even Phalcon here. But we tried our best to implement the concept of Model, View, and Controller (MVC) into this project. We will explain two things from this project:
 
@@ -76,9 +76,9 @@ We must clarify at first that this is **Full-Stack** Programming, NOT **Web-Fram
 
 ## Part IV: Where is the link?
 
-You can access the website through this link
+You can access the website through this link:
 
-https://project-fsp.pengalilla.com
+**Link still unavailable yet.**
 
 ## Part V: Seunik Mungkin
 
