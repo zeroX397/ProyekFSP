@@ -65,7 +65,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/teams/edit-team.css">
+    <link rel="stylesheet" href="/assets/styles/admin/teams/team.css">
     <title>Edit Team - Informatics E-Sport Club</title>
 </head>
 
@@ -86,7 +86,7 @@ if (isset($_POST['submit'])) {
             echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
                         <a href="/admin/event_teams/">Manage Event-Teams</a>
                     </div>
                 </div>';
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
                         <i class="fa fa-caret-down"></i>
@@ -122,26 +122,17 @@ if (isset($_POST['submit'])) {
         <form action="" class="edit-form" method="post">
             <!-- Hidden input for team ID -->
             <input type="hidden" name="idteam" value="<?= htmlspecialchars($team['idteam']) ?>">
-            <table class="edit-table">
-                <tr>
-                    <td><label for="idgame">Select Game</label></td>
-                    <td><select name="idgame" required>
-                            <?php foreach ($games as $game): ?>
-                                <option value="<?= $game['idgame'] ?>" <?= $team['idgame'] == $game['idgame'] ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($game['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select></td>
-                </tr>
-                <tr>
-                    <td><label for="team_name">Team Name</label></td>
-                    <td><input name="team_name" type="text" placeholder="Team Name" value="<?= htmlspecialchars($team['name']) ?>" required></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><button name="submit" type="submit" class='btnsubmit'>Update</button></td>
-                </tr>
-            </table>
+            <label for="idgame">Select Game</label>
+            <select name="idgame" required>
+                <?php foreach ($games as $game): ?>
+                    <option value="<?= $game['idgame'] ?>" <?= $team['idgame'] == $game['idgame'] ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($game['name']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <label for="team_name">Team Name</label>
+            <input name="team_name" type="text" placeholder="Team Name" value="<?= htmlspecialchars($team['name']) ?>" required>
+            <button name="submit" type="submit" class='btnsubmit'>Update</button>
         </form>
     </div>
     <script src="/assets/js/script.js"></script>

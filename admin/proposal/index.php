@@ -18,7 +18,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/[CHANGE LATER].css">
-    <title>Informatics E-Sport Club</title>
+    <title>Manage Proposals</title>
 </head>
 
 <body>

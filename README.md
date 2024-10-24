@@ -74,15 +74,27 @@ We must clarify at first that this is **Full-Stack** Programming, NOT **Web-Fram
     ![Join Proposal dropdown](/markdown-assets/joinproposal-dd.png)
     *Join Proposal dropdown contains proposal management page.*
 
+    Also the administration page will check user's role. The system will check whether user is admin or not, (line 4 to 7, at all page under `/admin` directory) using these lines of code:
+
+    ```php
+    // Check if user is logged in and is an admin
+    if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
+        header('Location: /'); // Redirect non-admins to the homepage
+        exit();
+    }
+    ```
+
+    As shown above, if user is not an admin, they will be redirected to homepage. 
+
 ## Part IV: Where is the link?
 
 You can access the website through this link:
 
-**Link still unavailable yet.**
+*Link still unavailable yet.*
 
 ## Part V: Seunik Mungkin
 
-This project would not have done without these great collabolators. Special thanks to our member:
+This project would not have done without these great collabolators. Special thanks to our members:
 
 1. 160422042 – [Oakley Levinson Gunawan](https://github.com/KaisarTomat)
 2. 160422029 – [Stanley Alexander Gondowardojo](https://github.com/S10li909)

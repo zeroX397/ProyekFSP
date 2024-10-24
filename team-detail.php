@@ -43,7 +43,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/team-detail.css">
-    <title>Informatics E-Sport Club</title>
+    <title>Team's Detail</title>
 </head>
 
 <body>

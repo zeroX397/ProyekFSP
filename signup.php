@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) { // Check if form was submitted
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/signup.css">
-    <title>Informatics E-Sport Club</title>
+    <title>Sign Up to Informatics Club</title>
 </head>
 
 <body>

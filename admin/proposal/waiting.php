@@ -43,7 +43,7 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/[CHANGE LATER].css">
-    <title>Manage Join Proposals - Waiting Approval</title>
+    <title>Manage Join Proposals - Waiting for Approval</title>
 </head>
 
 <body>

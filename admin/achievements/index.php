@@ -72,7 +72,7 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
-    <title>Informatics E-Sport Club</title>
+    <title>Manage Achievements</title>
 </head>
 
 <body>

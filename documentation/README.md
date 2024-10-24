@@ -8,6 +8,7 @@
     - [• Joining a team](#-joining-a-team)
     - [• Changing Profile Information](#-changing-profile-information)
   - [Part III: Admin](#part-iii-admin)
+    - [• Teams](#-teams)
 ## Part I: Guest
 
 "Guest" means users who do not have an account registered yet. Guest can explore the teams (including team's details), events, and about page only. It is indicating that Guest users have least access to the site. If users want to join a team, they must register an account through **Sign Up** page.
@@ -35,7 +36,7 @@ If password confirmation does not match with password field, users can not proce
   ![Teams page](teams-page.png)
   *You can click **Details** to see team's details. And then you may send application through **Apply** button*
 
-  Please take a note that users **HAVE to fill** the application form. Write a short description about applicant at maximum 100 **CHARACTERS**. For example, users can describe about their favorite roles, main agents/heroes, etc. After done with it, users may send it by clicking **Apply** button.
+  Please take a note that users **HAVE to fill** the application form. Write a short description about applicant at **maximum 100 CHARACTERS (not words)**. For example, users can describe about their favorite roles, main agents/heroes, etc. After done with it, users may send it by clicking **Apply** button.
 
   ![Fill the application form](application-form.png)
   ***Example only**. Fill the application form with short description. You may or may not include a contact (optional of course).*
@@ -56,4 +57,17 @@ If password confirmation does not match with password field, users can not proce
 
 ## Part III: Admin
 
-"Admin" is the most *powerful* role in this site.
+"Admin" is the most *powerful* role in this site. As admin, users can manage (create, update or edit, and delete) all categories in this site, such as: Teams, Members, Events, Games, Achievements, and Event-Teams (teams who joined specific events). Admins also have rights to revoke (or disband) teams, or delete and ban users. We have provided more detailed information for each categories below:
+
+### &bull; Teams
+
+When admin accessing /teams, the page will show all teams' name, alongside with two options: Edit and Delete.
+
+![Manage Teams Page](manage-team-page.png)
+
+You can choose which team you do want to edit or delete. To edit, simply click the blue **Edit** button, and you will be taken to edit page:
+
+![Edit Teams Page](edit-team-page.png)
+
+You can change the team's main game and/or edit the team's name. After you are done with editing, click the **Update** button to save your change(s).
+

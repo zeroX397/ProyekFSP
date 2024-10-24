@@ -48,7 +48,7 @@ $team_result = mysqli_query($connection, $team_sql);
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/members/add-member.css">
-    <title>Informatics E-Sport Club - Add Game</title>
+    <title>Informatics E-Sport Club - Add Event</title>
 </head>
 
 <body>

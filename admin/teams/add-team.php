@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/teams/add-team.css">
-    <title>Informatics E-Sport Club</title>
+    <title>Add a Team</title>
 </head>
 
 <body>

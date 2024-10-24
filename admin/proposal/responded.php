@@ -43,7 +43,7 @@ $result = mysqli_query($connection, $sql);
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/[CHANGE LATER].css">
-    <title>Informatics E-Sport Club</title>
+    <title>Manage Join Proposals - Responded Proposal</title>
 </head>
 
 <body>

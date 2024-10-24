@@ -11,7 +11,7 @@ session_start();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/about.css">
-    <title>Informatics E-Sport Club</title>
+    <title>About Us</title>
 </head>
 
 <body>
