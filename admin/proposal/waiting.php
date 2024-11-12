@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("proposal.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,28 +9,14 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5; // Number of entries per page
-$page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
+$perpage = 5;
+$page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
-// Count total join proposals
-$sql_count = "SELECT COUNT(DISTINCT join_proposal.idjoin_proposal) AS total 
-              FROM join_proposal
-              WHERE join_proposal.status = 'waiting'";
-$result_count = mysqli_query($connection, $sql_count);
-$row_count = mysqli_fetch_assoc($result_count);
-$totaldata = $row_count['total'];
+$proposal = new Proposal();
+$totaldata = $proposal->getTotalProposals();
 $totalpage = ceil($totaldata / $perpage);
-
-// Fetch join proposals data
-$sql = "SELECT join_proposal.idjoin_proposal, member.fname, member.lname, team.name AS team_name, join_proposal.description, join_proposal.status
-        FROM join_proposal 
-        INNER JOIN team ON team.idteam = join_proposal.idteam
-        INNER JOIN member ON member.idmember = join_proposal.idmember
-        WHERE join_proposal.status = 'waiting'
-        ORDER BY join_proposal.idjoin_proposal ASC 
-        LIMIT $start, $perpage";
-$result = mysqli_query($connection, $sql);
+$result = $proposal->getAllProposals($start, $perpage);
 ?>
 
 <!DOCTYPE html>

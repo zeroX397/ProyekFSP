@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("achievement.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,55 +9,23 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5; // Number sql per page
-if (isset($_GET['p'])) {
-    $page = $_GET['p'];
-} else {
-    $page = 1;
-}
-$start = ($page - 1) * $perpage;
+$perPage = 5; // Number of achievements per page
+$page = isset($_GET['p']) ? $_GET['p'] : 1;
+$start = ($page - 1) * $perPage;
 
-// Handle achievement filtering
-$team_filter = "";
-if (isset($_GET['team'])) {
-    $team_filter = mysqli_real_escape_string($connection, $_GET['team']);
-}
+// Initialize Achievement object
+$achievement = new Achievement();
 
-// SQL Filtering
-$teamQuery = "SELECT DISTINCT team.name as team_name, team.idteam as team_id 
-              FROM team 
-              JOIN event_teams ON team.idteam = event_teams.idteam";
-$teamResult = mysqli_query($connection, $teamQuery);
+// Set up team filter
+$team_filter = isset($_GET['team']) ? $_GET['team'] : "";
+$totalData = $achievement->getAchievementCount($team_filter);
+$totalPage = ceil($totalData / $perPage);
 
-// SQL Total Count 
-$sql_count = "SELECT COUNT(DISTINCT achievement.idachievement) AS total 
-              FROM achievement
-              INNER JOIN team ON team.idteam = achievement.idteam";
+// Fetch achievements with team filter
+$result = $achievement->getAchievements($team_filter, $start, $perPage);
 
-if (!empty($team_filter)) {
-    $sql_count .= " WHERE team.idteam = '$team_filter'";
-}
-
-$result_count = mysqli_query($connection, $sql_count);
-$row_count = mysqli_fetch_assoc($result_count);
-$totaldata = $row_count['total'];
-$totalpage = ceil($totaldata / $perpage);
-
-$sql = "SELECT achievement.idachievement, team.name AS team_name, achievement.name AS achievement_name, achievement.date AS achievement_date, 
-        achievement.description AS achievement_description 
-        FROM achievement 
-        INNER JOIN team ON team.idteam = achievement.idteam";
-
-$result = mysqli_query($connection, $sql);
-
-if (!empty($team_filter)) {
-    $sql .= " WHERE team.idteam = '$team_filter'";
-}
-
-$sql .= " ORDER BY team.idteam ASC 
-          LIMIT $start, $perpage";
-$result = mysqli_query($connection, $sql);
-
+// Fetch list of all teams for dropdown filter
+$teamResult = $achievement->getAllTeamsFilter();
 ?>
 
 <!DOCTYPE html>
@@ -139,6 +107,7 @@ $result = mysqli_query($connection, $sql);
             <select name="team" id="team" onchange="this.form.submit()">
                 <option value="">All Teams</option>
                 <?php
+                // Populate the dropdown with team options
                 if ($teamResult && mysqli_num_rows($teamResult) > 0) {
                     while ($team = mysqli_fetch_assoc($teamResult)) {
                         $selected = ($team_filter == $team['team_id']) ? 'selected' : '';
@@ -199,14 +168,14 @@ $result = mysqli_query($connection, $sql);
             $prev = $page - 1;
             echo "<a href='index.php?p=$prev'>Prev</a>"; // Previous page 
         }
-        for ($i = 1; $i <= $totalpage; $i++) {
+        for ($i = 1; $i <= $totalPage; $i++) {
             if ($i == $page) {
                 echo "<strong>$i</strong>"; // Current page 
             } else {
                 echo "<a href='index.php?p=$i'>$i</a>"; // Other page 
             }
         }
-        if ($page < $totalpage) {
+        if ($page < $totalPage) {
             $next = $page + 1;
             echo "<a href='index.php?p=$next'>Next</a>"; // Next page 
         }

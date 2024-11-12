@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("event.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -8,28 +8,17 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Check if the delete button was clicked and if id_event is set
-if (isset($_POST['deletebtn']) && isset($_POST['id_event'])) {
-    $event_id = $_POST['id_event'];
+// Delete event
+if (isset($_POST['deletebtn']) && isset($_POST['idevent'])) {
+    $idevent = $_POST['idevent'];
 
-    // Delete event from the database
-    $sql = "DELETE FROM event WHERE idevent = ?";
-    $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $event_id);
-    
-    if (mysqli_stmt_execute($stmt)) {
-        // Success delete event
-        echo "<script>alert('Success delete event'); window.location.href='/admin/events/index.php';</script>";
-        exit();
+    // Menggunakan instance class event untuk delete event
+    $event = new Event();
+    if ($event->deleteEvent($idevent)) {
+        echo "<script>alert('Event deleted successfully.'); window.location.href='/admin/events/index.php';</script>";
     } else {
-        // Failed delete event
-        $error = "Failed delete event";
-        exit();
+        $error = "Failed to delete event.";
     }
-} else {
-    // Redirect back if accessed incorrectly
-    header("Location: /admin/events/");
-    exit();
 }
 ?>
 

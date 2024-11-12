@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("member.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,26 +9,14 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5; // Number sql per page
-if (isset($_GET['p'])) {
-    $page = $_GET['p'];
-} else {
-    $page = 1;
-}
+$perpage = 5;
+$page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
-$sql_count = "SELECT COUNT(DISTINCT member.idmember) AS total 
-              FROM member";
-$result_count = mysqli_query($connection, $sql_count);
-$row_count = mysqli_fetch_assoc($result_count);
-$totaldata = $row_count['total'];
+$member = new Member();
+$totaldata = $member->getTotalMembers();
 $totalpage = ceil($totaldata / $perpage);
-
-$sql = "SELECT member.idmember as id_member, member.username, CONCAT(member.fname, ' ', member.lname) as member_name 
-        FROM `member` 
-        ORDER BY member.idmember ASC 
-        LIMIT $start, $perpage";
-$result = mysqli_query($connection, $sql);
+$result = $member->getAllMembers($start, $perpage);
 ?>
 
 <!DOCTYPE html>

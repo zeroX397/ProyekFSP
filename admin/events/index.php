@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("event.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,27 +9,14 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5; // Number of results per page
-if (isset($_GET['p'])) {
-    $page = $_GET['p'];
-} else {
-    $page = 1;
-}
+$perpage = 5;
+$page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
-// SQL to count total records in the event table
-$sql_count = "SELECT COUNT(DISTINCT idevent) AS total FROM event";
-$result_count = mysqli_query($connection, $sql_count);
-$row_count = mysqli_fetch_assoc($result_count);
-$totaldata = $row_count['total'];
+$event = new Event();
+$totaldata = $event->getTotalEvents();
 $totalpage = ceil($totaldata / $perpage);
-
-// SQL to retrieve paginated data from the event table
-$sql = "SELECT idevent, name, date, description
-        FROM `event`
-        ORDER BY idevent ASC
-        LIMIT $start, $perpage";
-$result = mysqli_query($connection, $sql);
+$result = $event->getAllEvents($start, $perpage);
 ?>
 
 <!DOCTYPE html>

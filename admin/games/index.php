@@ -1,35 +1,22 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("game.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
-    header('Location: /'); // Redirect non-admins to the homepage
+    header('Location: /');
     exit();
 }
 
 // Paging configuration
-$perpage = 5; // Number sql per page
-if (isset($_GET['p'])) {
-    $page = $_GET['p'];
-} else {
-    $page = 1;
-}
+$perpage = 5;
+$page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
-// $sql_count = "SELECT COUNT(*) AS total FROM game";
-$sql_count = "SELECT COUNT(DISTINCT game.idgame) AS total 
-              FROM game";
-$result_count = mysqli_query($connection, $sql_count);
-$row_count = mysqli_fetch_assoc($result_count);
-$totaldata = $row_count['total'];
+$game = new Game();
+$totaldata = $game->getTotalGames();
 $totalpage = ceil($totaldata / $perpage);
-
-$sql = "SELECT game.idgame as id_game, game.name, game.description
-        FROM `game` 
-        ORDER BY game.idgame ASC 
-        LIMIT $start, $perpage";
-$result = mysqli_query($connection, $sql);
+$result = $game->getAllGames($start, $perpage);
 ?>
 
 <!DOCTYPE html>

@@ -1,6 +1,8 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("team.php");
+
+$team = new Team();
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,28 +11,18 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Fetch game data to fill the dropdown
-$gameQuery = "SELECT idgame, name FROM game;";
-$gameResult = mysqli_query($connection, $gameQuery);
-$games = [];
-if ($gameResult) {
-    while ($gameRow = mysqli_fetch_assoc($gameResult)) {
-        $games[] = $gameRow;
-    }
-}
+$games = $team->getAllGames();
 
 // Check if team ID is set
-if (isset($_POST['idteam'])) {
-    $idteam = mysqli_real_escape_string($connection, $_POST['idteam']);
+if (isset($_POST['idteam']) || isset($_GET['idteam'])) {
+    $idteam = isset($_POST['idteam']) ? $_POST['idteam'] : $_GET['idteam'];
 
-    $teamQuery = "SELECT * FROM team WHERE idteam = ?";
-    $stmt = mysqli_prepare($connection, $teamQuery);
-    mysqli_stmt_bind_param($stmt, 'i', $idteam);
-    mysqli_stmt_execute($stmt);
-    $teamResult = mysqli_stmt_get_result($stmt);
-    $team = mysqli_fetch_assoc($teamResult);
-
-    if (!$team) {
-        echo "<script>alert('Team not found.'); window.location.href='/admin/teams/';</script>";
+    // Fetch team data by ID
+    $teamData = $team->getTeamById($idteam);
+    if ($teamData) {
+        $teamInfo = $teamData; // Store data in $teamInfo
+    } else {
+        echo "<script>alert('Team not found.'); window.location.href='/admin/teams/index.php';</script>";
         exit();
     }
 } else {
@@ -39,19 +31,16 @@ if (isset($_POST['idteam'])) {
 }
 
 // Update team data
-if (isset($_POST['submit'])) {
-    $idgame = mysqli_real_escape_string($connection, $_POST['idgame']);
-    $team_name = mysqli_real_escape_string($connection, $_POST['team_name']);
-
-    $sql = "UPDATE `team` SET `idgame` = ?, `name` = ? WHERE `idteam` = ?;";
-    $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, 'isi', $idgame, $team_name, $idteam);
-    $result = mysqli_stmt_execute($stmt);
-
-    if ($result) {
-        echo "<script>alert('Team updated successfully.'); window.location.href='/admin/teams/';</script>";
+if (isset($_POST['submit']) && isset($_POST['idteam'])) {
+    $idteam = $_POST['idteam'];
+    $idgame = $_POST['idgame'];
+    $team_name = $_POST['team_name'];
+    
+    // Update the team data in the database
+    if ($team->updateTeam($idteam, $idgame, $team_name)) {
+        echo "<script>alert('Team updated successfully.'); window.location.href='/admin/teams/index.php';</script>";
     } else {
-        $error = "Error updating team: " . mysqli_error($connection);
+        $error = "Error during team update.";
     }
 }
 ?>
@@ -121,17 +110,17 @@ if (isset($_POST['submit'])) {
         <?php endif; ?>
         <form action="" class="edit-form" method="post">
             <!-- Hidden input for team ID -->
-            <input type="hidden" name="idteam" value="<?= htmlspecialchars($team['idteam']) ?>">
+            <input type="hidden" name="idteam" value="<?= htmlspecialchars($teamInfo['idteam']) ?>">
             <label for="idgame">Select Game</label>
             <select name="idgame" required>
                 <?php foreach ($games as $game): ?>
-                    <option value="<?= $game['idgame'] ?>" <?= $team['idgame'] == $game['idgame'] ? 'selected' : '' ?>>
+                    <option value="<?= $game['idgame'] ?>" <?= $teamInfo['idgame'] == $game['idgame'] ? 'selected' : '' ?>>
                         <?= htmlspecialchars($game['name']) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
             <label for="team_name">Team Name</label>
-            <input name="team_name" type="text" placeholder="Team Name" value="<?= htmlspecialchars($team['name']) ?>" required>
+            <input name="team_name" type="text" placeholder="Team Name" value="<?= htmlspecialchars($teamInfo['name']) ?>" required>
             <button name="submit" type="submit" class='btnsubmit'>Update</button>
         </form>
     </div>

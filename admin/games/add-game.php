@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("game.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,17 +9,13 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Insert new game data
+$game = new Game();
 if (isset($_POST['submit'])) {
-    $name = mysqli_real_escape_string($connection, $_POST['name']);
-    $desc = mysqli_real_escape_string($connection, $_POST['description']); 
+    $name = $_POST['name'];
+    $description = $_POST['description'];
 
-    $sql = "INSERT INTO `game`(`name`, `description`) VALUES (?, ?);";
-    $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, 'ss', $name, $desc);
-    $result = mysqli_stmt_execute($stmt);
-
-    if ($result) {
-        echo "<script>alert('Game registration successful. You may see it on the game page.'); window.location.href='/admin/games/index.php';</script>";
+    if ($game->addGame($name, $description)) {
+        echo "<script>alert('Game registration successful.'); window.location.href='/admin/games/index.php';</script>";
     } else {
         $error = "Error during game registration.";
     }

@@ -1,30 +1,24 @@
 <?php
 session_start();
-include("config.php");
+require_once("signup_class.php");
+
+$member = new Member();
 
 if (isset($_POST['submit'])) { // Check if form was submitted
-    $fname = mysqli_real_escape_string($connection, $_POST['fname']);
-    $lname = mysqli_real_escape_string($connection, $_POST['lname']);
-    $username = mysqli_real_escape_string($connection, $_POST['username']);
-    $password = mysqli_real_escape_string($connection, $_POST['password']);
+    $fname = $_POST['fname'];
+    $lname = $_POST['lname'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $confirmPassword = $_POST['confirm_password'];
 
     $hashedPassword = hash('sha256', $password);
 
-    // Check if username already exists
-    $checkUser = "SELECT * FROM `fsp-project`.member WHERE username=?";
-    $stmt = mysqli_prepare($connection, $checkUser);
-    mysqli_stmt_bind_param($stmt, 's', $username);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    if ($result->num_rows > 0) {
+    if ($password !== $confirmPassword) {
+        $error = "Passwords do not match.";
+    } else if ($member->isUsernameExists($username)) {
         $error = "Username already exists.";
     } else {
-        // Insert new user
-        $sql = "INSERT INTO `fsp-project`.member (fname, lname, username, password, profile) VALUES (?, ?, ?, ?, 'member')";
-        $stmt = mysqli_prepare($connection, $sql);
-        mysqli_stmt_bind_param($stmt, 'ssss', $fname, $lname, $username, $hashedPassword);
-        $result = mysqli_stmt_execute($stmt);
-        if ($result) {
+        if ($member->registerMember($fname, $lname, $username, $password)) {
             echo "<script>alert('Registration successful! You can now log in.'); window.location.href='/login.php';</script>";
         } else {
             $error = "Error during registration.";

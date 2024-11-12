@@ -1,26 +1,25 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("game.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
-    header('Location: /');
+    header('Location: /'); // Redirect non-admins to the homepage
     exit();
 }
 
+// Create Game instance
+$game = new Game();
+
 // Get the game ID from the URL or form submission
-if (isset($_POST['id_game'])) {
-    $idgame = mysqli_real_escape_string($connection, $_POST['id_game']);
-
-    $gameQuery = "SELECT * FROM game WHERE idgame = ?";
-    $stmt = mysqli_prepare($connection, $gameQuery);
-    mysqli_stmt_bind_param($stmt, 'i', $idgame);
-    mysqli_stmt_execute($stmt);
-    $gameResult = mysqli_stmt_get_result($stmt);
-    $game = mysqli_fetch_assoc($gameResult);
-
-    // If game not found, redirect back
-    if (!$game) {
+if (isset($_POST['id_game']) || isset($_GET['id_game'])) {
+    $idgame = isset($_POST['id_game']) ? $_POST['id_game'] : $_GET['id_game'];
+    
+    // Fetch game data by ID
+    $gameData = $game->getGameById($idgame);
+    if ($gameData) {
+        $gameInfo = $gameData; // Store data in $gameInfo
+    } else {
         echo "<script>alert('Game not found.'); window.location.href='/admin/games/index.php';</script>";
         exit();
     }
@@ -31,20 +30,15 @@ if (isset($_POST['id_game'])) {
 
 // Handle the form submission for updating the game
 if (isset($_POST['submit']) && isset($_POST['id_game'])) {
-    $idgame = mysqli_real_escape_string($connection, $_POST['id_game']);
-    $name = mysqli_real_escape_string($connection, $_POST['name']);
-    $desc = mysqli_real_escape_string($connection, $_POST['description']);
+    $idgame = $_POST['id_game'];
+    $name = $_POST['name'];
+    $description = $_POST['description'];
 
     // Update the game data in the database
-    $updateQuery = "UPDATE game SET name = ?, description = ? WHERE idgame = ?";
-    $stmt = mysqli_prepare($connection, $updateQuery);
-    mysqli_stmt_bind_param($stmt, 'ssi', $name, $desc, $idgame);
-    $result = mysqli_stmt_execute($stmt);
-
-    if ($result) {
+    if ($game->updateGame($idgame, $name, $description)) {
         echo "<script>alert('Game updated successfully.'); window.location.href='/admin/games/index.php';</script>";
     } else {
-        $error = "Error during game update: " . mysqli_error($connection); // Detail error dari MySQL
+        $error = "Error during game update.";
     }
 }
 ?>
@@ -75,7 +69,7 @@ if (isset($_POST['submit']) && isset($_POST['id_game'])) {
         if (!isset($_SESSION['username'])) {
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
-            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
+            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username'];
             echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
@@ -114,12 +108,10 @@ if (isset($_POST['submit']) && isset($_POST['id_game'])) {
         <?php endif; ?>
         <form action="" method="post" class="edit-form">
             <!-- Hidden input for game ID -->
-            <input type="hidden" name="id_game" value="<?php echo htmlspecialchars($game['idgame']); ?>">
-            <form action="" class="add-form" method="post">
-                <input name="name" type="text" placeholder="Game Name" value="<?php echo htmlspecialchars($game['name']); ?>" required>
-                <textarea name="description" rows="10" placeholder="Game Description" required><?php echo htmlspecialchars($game['description']); ?></textarea>
-                <button name="submit" type="submit" class="btnsubmit">Update</button>
-            </form>
+            <input type="hidden" name="id_game" value="<?php echo htmlspecialchars($gameInfo['idgame']); ?>">
+            <input name="name" type="text" placeholder="Game Name" value="<?php echo htmlspecialchars($gameInfo['name'] ?? ''); ?>" required>
+            <textarea name="description" rows="10" placeholder="Game Description" required><?php echo htmlspecialchars($gameInfo['description'] ?? ''); ?></textarea>
+            <button name="submit" type="submit" class="btnsubmit">Update</button>
         </form>
     </div>
     <script src="/assets/js/script.js"></script>

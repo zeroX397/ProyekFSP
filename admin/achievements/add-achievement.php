@@ -1,6 +1,8 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("achievement.php");
+
+$achievement = new Achievement();
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,26 +11,17 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Fetch team data to fill the dropdown
-$teamQuery = "SELECT idteam, name FROM team;";
-$teamResult = mysqli_query($connection, $teamQuery);
-$teams = [];
-if ($teamResult) {
-    while ($teamRow = mysqli_fetch_assoc($teamResult)) {
-        $teams[] = $teamRow;
-    }
-}
+$teams = $achievement->getAllTeams();
 
 // Insert new achievement data
 if (isset($_POST['submit'])) {
-    $idteam = mysqli_real_escape_string($connection, $_POST['idteam']);
-    $achievement_name = mysqli_real_escape_string($connection, $_POST['achievement_name']);
-    $achievement_date = mysqli_real_escape_string($connection, $_POST['achievement_date']);
-    $achievement_description = mysqli_real_escape_string($connection, $_POST['achievement_description']);
+    $idteam = $_POST['idteam'];
+    $achievement_name = $_POST['achievement_name'];
+    $achievement_date = $_POST['achievement_date'];
+    $achievement_description = $_POST['achievement_description'];
 
-    $sql = "INSERT INTO `achievement`(`idteam`, `name`, `date`, `description`) VALUES (?, ?, ?, ?);";
-    $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, 'isss', $idteam, $achievement_name, $achievement_date, $achievement_description);
-    $result = mysqli_stmt_execute($stmt);
+    $result = $achievement->addAchievement($idteam, $achievement_name, $achievement_date, $achievement_description);
+
     if ($result) {
         echo "<script>alert('Achievement registration successful. You may see in achievement page.'); window.location.href='/admin/achievements/index.php';</script>";
     } else {
@@ -98,23 +91,29 @@ if (isset($_POST['submit'])) {
         }
         ?>
     </nav>
-    <!-- Form to Add New Team -->
+    <!-- Form to Add New Achievement -->
     <div class="form">
         <?php if (isset($error)) : ?>
-            <div style="color: red;"><?php echo $error; ?></div>
+            <div class="error-message" style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" class="add-form" method="post">
             <select name="idteam" required>
                 <option value="">Select Team</option>
-                <?php foreach ($teams as $team): ?>
-                    <option value="<?= $team['idteam'] ?>"><?= $team['name'] ?></option>
-                <?php endforeach; ?>
+                <?php
+                if (!empty($teams)) {
+                    foreach ($teams as $team_row) {
+                        echo "<option value='" . $team_row['idteam'] . "'>" . htmlspecialchars($team_row['name']) . "</option>";
+                    }
+                } else {
+                    echo "<option disabled>No teams available</option>";
+                }
+                ?>
             </select>
             <input name="achievement_name" type="text" placeholder="Achievement Name" required>
-            <input type="date" name="achievement_date" id="" required>
+            <input type="date" name="achievement_date" required>
             <textarea class="achievement-text" name="achievement_description" maxlength="100" rows="4" cols="50"
                 placeholder="Achievement's description" required></textarea>
-            <button name="submit" type="submit">Save Team</button><br>
+            <button name="submit" type="submit">Save Achievement</button><br>
         </form>
     </div>
     <script src="/assets/js/script.js"></script>

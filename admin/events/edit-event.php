@@ -1,6 +1,8 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("event.php");
+
+$event = new Event();
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,32 +11,23 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Get the event ID from the URL
-if (isset($_POST['id_event'])) {
-    $idevent = mysqli_real_escape_string($connection, $_POST['id_event']);
+if (isset($_POST['idevent'])) {
+    $idevent = isset($_POST['idevent']) ? $_POST['idevent'] : $_GET['idevent'];
 
     // Fetch the event data to pre-fill the form
-    $eventQuery = "SELECT * FROM event WHERE idevent = ?";
-    $stmt = mysqli_prepare($connection, $eventQuery);
-    mysqli_stmt_bind_param($stmt, 'i', $idevent);
-    mysqli_stmt_execute($stmt);
-    $eventResult = mysqli_stmt_get_result($stmt);
-    $event = mysqli_fetch_assoc($eventResult);
+    $eventData = $event->getEventById($idevent);
 
     // If event not found, redirect back
-    if (!$event) {
+    if (!$eventData) {
         echo "<script>alert('Event not found.'); window.location.href='/admin/events/index.php';</script>";
         exit();
     }
-    $teamQuery = "SELECT idteam FROM event_teams WHERE idevent = ?";
-    $stmt_team = mysqli_prepare($connection, $teamQuery);
-    mysqli_stmt_bind_param($stmt_team, 'i', $idevent);
-    mysqli_stmt_execute($stmt_team);
-    $teamResult = mysqli_stmt_get_result($stmt_team);
-    $current_team = mysqli_fetch_assoc($teamResult)['idteam'];
+
+    // Fetch the current team associated with the event
+    $currentTeam = $event->getTeamByEventId($idevent);
 
     // Fetch all teams for the dropdown
-    $allTeamsQuery = "SELECT idteam, name FROM team";
-    $teamsResult = mysqli_query($connection, $allTeamsQuery);
+    $teams = $event->getAllTeams();
 } else {
     header('Location: /admin/events/index.php');
     exit();
@@ -42,14 +35,12 @@ if (isset($_POST['id_event'])) {
 
 // Handle the form submission for updating the event
 if (isset($_POST['submit'])) {
-    $name = mysqli_real_escape_string($connection, $_POST['name']);
-    $date = mysqli_real_escape_string($connection, $_POST['date']);
-    $description = mysqli_real_escape_string($connection, $_POST['description']);
+    $name = $_POST['name'];
+    $date = $_POST['date'];
+    $description = $_POST['description'];
+
     // Update the event data in the database
-    $updateQuery = "UPDATE event SET name = ?, date = ?, description = ? WHERE idevent = ?";
-    $stmt = mysqli_prepare($connection, $updateQuery);
-    mysqli_stmt_bind_param($stmt, 'sssi', $name, $date, $description, $idevent);
-    $result = mysqli_stmt_execute($stmt);
+    $result = $event->updateEvent($idevent, $name, $date, $description);
 
     if ($result) {
         echo "<script>alert('Event updated successfully.'); window.location.href='/admin/events/index.php';</script>";
@@ -127,16 +118,16 @@ if (isset($_POST['submit'])) {
             <table class="edit-table">
                 <tr>
                     <td><label for="name">Event Name</label></td>
-                    <td><input name="name" type="text" placeholder="Event Name" value="<?php echo htmlspecialchars($event['name']); ?>" required></td>
-                    <input type="hidden" name="id_event" value="<?php echo htmlspecialchars($idevent); ?>">
+                    <td><input name="name" type="text" placeholder="Event Name" value="<?php echo htmlspecialchars($eventData['name']); ?>" required></td>
+                    <input type="hidden" name="idevent" value="<?php echo htmlspecialchars($idevent); ?>">
                 </tr>
                 <tr>
                     <td><label for="date">Event Date</label></td>
-                    <td><input name="date" type="date" value="<?php echo htmlspecialchars($event['date']); ?>" required></td>
+                    <td><input name="date" type="date" value="<?php echo htmlspecialchars($eventData['date']); ?>" required></td>
                 </tr>
                 <tr>
                     <td><label for="description">Description</label></td>
-                    <td><textarea style="width: 500px;" name="description" placeholder="Event Description" rows="10" required><?php echo htmlspecialchars($event['description']); ?></textarea></td>
+                    <td><textarea style="width: 500px;" name="description" placeholder="Event Description" rows="10" required><?php echo htmlspecialchars($eventData['description']); ?></textarea></td>
                 </tr>
                 <tr>
                     <td></td>

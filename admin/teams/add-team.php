@@ -1,6 +1,8 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("team.php");
+
+$team = new Team();
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,28 +11,17 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Fetch game data to fill the dropdown
-$gameQuery = "SELECT idgame, name FROM game;";
-$gameResult = mysqli_query($connection, $gameQuery);
-$games = [];
-if ($gameResult) {
-    while ($gameRow = mysqli_fetch_assoc($gameResult)) {
-        $games[] = $gameRow;
-    }
-}
+$games = $team->getAllGames();
 
 // Insert new team data
 if (isset($_POST['submit'])) {
-    $idgame = mysqli_real_escape_string($connection, $_POST['idgame']);
-    $team_name = mysqli_real_escape_string($connection, $_POST['team_name']);
+    $idgame = $_POST['idgame'];
+    $team_name = $_POST['team_name'];
 
-    $sql = "INSERT INTO `team`(`idgame`, `name`) VALUES (?, ?);";
-    $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, 'is', $idgame, $team_name);
-    $result = mysqli_stmt_execute($stmt);
-    if ($result) {
-        echo "<script>alert('Team registration successful. You may see in Teams page.'); window.location.href='/admin/teams/index.php';</script>";
+    if ($team->addTeam($idgame, $team_name)) {
+        echo "<script>alert('Team registration successful.'); window.location.href='/admin/teams/index.php';</script>";
     } else {
-        $error = "Error during registration.";
+        $error = "Error during team registration.";
     }
 }
 ?>

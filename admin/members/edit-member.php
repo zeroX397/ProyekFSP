@@ -1,6 +1,8 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("member.php");
+
+$member = new Member(); 
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -8,20 +10,15 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Get the member ID from the form (via POST)
-if (isset($_POST['id_member'])) {
-    $idmember = mysqli_real_escape_string($connection, $_POST['id_member']);
+// Get the member ID from the form (via POST or GET)
+if (isset($_POST['id_member']) || isset($_GET['id_member'])) {
+    $idmember = isset($_POST['id_member']) ? $_POST['id_member'] : $_GET['id_member'];
 
     // Fetch the member data to pre-fill the form
-    $memberQuery = "SELECT * FROM member WHERE idmember = ?";
-    $stmt = mysqli_prepare($connection, $memberQuery);
-    mysqli_stmt_bind_param($stmt, 'i', $idmember);
-    mysqli_stmt_execute($stmt);
-    $memberResult = mysqli_stmt_get_result($stmt);
-    $member = mysqli_fetch_assoc($memberResult);
+    $memberData = $member->getMemberById($idmember);
 
     // If member not found, redirect back
-    if (!$member) {
+    if (!$memberData) {
         echo "<script>alert('Member not found.'); window.location.href='/admin/members/index.php';</script>";
         exit();
     }
@@ -31,29 +28,24 @@ if (isset($_POST['id_member'])) {
 }
 
 // Handle the form submission for updating the member
-if (isset($_POST['submit'])) {
-    $username = mysqli_real_escape_string($connection, $_POST['username']);
-    $fname = mysqli_real_escape_string($connection, $_POST['fname']);
-    $lname = mysqli_real_escape_string($connection, $_POST['lname']);
-    $password = mysqli_real_escape_string($connection, $_POST['password']);
+if (isset($_POST['submit']) && isset($_POST['id_member'])) {
+    $username = $_POST['username'];
+    $fname = $_POST['fname'];
+    $lname = $_POST['lname'];
+    $password = $_POST['password'];
 
     // Check if password needs to be updated
     if (!empty($password)) {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Secure password hashing
     } else {
-        $hashed_password = $member['password']; // Keep existing password if unchanged
+        $hashed_password = $memberData['password']; // Keep existing password if unchanged
     }
 
     // Update the member data in the database
-    $updateQuery = "UPDATE member SET username = ?, fname = ?, lname = ?, password = ? WHERE idmember = ?";
-    $stmt = mysqli_prepare($connection, $updateQuery);
-    mysqli_stmt_bind_param($stmt, 'ssssi', $username, $fname, $lname, $hashed_password, $idmember);
-    $result = mysqli_stmt_execute($stmt);
-
-    if ($result) {
+    if ($member->updateMember($username, $fname, $lname, $hashed_password, $idmember)) {
         echo "<script>alert('Member updated successfully.'); window.location.href='/admin/members/index.php';</script>";
     } else {
-        $error = "Error during member update: " . mysqli_error($connection);
+        $error = "Error during member update.";
     }
 }
 ?>
@@ -123,20 +115,20 @@ if (isset($_POST['submit'])) {
         <?php endif; ?>
         <form action="" method="post" class="edit-form">
             <!-- Hidden input for member ID -->
-            <input type="hidden" name="idmember" value="<?php echo htmlspecialchars($member['idmember']); ?>">
+            <input type="hidden" name="id_member" value="<?php echo htmlspecialchars($memberData['idmember']); ?>">
             <br><br><br>
             <table class="edit-table">
                 <tr>
                     <td><label for="username">Username</label></td>
-                    <td><input name="username" type="text" placeholder="Username" value="<?php echo htmlspecialchars($member['username']); ?>" required></td>
+                    <td><input name="username" type="text" placeholder="Username" value="<?php echo htmlspecialchars($memberData['username']); ?>" required></td>
                 </tr>
                 <tr>
                     <td><label for="fname">First Name</label></td>
-                    <td><input name="fname" type="text" placeholder="First Name" value="<?php echo htmlspecialchars($member['fname']); ?>" required></td>
+                    <td><input name="fname" type="text" placeholder="First Name" value="<?php echo htmlspecialchars($memberData['fname']); ?>" required></td>
                 </tr>
                 <tr>
                     <td><label for="lname">Last Name</label></td>
-                    <td><input name="lname" type="text" placeholder="Last Name" value="<?php echo htmlspecialchars($member['lname']); ?>" required></td>
+                    <td><input name="lname" type="text" placeholder="Last Name" value="<?php echo htmlspecialchars($memberData['lname']); ?>" required></td>
                 </tr>
                 <tr>
                     <td><label for="password">Password</label></td>

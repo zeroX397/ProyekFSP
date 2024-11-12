@@ -1,6 +1,8 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("achievement.php");
+
+$achievement = new Achievement();
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,30 +11,18 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Fetch team data to fill the dropdown
-$teamQuery = "SELECT idteam, name FROM team;";
-$teamResult = mysqli_query($connection, $teamQuery);
-$teams = [];
-if ($teamResult) {
-    while ($teamRow = mysqli_fetch_assoc($teamResult)) {
-        $teams[] = $teamRow;
-    }
-}
+$teams = $achievement->getAllTeams();
 
 // Get the achievement ID from the URL
 if (isset($_POST['idachievement'])) {
-    $idachievement = mysqli_real_escape_string($connection, $_POST['idachievement']);
+    $idachievement = isset($_POST['idachievement']) ? $_POST['idachievement'] : $_GET['idachievement'];
 
     // Fetch the achievement data to pre-fill the form
-    $achievementQuery = "SELECT * FROM achievement WHERE idachievement = ?";
-    $stmt = mysqli_prepare($connection, $achievementQuery);
-    mysqli_stmt_bind_param($stmt, 'i', $idachievement);
-    mysqli_stmt_execute($stmt);
-    $achievementResult = mysqli_stmt_get_result($stmt);
-    $achievement = mysqli_fetch_assoc($achievementResult);
+    $achievementData = $achievement->getAchievementById($idachievement);
 
     // If achievement not found, redirect back
-    if (!$achievement) {
-        echo "<script>alert('Achievement not found.'); window.location.href='/admin/achievements/index.php';</script>";
+    if (!$achievementData) {
+        echo "<script>alert('achievement not found.'); window.location.href='/admin/achievements/index.php';</script>";
         exit();
     }
 } else {
@@ -42,16 +32,19 @@ if (isset($_POST['idachievement'])) {
 
 // Handle the form submission for updating the achievement
 if (isset($_POST['submit'])) {
-    $idteam = mysqli_real_escape_string($connection, $_POST['idteam']);
-    $achievement_name = mysqli_real_escape_string($connection, $_POST['achievement_name']);
-    $achievement_date = mysqli_real_escape_string($connection, $_POST['achievement_date']);
-    $achievement_description = mysqli_real_escape_string($connection, $_POST['achievement_description']);
+    $idteam = $_POST['idteam'];
+    $achievement_name = $_POST['achievement_name'];
+    $achievement_date = $_POST['achievement_date'];
+    $achievement_description = $_POST['achievement_description'];
+
+    // Validate that team is selected
+    if (empty($idteam)) {
+        echo "<script>alert('Please select a team.'); window.location.href='edit-achievement.php?idachievement=" . $_POST['idachievement'] . "';</script>";
+        exit();
+    }
 
     // Update the achievement data in the database
-    $updateQuery = "UPDATE achievement SET idteam = ?, name = ?, date = ?, description = ? WHERE idachievement = ?";
-    $stmt = mysqli_prepare($connection, $updateQuery);
-    mysqli_stmt_bind_param($stmt, 'isssi', $idteam, $achievement_name, $achievement_date, $achievement_description, $idachievement);
-    $result = mysqli_stmt_execute($stmt);
+    $result = $achievement->updateAchievement($idachievement, $idteam, $achievement_name, $achievement_date, $achievement_description);
 
     if ($result) {
         echo "<script>alert('Achievement updated successfully.'); window.location.href='/admin/achievements/index.php';</script>";
@@ -113,57 +106,46 @@ if (isset($_POST['submit'])) {
                     <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
                         <i class="fa fa-caret-down"></i>
                     </a>
-                    <div class="dropdown-content" id="proposalPage">
-                        <a href="/admin/proposal/waiting.php">Waiting Approval</a>
-                        <a href="/admin/proposal/responded.php">Responded</a>
+                    <div class="dropdown-content" id="dd-proposal-page">
+                        <a href="/admin/proposals/">Proposal List</a>
+                        <a href="/admin/proposals/accepted">Accepted Proposals</a>
                     </div>
                 </div>';
             }
         }
         ?>
     </nav>
-    <!-- Form to Edit Achievement -->
-    <div class="form">
-        <?php if (isset($error)) : ?>
-            <div style="color: red;"><?php echo $error; ?></div>
-        <?php endif; ?>
-        <form action="" method="post" class="edit-form">
-            <br><br><br>
-            <table class="edit-table">
-                <tr>
-                    <td><label for="idteam">Team</label></td>
-                    <td>
-                    <input type="hidden" name="idachievement" value="<?php echo htmlspecialchars($idachievement); ?>">
-                        <select name="idteam" required>
-                            <option value="">Select Team</option>
-                            <?php foreach ($teams as $team): ?>
-                                <option value="<?= $team['idteam'] ?>" <?= $team['idteam'] == $achievement['idteam'] ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($team['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label for="achievement_name">Achievement Name</label></td>
-                    <td><input name="achievement_name" type="text" placeholder="Achievement Name" value="<?= htmlspecialchars($achievement['name']) ?>" required></td>
-                </tr>
-                <tr>
-                    <td><label for="achievement_date">Achievement Date</label></td>
-                    <td><input type="date" name="achievement_date" value="<?= htmlspecialchars($achievement['date']) ?>" required></td>
-                </tr>
-                <tr>
-                    <td><label for="achievement_description">Achievement Description</label></td>
-                    <td><textarea name="achievement_description" maxlength="300" rows="4" cols="50" placeholder="Description..." required><?= htmlspecialchars($achievement['description']) ?></textarea></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><button name="submit" type="submit" class="btnsubmit">Update</button></td>
-                </tr>
-            </table>
+
+    <!-- Edit Achievement Form -->
+    <div class="container">
+        <h2>Edit Achievement</h2>
+        <form action="edit-achievement.php" method="post" class="edit-form">
+            <input type="hidden" name="idachievement" value="<?php echo $achievementData['idachievement']; ?>">
+            <div class="form-group">
+                <label for="idteam">Team</label>
+                <select name="idteam" id="idteam">
+                    <?php foreach ($teams as $team): ?>
+                        <option value="<?php echo $team['idteam']; ?>" <?php if ($achievementData['idteam'] == $team['idteam']) echo 'selected'; ?>>
+                            <?php echo $team['name']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="achievement_name">Achievement Name</label>
+                <input type="text" name="achievement_name" id="achievement_name" value="<?php echo $achievementData['name']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="achievement_date">Achievement Date</label>
+                <input type="date" name="achievement_date" id="achievement_date" value="<?php echo $achievementData['date']; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="achievement_description">Description</label>
+                <textarea name="achievement_description" id="achievement_description" required><?php echo $achievementData['description']; ?></textarea>
+            </div>
+            <button name="submit" type="submit" class="btnsubmit">Update</button>
         </form>
     </div>
-    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

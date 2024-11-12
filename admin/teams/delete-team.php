@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("team.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -8,28 +8,17 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Check if the delete button was clicked and if idteam is set
+// Delete game
 if (isset($_POST['deletebtn']) && isset($_POST['idteam'])) {
-    $team_id = $_POST['idteam'];
+    $idTeam = $_POST['idteam'];
 
-    // Delete the team from the database
-    $sql = "DELETE FROM team WHERE idteam = ?";
-    $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $team_id);
-    
-    if (mysqli_stmt_execute($stmt)) {
-        // Success delete team
-        echo "<script>alert('Success delete team'); window.location.href='/admin/teams/index.php';</script>";
-        exit();
+    // Use class in team to delete team
+    $team = new Team();
+    if ($team->deleteTeam($idTeam)) {
+        echo "<script>alert('Team deleted successfully.'); window.location.href='/admin/teams/index.php';</script>";
     } else {
-        // Failed delete team
-        $error = "Failed delete team";
-        exit();
+        $error = "Failed to delete team.";
     }
-} else {
-    // Redirect back if accessed incorrectly
-    header("Location: /admin/teams/");
-    exit();
 }
 ?>
 

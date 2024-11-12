@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("proposal.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,28 +9,16 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5; // Number of entries per page
-$page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
-$start = ($page - 1) * $perpage;
+$perPage = 5;
+$page = isset($_GET['p']) ? $_GET['p'] : 1;
+$start = ($page - 1) * $perPage;
 
-// Count total responded join proposals (approved + rejected)
-$sql_count = "SELECT COUNT(DISTINCT join_proposal.idjoin_proposal) AS total 
-              FROM join_proposal
-              WHERE join_proposal.status IN ('approved', 'rejected')";
-$result_count = mysqli_query($connection, $sql_count);
-$row_count = mysqli_fetch_assoc($result_count);
-$totaldata = $row_count['total'];
-$totalpage = ceil($totaldata / $perpage);
+$proposal = new Proposal();
+$totalData = $proposal->getTotalRespondedProposals();
+$totalPage = ceil($totalData / $perPage);
 
-// Fetch responded join proposals data
-$sql = "SELECT join_proposal.idjoin_proposal, member.fname, member.lname, team.name AS team_name, join_proposal.description, join_proposal.status
-        FROM join_proposal 
-        INNER JOIN team ON team.idteam = join_proposal.idteam
-        INNER JOIN member ON member.idmember = join_proposal.idmember
-        WHERE join_proposal.status IN ('approved', 'rejected')
-        ORDER BY join_proposal.idjoin_proposal ASC 
-        LIMIT $start, $perpage";
-$result = mysqli_query($connection, $sql);
+// Fetch responded proposals
+$respondedProposals = $proposal->getRespondedProposals($start, $perPage);
 ?>
 
 <!DOCTYPE html>
@@ -109,8 +97,9 @@ $result = mysqli_query($connection, $sql);
                 <th>Status</th>
             </tr>
             <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
+            // Ensure we have data to display
+            if (!empty($respondedProposals)) {
+                foreach ($respondedProposals as $row) {
                     echo "<tr>";
                     echo "<td>" . $row['idjoin_proposal'] . "</td>";
                     echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
@@ -134,7 +123,7 @@ $result = mysqli_query($connection, $sql);
             echo "<a href='responded.php?p=$prev'>Prev</a>"; 
         }
 
-        for ($i = 1; $i <= $totalpage; $i++) {
+        for ($i = 1; $i <= $totalPage; $i++) {
             if ($i == $page) {
                 echo "<strong>$i</strong>"; 
             } else {
@@ -142,7 +131,7 @@ $result = mysqli_query($connection, $sql);
             }
         }
 
-        if ($page < $totalpage) {
+        if ($page < $totalPage) {
             $next = $page + 1;
             echo "<a href='responded.php?p=$next'>Next</a>"; 
         }

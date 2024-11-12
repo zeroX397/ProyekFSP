@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("event.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {

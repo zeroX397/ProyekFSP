@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("team.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,28 +9,14 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5; // Number sql per page
-if (isset($_GET['p'])) {
-    $page = $_GET['p'];
-} else {
-    $page = 1; 
-}
-$start = ($page - 1) * $perpage; 
+$perpage = 5;
+$page = isset($_GET['p']) ? $_GET['p'] : 1;
+$start = ($page - 1) * $perpage;
 
-$sql_count = "SELECT COUNT(DISTINCT team.idteam) AS total 
-              FROM team
-              INNER JOIN game ON game.idgame = team.idgame";
-$result_count = mysqli_query($connection, $sql_count);
-$row_count = mysqli_fetch_assoc($result_count);
-$totaldata = $row_count['total'];
+$team = new Team();
+$totaldata = $team->getTotalTeams();
 $totalpage = ceil($totaldata / $perpage);
-
-$sql = "SELECT team.idteam, game.name AS game_name, team.name AS team_name 
-        FROM team 
-        INNER JOIN game ON game.idgame = team.idgame 
-        ORDER BY team.idteam ASC 
-        LIMIT $start, $perpage";
-$result = mysqli_query($connection, $sql);
+$result = $team->getAllTeams($start, $perpage);
 ?>
 
 <!DOCTYPE html>

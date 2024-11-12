@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("achievement.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -8,28 +8,17 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Check if the delete button was clicked and if id_achievement is set
+// Delete achievement
 if (isset($_POST['deletebtn']) && isset($_POST['idachievement'])) {
-    $achievement_id = $_POST['idachievement'];
+    $idachievement = $_POST['idachievement'];
 
-    // Delete achievement from the database
-    $sql = "DELETE FROM achievement WHERE idachievement = ?";
-    $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $achievement_id);
-    
-    if (mysqli_stmt_execute($stmt)) {
-        // Success delete achievement
-        echo "<script>alert('Success delete achievement'); window.location.href='/admin/achievements/index.php';</script>";
-        exit();
+    // Menggunakan instance class achievement untuk delete achievement
+    $achievement = new Achievement();
+    if ($achievement->deleteAchievement($idachievement)) {
+        echo "<script>alert('Achievement deleted successfully.'); window.location.href='/admin/achievements/index.php';</script>";
     } else {
-        // Failed delete achievement
-        $error = "Failed delete achievement";
-        exit();
+        $error = "Failed to delete achievement.";
     }
-} else {
-    // Redirect back if accessed incorrectly
-    header("Location: /admin/achievements/");
-    exit();
 }
 ?>
 

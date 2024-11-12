@@ -1,6 +1,8 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("event.php");
+
+$event = new Event();
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -10,32 +12,22 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 
 // Insert new event data
 if (isset($_POST['submit'])) {
-    $name = mysqli_real_escape_string($connection, $_POST['name']);
-    $date = mysqli_real_escape_string($connection, string: $_POST['date']);
-    $desc = mysqli_real_escape_string($connection, $_POST['description']); 
-    $team_id = mysqli_real_escape_string($connection, $_POST['team']); 
+    $name = $_POST['name'];
+    $date = $_POST['date'];
+    $desc =  $_POST['description'];
+    $team_id = $_POST['team'];
 
-    $sql = "INSERT INTO `event`(`name`, `date`, `description`) VALUES (?, ?, ?);";
-    $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, 'sss', $name, $date, $desc);
-    $result = mysqli_stmt_execute($stmt);
+    $result = $event->insertEvent($name, $date, $desc, $team_id);
 
-
-    $lasteventid = mysqli_insert_id($connection);
-
-
-    $sqlevent_team = "INSERT INTO `event_teams`(`idevent`, `idteam`) VALUES (?, ?)";
-    $stmtevent_team = mysqli_prepare($connection, $sqlevent_team);
-    mysqli_stmt_bind_param($stmtevent_team, 'ii', $lasteventid, $team_id);
-    $resultevent_team = mysqli_stmt_execute($stmtevent_team);
-    if ($result) {
-        echo "<script>alert('Game registration successful. You may see it on the event page.'); window.location.href='/admin/events/index.php';</script>";
+    if ($result === true) {
+        echo "<script>alert('Event registration successful. You may see it on the event page.'); window.location.href='/admin/events/index.php';</script>";
     } else {
-        $error = "Error during game registration.";
+        $error = $result;
     }
 }
-$team_sql = "SELECT idteam, name FROM team";
-$team_result = mysqli_query($connection, $team_sql);
+
+// Mendapatkan data tim untuk dropdown
+$teams = $event->getAllTeams();
 ?>
 
 <!DOCTYPE html>
@@ -110,10 +102,12 @@ $team_result = mysqli_query($connection, $team_sql);
             <select name="team" required>
                 <option value="">Select Team</option>
                 <?php
-                if ($team_result && mysqli_num_rows($team_result) > 0) {
-                    while ($team_row = mysqli_fetch_assoc($team_result)) {
-                        echo "<option value='" . $team_row['idteam'] . "'>" . $team_row['name'] . "</option>";
+                if (!empty($teams)) {
+                    foreach ($teams as $team_row) {
+                        echo "<option value='" . $team_row['idteam'] . "'>" . htmlspecialchars($team_row['name']) . "</option>";
                     }
+                } else {
+                    echo "<option disabled>No teams available</option>";
                 }
                 ?>
             </select>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("member.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -8,28 +8,17 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Check if the delete button was clicked and if id_member is set
+// Delete member
 if (isset($_POST['deletebtn']) && isset($_POST['id_member'])) {
-    $member_id = $_POST['id_member'];
+    $idmember = $_POST['id_member'];
 
-    // Delete member from the database
-    $sql = "DELETE FROM member WHERE idmember = ?";
-    $stmt = mysqli_prepare($connection, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $member_id);
-
-    if (mysqli_stmt_execute($stmt)) {
-        // Success delete member
-        echo "<script>alert('Success delete member'); window.location.href='/admin/members/index.php';</script>";
-        exit();
+    // Use class in member to delete member
+    $member = new Member();
+    if ($member->deleteMember($idmember)) {
+        echo "<script>alert('Member deleted successfully.'); window.location.href='/admin/members/index.php';</script>";
     } else {
-        // Failed delete member
-        $error = "Failed delete member";
-        exit();
+        $error = "Failed to delete member.";
     }
-} else {
-    // Redirect back if accessed incorrectly
-    header("Location: /admin/members/");
-    exit();
 }
 ?>
 

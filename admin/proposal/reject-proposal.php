@@ -1,6 +1,8 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("proposal.php");
+
+$proposal = new Proposal();
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -8,23 +10,23 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
     exit();
 }
 
-// Check if the proposal ID is provided
 if (isset($_POST['idjoin_proposal'])) {
     $idJoinProposal = $_POST['idjoin_proposal'];
 
-    // Update status to 'rejected'
-    $sql_update = "UPDATE join_proposal SET status = 'rejected' WHERE idjoin_proposal = ?";
-    $stmt = mysqli_prepare($connection, $sql_update);
-    if ($stmt) {
-        mysqli_stmt_bind_param($stmt, 'i', $idJoinProposal);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
+    // Approve proposal
+    if ($proposal->rejectProposal($idJoinProposal)) {
+        $idTeam = $proposal->getTeamIdByProposal($idJoinProposal);
+        $idMember = $proposal->getMemberIdByProposal($idJoinProposal);
 
-        // Redirect to the waiting page with status 'rejected'
-        header("Location: waiting.php?status=rejected");
-        exit();
+        if ($idTeam && $idMember && $proposal->addMemberToTeam($idTeam, $idMember)) {
+            header("Location: waiting.php?status=rejected");
+            exit();
+        } else {
+            echo "Error updating proposal status.";
+            exit();
+        }
     } else {
-        echo "Error updating proposal status: " . mysqli_error($connection);
+        echo "Error rejecting proposal.";
         exit();
     }
 } else {
