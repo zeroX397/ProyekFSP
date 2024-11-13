@@ -6,7 +6,7 @@ class Game extends Database {
         parent::__construct();
     }
 
-    // Method untuk mendapatkan daftar game dengan paging
+    // Get all games for paging
     public function getAllGames($start, $perpage) {
         $sql = "SELECT idgame AS id_game, name, description 
                 FROM game 
@@ -19,7 +19,7 @@ class Game extends Database {
         return $result;
     }
 
-    // Method untuk menghitung total data game
+    // Count total games
     public function getTotalGames() {
         $sql = "SELECT COUNT(DISTINCT idgame) AS total 
                 FROM game";
@@ -28,7 +28,7 @@ class Game extends Database {
         return $row['total'];
     }
 
-    // Method untuk menambahkan game baru
+    // Add new game
     public function addGame($name, $description) {
         $sql = "INSERT INTO game (name, description) 
                 VALUES (?, ?)";
@@ -37,7 +37,7 @@ class Game extends Database {
         return $stmt->execute();
     }
 
-    // Method untuk mendapatkan data game berdasarkan ID
+    // Get game name by ID
     public function getGameById($idgame) {
         $sql = "SELECT * 
                 FROM game 
@@ -49,7 +49,7 @@ class Game extends Database {
         return $result->fetch_assoc();
     }
 
-    // Method untuk mengupdate data game
+    // Update game
     public function updateGame($idgame, $name, $description) {
         $sql = "UPDATE game 
                 SET name = ?, description = ? 
@@ -59,7 +59,7 @@ class Game extends Database {
         return $stmt->execute();
     }
 
-    // Method untuk menghapus data game
+    // Delete game
     public function deleteGame($idgame) {
         $sql = "DELETE FROM game 
                 WHERE idgame = ?";

@@ -49,11 +49,17 @@ class Achievement extends Database {
                 INNER JOIN team ON team.idteam = achievement.idteam";
 
         if (!empty($teamFilter)) {
-            $sql .= " WHERE team.idteam = '" . mysqli_real_escape_string($this->connection, $teamFilter) . "'";
+            $sql .= " WHERE team.idteam = ?";
+        }
+        $stmt = $this->connection->prepare($sql);
+
+        if (!empty($teamFilter)) {
+            $stmt->bind_param("s", $teamFilter);
         }
 
-        $result = mysqli_query($this->connection, $sql);
-        $row = mysqli_fetch_assoc($result);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
         return $row['total'];
     }
 

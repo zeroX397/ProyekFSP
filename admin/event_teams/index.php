@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../../config.php");
+require_once("event_team.php");
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -9,55 +9,23 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5; // Number of results per page
-if (isset($_GET['p'])) {
-    $page = $_GET['p'];
-} else {
-    $page = 1; 
-}
-$start = ($page - 1) * $perpage;
+$perPage = 5; 
+$page = isset($_GET['p']) ? $_GET['p'] : 1;
+$start = ($page - 1) * $perPage;
 
-// Handle team filtering
-$team_filter = "";
-if (isset($_GET['team'])) {
-    $team_filter = mysqli_real_escape_string($connection, $_GET['team']);
-}
+// Initialize EventTeam object
+$event_team = new EventTeam();
 
-// SQL Filtering
-$teamQuery = "SELECT DISTINCT team.name as team_name, team.idteam as team_id 
-              FROM team 
-              JOIN event_teams ON team.idteam = event_teams.idteam";
-$teamResult = mysqli_query($connection, $teamQuery);
+// Set up team filter
+$team_filter = isset($_GET['team']) ? $_GET['team'] : "";
+$totalData = $event_team->getEventTeamsCount($team_filter);
+$totalpage = ceil($totalData / $perPage);
 
-// Total Count 
-$sql_count = "SELECT COUNT(DISTINCT event.idevent) AS total 
-              FROM event
-              INNER JOIN event_teams ON event.idevent = event_teams.idevent
-              INNER JOIN team ON event_teams.idteam = team.idteam";
+// Fetch achievements with team filter
+$result = $event_team->getEventTeams($team_filter, $start, $perPage);
 
-if (!empty($team_filter)) {
-    $sql_count .= " WHERE team.idteam = '$team_filter'";
-}
-
-$result_count = mysqli_query($connection, $sql_count);
-$row_count = mysqli_fetch_assoc($result_count);
-$totaldata = $row_count['total'];
-$totalpage = ceil($totaldata / $perpage);
-
-// Query for event list (with optional team filter)
-$sql = "SELECT event.idevent as id_event, event.name, event.date, event.description, 
-               team.name as team_name
-        FROM `event`
-        JOIN event_teams ON event.idevent = event_teams.idevent
-        JOIN team ON event_teams.idteam = team.idteam";
-
-if (!empty($team_filter)) {
-    $sql .= " WHERE team.idteam = '$team_filter'";
-}
-
-$sql .= " ORDER BY event.idevent ASC 
-          LIMIT $start, $perpage";
-$result = mysqli_query($connection, $sql);
+// Fetch list of all teams for dropdown filter
+$teamResult = $event_team->getAllTeamsFilter();
 ?>
 
 <!DOCTYPE html>
@@ -126,9 +94,6 @@ $result = mysqli_query($connection, $sql);
         </nav>
         <div class="header-content">
             <h1 class="welcome-mssg">Manage Event-Teams</h1>
-            <form action="add-event_teams.php" class="add-new">
-                <button type="submit">Add Event Teams</button>
-            </form>
         </div>
     </header>
 
@@ -152,31 +117,17 @@ $result = mysqli_query($connection, $sql);
             <tr>
                 <th>Event</th>
                 <th>Teams</th>
-                <th>Edit Event Teams</th>
-                <th>Delete Event Teams</th>
             </tr>
             <?php
             if ($result && mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>";
-                    echo "<td>" . $row['name'] . "</td>";
+                    echo "<td>" . $row['event_name'] . "</td>";
                     echo "<td>" . $row['team_name'] . "</td>";
-                    echo "<td>";
-                    echo "<form action='edit-event_teams.php' method='post'>";
-                    echo "<input type='hidden' name='id_event' value='" . $row['id_event'] . "'>";
-                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "<td>";
-                    echo "<form action='delete-event_teams.php' method='post' onsubmit='return confirmDelete()'>";
-                    echo "<input type='hidden' name='id_event' value='" . $row['id_event'] . "'>";
-                    echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
-                    echo "</form>";
-                    echo "</td>";
                     echo "</tr>";
                 }
             } else {
-                echo "<tr><td colspan='7'>No event found</td></tr>";
+                echo "<tr><td colspan='2'>No event found</td></tr>";
             }
             ?>
         </table>

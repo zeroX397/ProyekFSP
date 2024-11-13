@@ -12,7 +12,6 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 if (isset($_POST['deletebtn']) && isset($_POST['id_game'])) {
     $idgame = $_POST['id_game'];
 
-    // Menggunakan instance class Game untuk delete game
     $game = new Game();
     if ($game->deleteGame($idgame)) {
         echo "<script>alert('Game deleted successfully.'); window.location.href='/admin/games/index.php';</script>";

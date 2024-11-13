@@ -18,7 +18,7 @@ if (isset($_POST['id_game']) || isset($_GET['id_game'])) {
     // Fetch game data by ID
     $gameData = $game->getGameById($idgame);
     if ($gameData) {
-        $gameInfo = $gameData; // Store data in $gameInfo
+        $gameInfo = $gameData; 
     } else {
         echo "<script>alert('Game not found.'); window.location.href='/admin/games/index.php';</script>";
         exit();
@@ -28,13 +28,13 @@ if (isset($_POST['id_game']) || isset($_GET['id_game'])) {
     exit();
 }
 
-// Handle the form submission for updating the game
+// Handle form submission for updating the game
 if (isset($_POST['submit']) && isset($_POST['id_game'])) {
     $idgame = $_POST['id_game'];
     $name = $_POST['name'];
     $description = $_POST['description'];
 
-    // Update the game data in the database
+    // Update the game data 
     if ($game->updateGame($idgame, $name, $description)) {
         echo "<script>alert('Game updated successfully.'); window.location.href='/admin/games/index.php';</script>";
     } else {
