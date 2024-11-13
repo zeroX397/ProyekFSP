@@ -5,13 +5,24 @@ session_start();
 $idmember = isset($_SESSION['idmember']) ? $_SESSION['idmember'] : null;
 
 if ($idmember) {
-    $query = "SELECT t.idteam, t.name as team_name FROM team as t 
+    // Query to show all joined team
+    $queryjoinedteam = "SELECT t.idteam, t.name as team_name FROM team as t 
               INNER JOIN team_members as tm ON t.idteam = tm.idteam 
               WHERE tm.idmember = ?";
-    $stmt = $connection->prepare($query);
+    $stmt = $connection->prepare($queryjoinedteam);
     $stmt->bind_param("i", $idmember);
     $stmt->execute();
     $result = $stmt->get_result();
+
+    // Query to show all join proposal that already sent
+    $queryjoinproposal = "SELECT jp.idjoin_proposal, t.name as team_name, jp.status 
+                      FROM join_proposal jp 
+                      JOIN team t ON jp.idteam = t.idteam 
+                      WHERE jp.idmember = ?";
+    $stmt = $connection->prepare($queryjoinproposal);
+    $stmt->bind_param("i", $idmember);
+    $stmt->execute();
+    $proposals = $stmt->get_result();
 }
 
 ?>
@@ -107,7 +118,28 @@ if ($idmember) {
             }
             ?>
         </table>
+
         <h2>Your Proposal Status</h2>
+        <table>
+            <tr>
+                <th>Proposal ID</th>
+                <th>Team Name</th>
+                <th>Status</th>
+            </tr>
+            <?php if ($proposals->num_rows > 0) : ?>
+                <?php while ($row = $proposals->fetch_assoc()) : ?>
+                    <tr>
+                        <td><?php echo $row['idjoin_proposal']; ?></td>
+                        <td><?php echo $row['team_name']; ?></td>
+                        <td><?php echo $row['status']; ?></td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else : ?>
+                <tr>
+                    <td colspan='3'>No proposals found</td>
+                </tr>
+            <?php endif; ?>
+        </table>
     </main>
     <script src="/assets/js/script.js"></script>
 </body>
