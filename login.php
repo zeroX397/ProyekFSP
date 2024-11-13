@@ -10,7 +10,7 @@ if (isset($_POST['submit'])) {
     $hashedPassword = hash('sha256', $password);
 
     // Prepared statement to avoid SQL injection
-    $sql = "SELECT idmember, username, password, profile FROM `fsp-project`.member WHERE username=? AND password=?";
+    $sql = "SELECT idmember, username, fname, lname, password, profile FROM `fsp-project`.member WHERE username=? AND password=?";
     $stmt = mysqli_prepare($connection, $sql);
     mysqli_stmt_bind_param($stmt, 'ss', $username, $hashedPassword);
     mysqli_stmt_execute($stmt);
@@ -20,6 +20,8 @@ if (isset($_POST['submit'])) {
         $row = mysqli_fetch_assoc($result);
         $_SESSION['idmember'] = $row['idmember'];
         $_SESSION['username'] = $row['username'];
+        $_SESSION['fname'] = $row['fname'];
+        $_SESSION['lname'] = $row['lname'];
         $_SESSION['profile'] = $row['profile']; // Store user profile in session
 
         if ($row['profile'] == 'admin') {

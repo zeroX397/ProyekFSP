@@ -48,7 +48,7 @@ $result = $event->getAllEvents($start, $perpage);
                 // User is logged in
                 $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
                 echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
-                echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
+                echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
                 // To check whether user is admin or not
                 if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                     echo

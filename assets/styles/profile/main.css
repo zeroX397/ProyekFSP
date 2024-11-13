@@ -1,0 +1,48 @@
+h1,
+h2 {
+    margin-top: 50px;
+    text-align: center;
+}
+
+#edit-profile-change-passwd-btn {
+    display: flex;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+button {
+    width: fit-content;
+    padding: 10px;
+    height: 40px;
+    font-size: 14px;
+}
+
+#edit-profile-btn {
+    margin-right: 5px;
+}
+
+#detail-btn {
+    width: 80px;
+    height: 30px;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #04AA6D;
+    border: none;
+    border-radius: 15px;
+    /* box-shadow: 0 9px #999; */
+}
+
+#detail-btn:hover {
+    background-color: #3e8e41
+}
+
+#detail-btn:active {
+    background-color: #3e8e41;
+    /* box-shadow: 0 5px #666; */
+    transform: translateY(4px);
+}

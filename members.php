@@ -114,7 +114,7 @@ $result = mysqli_query($connection, $sql);
                         echo "<td>";
                         echo "<form action='member-detail.php' method='post'>";
                         echo "<input type='hidden' name='idmember' value='" . $row['idmember'] . "'>";
-                        echo "<input type='submit' name='joinbtn' id='btn-join' class='button' value='Details'>";
+                        echo "<button type='submit' name='joinbtn' id='btn-join' class='button'>Detail</button>";
                         echo "</form>";
                         echo "</td>";
                         echo "</tr>";

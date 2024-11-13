@@ -10,7 +10,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="/assets/styles/home.css">
+    <link rel="stylesheet" href="/assets/styles/[CHANGE LATER].css">
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -34,7 +34,7 @@ session_start();
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
@@ -48,7 +48,7 @@ session_start();
                         <a href="/admin/event_teams/">Manage Event-Teams</a>
                     </div>
                 </div>';
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
                         <i class="fa fa-caret-down"></i>
@@ -62,12 +62,6 @@ session_start();
         }
         ?>
     </nav>
-
-    <!-- Header -->
-    <div class="welcome-mssg">
-        <h1>Welcome to the Informatics E-Sport Club</h1>
-        <h3>By Universitas Surabaya</h3>
-    </div>
     <script src="/assets/js/script.js"></script>
 </body>
 

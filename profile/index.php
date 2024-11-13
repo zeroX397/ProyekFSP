@@ -1,5 +1,19 @@
 <?php
+include('../config.php');
 session_start();
+
+$idmember = isset($_SESSION['idmember']) ? $_SESSION['idmember'] : null;
+
+if ($idmember) {
+    $query = "SELECT t.idteam, t.name as team_name FROM team as t 
+              INNER JOIN team_members as tm ON t.idteam = tm.idteam 
+              WHERE tm.idmember = ?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("i", $idmember);
+    $stmt->execute();
+    $result = $stmt->get_result();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +25,7 @@ session_start();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/profile/main.css">
-    <title>Informatics E-Sport Club</title>
+    <title>Profile</title>
 </head>
 
 <body>
@@ -64,9 +78,36 @@ session_start();
     </nav>
 
     <main>
-        <h1>
-
-        </h1>
+        <h1>Hello <?php echo $_SESSION['fname'] . " " . $_SESSION['lname'] ?></h1>
+        <span id="edit-profile-change-passwd-btn">
+            <button id="edit-profile-btn">Edit Profile</button>
+            <button id="change-passwd-btn">Change Password</button>
+        </span>
+        <h2>Joined Team</h2>
+        <table>
+            <tr>
+                <th>ID Team</th>
+                <th>Team Name</th>
+                <th>Action</th>
+            </tr>
+            <?php
+            if (isset($result) && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $row['idteam'] . "</td>";
+                    echo "<td>" . $row['team_name'] . "</td>";
+                    echo "<td><form action='team-detail.php' method='get'>";
+                    echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
+                    echo "<input type='submit' id='detail-btn' value='Details'>";
+                    echo "</form></td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='3'>No teams found</td></tr>";
+            }
+            ?>
+        </table>
+        <h2>Your Proposal Status</h2>
     </main>
     <script src="/assets/js/script.js"></script>
 </body>
