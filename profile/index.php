@@ -118,7 +118,15 @@ if ($idmember) {
                     <tr>
                         <td><?php echo $row['idjoin_proposal']; ?></td>
                         <td><?php echo $row['team_name']; ?></td>
-                        <td><?php echo $row['status']; ?></td>
+                        <?php
+                        if ($row['status'] == 'approved') {
+                            echo "<td id='td-status-approved'>" . $row['status'] . "</td>";
+                        } else if ($row['status'] == 'waiting'){
+                            echo "<td id='td-status-waiting'>" . $row['status'] . "</td>";
+                        } else {
+                            echo "<td id='td-status-waiting'>" . $row['status'] . "</td>";
+                        }
+                        ?>
                     </tr>
                 <?php endwhile; ?>
             <?php else : ?>

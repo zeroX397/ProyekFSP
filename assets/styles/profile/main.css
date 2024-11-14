@@ -46,3 +46,16 @@ button {
     /* box-shadow: 0 5px #666; */
     transform: translateY(4px);
 }
+
+#td-status-approved{
+    background-color: #90EE90;
+    color: #000;
+}
+#td-status-waiting{
+    background-color: #E9D502;
+    color: #000;
+}
+#td-status-rejected{
+    background-color: #FF4545;
+    color: #000;
+}

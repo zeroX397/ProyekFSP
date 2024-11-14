@@ -38,48 +38,43 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
 
     $uploadDir = __DIR__ . "/assets/img/team_picture/";
     $uploadFile = $uploadDir . $idteam . ".jpg";
-    if ($team->updateTeam($idteam, $idgame, $team_name)) {
-        // Menentukan folder penyimpanan gambar
-        $uploadDir = __DIR__ . "/assets/img/team_picture/";
-        $uploadFile = $uploadDir . $idteam . ".jpg"; // Nama file baru sesuai idteam
 
-        // Cek apakah file gambar diupload
-        if (isset($_FILES['team_logo']) && $_FILES['team_logo']['error'] === UPLOAD_ERR_OK) {
-            // Validasi tipe file
-            $allowedTypes = ['image/jpeg', 'image/png'];
-            $fileType = mime_content_type($_FILES['team_logo']['tmp_name']);
+    // Ensure file upload is valid before updating team info
+    if (isset($_FILES['team_logo']) && $_FILES['team_logo']['error'] === UPLOAD_ERR_OK) {
+        $fileType = mime_content_type($_FILES['team_logo']['tmp_name']);
+        $allowedTypes = ['image/jpeg', 'image/png'];
+        $maxFileSize = 2 * 1024 * 1024; // 2MB
 
-            if (in_array($fileType, $allowedTypes)) {
-                // Hapus gambar lama jika ada (agar hanya ada 1 gambar per tim)
-                if (file_exists($uploadFile)) {
-                    unlink($uploadFile);
-                }
+        if (!in_array($fileType, $allowedTypes)) {
+            $error = "Invalid file type. Only JPG and PNG are allowed.";
+        } elseif ($_FILES['team_logo']['size'] > $maxFileSize) {
+            $error = "File size should not exceed 2MB.";
+        } else {
+            // Check if an existing file exists and remove it
+            if (file_exists($uploadFile)) {
+                unlink($uploadFile);
+            }
 
-                // Pindahkan file yang diupload ke folder tujuan dengan nama idteam.jpg
-                if (move_uploaded_file($_FILES['team_logo']['tmp_name'], $uploadFile)) {
-                    echo "<script>alert('Team updated successfully with new logo.'); window.location.href='/admin/teams/index.php';</script>";
-                } else {
-                    $error = "Error uploading the logo.";
-                }
+            // Move the new file to the target location
+            if (move_uploaded_file($_FILES['team_logo']['tmp_name'], $uploadFile)) {
+                echo "<script>alert('Team updated successfully with new logo.'); window.location.href='/admin/teams/index.php';</script>";
+                exit();
             } else {
-                $error = "Invalid file type. Only JPG and PNG are allowed.";
+                $error = "Error uploading the logo.";
             }
         }
     }
-    $maxFileSize = 2 * 1024 * 1024; // 2MB
-    if ($_FILES['team_logo']['size'] > $maxFileSize) {
-        $error = "File size should not exceed 2MB.";
-    }
 
-
-    // Update the team data in the database
+    // Update the team data in the database (if needed)
     if ($team->updateTeam($idteam, $idgame, $team_name)) {
         echo "<script>alert('Team updated successfully.'); window.location.href='/admin/teams/index.php';</script>";
+        exit();
     } else {
         $error = "Error during team update.";
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -112,7 +107,7 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo
-                    '<div class="dropdown">
+                '<div class="dropdown">
                     <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
                     </a>
@@ -126,7 +121,7 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
                     </div>
                 </div>';
                 echo
-                    '<div class="dropdown">
+                '<div class="dropdown">
                     <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
                         <i class="fa fa-caret-down"></i>
                     </a>

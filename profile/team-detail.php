@@ -37,13 +37,43 @@ if ($result && mysqli_num_rows($result) > 0) {
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
+        <a href="/how-to-join.php">How to Join</a>
         <?php
         if (!isset($_SESSION['username'])) {
+            // User is not logged in
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
-            $displayName = "Welcome, " . $_SESSION['username'];
+            // User is logged in
+            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
+            // To check whether is admin or not
+            if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
+                echo
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="dd-admin-page">
+                        <a href="/admin/teams/">Manage Teams</a>
+                        <a href="/admin/members/">Manage Members</a>
+                        <a href="/admin/events/">Manage Events</a>
+                        <a href="/admin/games/">Manage Games</a>
+                        <a href="/admin/achievements/">Manage Achievements</a>
+                        <a href="/admin/event_teams/">Manage Event-Teams</a>
+                    </div>
+                </div>';
+                echo
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="proposalPage">
+                        <a href="/admin/proposal/waiting.php">Waiting Approval</a>
+                        <a href="/admin/proposal/responded.php">Responded</a>
+                    </div>
+                </div>';
+            }
         }
         ?>
     </nav>
@@ -51,7 +81,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     <!-- Begin team's details -->
     <h1><?= htmlspecialchars($teamName) ?></h1>
     <?php if ($teamName !== "Team not found or no access"): ?>
-<h2>Members</h2>
+        <h2>Members</h2>
         <table>
             <tr>
                 <th>Member Name</th>
@@ -59,11 +89,11 @@ if ($result && mysqli_num_rows($result) > 0) {
             <?php
             mysqli_data_seek($result, 0);
             $memberFound = false;
-            $memberSet = []; 
+            $memberSet = [];
             while ($row = mysqli_fetch_assoc($result)) {
                 if (!empty($row['MemberName']) && !in_array($row['MemberName'], $memberSet)) {
                     echo "<tr><td>{$row['MemberName']}</td></tr>";
-                    $memberSet[] = $row['MemberName']; 
+                    $memberSet[] = $row['MemberName'];
                     $memberFound = true;
                 }
             }
@@ -74,7 +104,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         </table>
 
 
-<h2>Achievements</h2>
+        <h2>Achievements</h2>
         <table>
             <tr>
                 <th>Achievement Name</th>
@@ -83,12 +113,12 @@ if ($result && mysqli_num_rows($result) > 0) {
             <?php
             mysqli_data_seek($result, 0);
             $achievementFound = false;
-            $achievementSet = []; 
+            $achievementSet = [];
             while ($row = mysqli_fetch_assoc($result)) {
                 $achievementKey = $row['AchievementName'] . $row['AchievementDate'];
                 if (!empty($row['AchievementName']) && !in_array($achievementKey, $achievementSet)) {
                     echo "<tr><td>{$row['AchievementName']}</td><td>{$row['AchievementDate']}</td></tr>";
-                    $achievementSet[] = $achievementKey; 
+                    $achievementSet[] = $achievementKey;
                     $achievementFound = true;
                 }
             }
@@ -99,7 +129,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         </table>
 
 
-<h2>Events</h2>
+        <h2>Events</h2>
         <table>
             <tr>
                 <th>Event Name</th>
@@ -108,12 +138,12 @@ if ($result && mysqli_num_rows($result) > 0) {
             <?php
             mysqli_data_seek($result, 0);
             $eventFound = false;
-            $eventSet = []; 
+            $eventSet = [];
             while ($row = mysqli_fetch_assoc($result)) {
                 $eventKey = $row['EventName'] . $row['EventDate'];
                 if (!empty($row['EventName']) && !in_array($eventKey, $eventSet)) {
                     echo "<tr><td>{$row['EventName']}</td><td>{$row['EventDate']}</td></tr>";
-                    $eventSet[] = $eventKey; 
+                    $eventSet[] = $eventKey;
                     $eventFound = true;
                 }
             }
