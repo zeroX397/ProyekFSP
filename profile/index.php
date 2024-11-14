@@ -1,28 +1,15 @@
 <?php
-include('../config.php');
 session_start();
+require_once("profile.php");
+
+$profile = new Profile();
 
 $idmember = isset($_SESSION['idmember']) ? $_SESSION['idmember'] : null;
 
 if ($idmember) {
-    // Query to show all joined team
-    $queryjoinedteam = "SELECT t.idteam, t.name as team_name FROM team as t 
-              INNER JOIN team_members as tm ON t.idteam = tm.idteam 
-              WHERE tm.idmember = ?";
-    $stmt = $connection->prepare($queryjoinedteam);
-    $stmt->bind_param("i", $idmember);
-    $stmt->execute();
-    $result = $stmt->get_result();
 
-    // Query to show all join proposal that already sent
-    $queryjoinproposal = "SELECT jp.idjoin_proposal, t.name as team_name, jp.status 
-                      FROM join_proposal jp 
-                      JOIN team t ON jp.idteam = t.idteam 
-                      WHERE jp.idmember = ?";
-    $stmt = $connection->prepare($queryjoinproposal);
-    $stmt->bind_param("i", $idmember);
-    $stmt->execute();
-    $proposals = $stmt->get_result();
+    $result = $profile->getJoinedTeams($idmember);
+    $proposals = $profile->getJoinProposals($idmember);
 }
 
 ?>
