@@ -17,6 +17,38 @@ $games = $team->getAllGames();
 if (isset($_POST['submit'])) {
     $idgame = $_POST['idgame'];
     $team_name = $_POST['team_name'];
+    $idteam =  $row['idteam'].uniqid();//id unik
+
+    $uploadDir = __DIR__ . "/assets/img/team_picture/";
+    $uploadFile = $uploadDir . $idteam . ".jpg";
+    if (isset($_FILES['team_logo']) && $_FILES['team_logo']['error'] === UPLOAD_ERR_OK) {
+        // Validasi ukuran dan tipe file jika diperlukan
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        $fileType = mime_content_type($_FILES['team_logo']['tmp_name']);
+        
+        if (in_array($fileType, $allowedTypes)) {
+            // Pindahkan file yang diupload ke folder sementara
+            if (move_uploaded_file($_FILES['team_logo']['tmp_name'], $uploadFile)) {
+                // Dapatkan ID tim yang baru saja ditambahkan (idteam harus diperoleh setelah insert)
+                $idteam = $team->getLastInsertedTeamId(); // Pastikan fungsi ini mengembalikan ID terakhir
+
+                // File yang telah di-upload, ganti namanya menjadi [idteam].jpg
+                $finalFileName = $uploadDir . $idteam . ".jpg"; // Nama file baru sesuai idteam
+
+                // Rename file yang telah diupload sesuai idteam.jpg
+                if (rename($uploadFile, $finalFileName)) {
+                    // Set the image path in the database if needed
+                    echo "<script>alert('Team registration successful with logo.'); window.location.href='/admin/teams/index.php';</script>";
+                } else {
+                    $error = "Error renaming the logo.";
+                }
+            } else {
+                $error = "Error uploading the logo.";
+            }
+        } else {
+            $error = "Invalid file type. Only JPG and PNG are allowed.";
+        }
+    } 
 
     if ($team->addTeam($idgame, $team_name)) {
         echo "<script>alert('Team registration successful.'); window.location.href='/admin/teams/index.php';</script>";
@@ -100,6 +132,7 @@ if (isset($_POST['submit'])) {
                 <?php endforeach; ?>
             </select>
             <input name="team_name" type="text" placeholder="Team Name" required>
+            <input type="file" name="team_logo" accept="image/*">
             <button name="submit" type="submit">Save Team</button><br>
         </form>
     </div>

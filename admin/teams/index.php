@@ -28,6 +28,7 @@ $result = $team->getAllTeams($start, $perpage);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
+    <link rel="stylesheet" href="/assets/styles/admin/teams/team_picture.css">
     <title>Manage Teams</title>
 </head>
 
@@ -91,6 +92,7 @@ $result = $team->getAllTeams($start, $perpage);
     <div class="all-team">
         <table>
             <tr>
+                <th>Team Logo</th>
                 <th>Team ID</th>
                 <th>Team Name</th>
                 <th>Game</th>
@@ -100,8 +102,15 @@ $result = $team->getAllTeams($start, $perpage);
             <?php
             if ($result && mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['idteam'] . "</td>";
+                    $idteam = $row['idteam'];
+                $logoPath = "/assets/img/team_picture/$idteam.jpg";
+                $defaultPath = "/assets/img/team_picture/default.jpg";
+
+                // Check if the logo file exists
+                echo "<tr>";
+                echo "<td><img src='$logoPath' alt='Team Logo' class='team-logo' onerror=\"this.onerror=null;this.src='$defaultPath';\"></td>";
+
+                echo "<td>" . $row['idteam'] . "</td>";
                     echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>" . $row['game_name'] . "</td>";
                     echo "<td>";

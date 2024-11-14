@@ -35,7 +35,43 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
     $idteam = $_POST['idteam'];
     $idgame = $_POST['idgame'];
     $team_name = $_POST['team_name'];
-    
+
+    $uploadDir = __DIR__ . "/assets/img/team_picture/";
+    $uploadFile = $uploadDir . $idteam . ".jpg";
+    if ($team->updateTeam($idteam, $idgame, $team_name)) {
+        // Menentukan folder penyimpanan gambar
+        $uploadDir = __DIR__ . "/assets/img/team_picture/";
+        $uploadFile = $uploadDir . $idteam . ".jpg"; // Nama file baru sesuai idteam
+
+        // Cek apakah file gambar diupload
+        if (isset($_FILES['team_logo']) && $_FILES['team_logo']['error'] === UPLOAD_ERR_OK) {
+            // Validasi tipe file
+            $allowedTypes = ['image/jpeg', 'image/png'];
+            $fileType = mime_content_type($_FILES['team_logo']['tmp_name']);
+
+            if (in_array($fileType, $allowedTypes)) {
+                // Hapus gambar lama jika ada (agar hanya ada 1 gambar per tim)
+                if (file_exists($uploadFile)) {
+                    unlink($uploadFile);
+                }
+
+                // Pindahkan file yang diupload ke folder tujuan dengan nama idteam.jpg
+                if (move_uploaded_file($_FILES['team_logo']['tmp_name'], $uploadFile)) {
+                    echo "<script>alert('Team updated successfully with new logo.'); window.location.href='/admin/teams/index.php';</script>";
+                } else {
+                    $error = "Error uploading the logo.";
+                }
+            } else {
+                $error = "Invalid file type. Only JPG and PNG are allowed.";
+            }
+        }
+    }
+    $maxFileSize = 2 * 1024 * 1024; // 2MB
+    if ($_FILES['team_logo']['size'] > $maxFileSize) {
+        $error = "File size should not exceed 2MB.";
+    }
+
+
     // Update the team data in the database
     if ($team->updateTeam($idteam, $idgame, $team_name)) {
         echo "<script>alert('Team updated successfully.'); window.location.href='/admin/teams/index.php';</script>";
@@ -76,7 +112,7 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo
-                '<div class="dropdown">
+                    '<div class="dropdown">
                     <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
                     </a>
@@ -90,7 +126,7 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
                     </div>
                 </div>';
                 echo
-                '<div class="dropdown">
+                    '<div class="dropdown">
                     <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
                         <i class="fa fa-caret-down"></i>
                     </a>
@@ -105,10 +141,10 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
     </nav>
     <!-- Form to Edit Team -->
     <div class="form">
-        <?php if (isset($error)) : ?>
+        <?php if (isset($error)): ?>
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
-        <form action="" class="edit-form" method="post">
+        <form action="" class="edit-form" method="post" enctype="multipart/form-data">
             <!-- Hidden input for team ID -->
             <input type="hidden" name="idteam" value="<?= htmlspecialchars($teamInfo['idteam']) ?>">
             <label for="idgame">Select Game</label>
@@ -120,7 +156,21 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
                 <?php endforeach; ?>
             </select>
             <label for="team_name">Team Name</label>
-            <input name="team_name" type="text" placeholder="Team Name" value="<?= htmlspecialchars($teamInfo['name']) ?>" required>
+            <input name="team_name" type="text" placeholder="Team Name"
+                value="<?= htmlspecialchars($teamInfo['name']) ?>" required>
+            <!-- Upload Team Logo -->
+            <label for="team_logo">Team Logo</label>
+            <input type="file" name="team_logo" accept="image/jpeg, image/png">
+
+            <!-- Display Existing Logo (if available) -->
+            <?php
+            $logoPath = "/assets/img/team_picture/" . $teamInfo['idteam'] . ".jpg";
+            if (file_exists(__DIR__ . $logoPath)) {
+                echo "<img src='$logoPath' alt='Team Logo' style='width: 100px; height: auto; margin-top: 10px;'><br>";
+            } else {
+                echo "<img src='/assets/img/team_picture/default.jpg' alt='Default Logo' style='width: 100px; height: auto; margin-top: 10px;'><br>";
+            } ?>
+
             <button name="submit" type="submit" class='btnsubmit'>Update</button>
         </form>
     </div>
