@@ -18,6 +18,16 @@ class Team extends Database {
         $result = $stmt->get_result();
         return $result;
     }
+    public function getLastInsertedTeamId() {
+        // Menggunakan fungsi LAST_INSERT_ID() untuk mendapatkan ID terakhir yang ditambahkan
+        $result = $this->connection->query("SELECT LAST_INSERT_ID() as idteam");
+        
+        if ($result) {
+            $row = $result->fetch_assoc();
+            return $row['idteam'];
+        }
+        return null; 
+    }
 
     public function getTotalTeams() {
         $sql = "SELECT COUNT(DISTINCT team.idteam) AS total 

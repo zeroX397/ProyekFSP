@@ -154,17 +154,23 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
             <input name="team_name" type="text" placeholder="Team Name"
                 value="<?= htmlspecialchars($teamInfo['name']) ?>" required>
             <!-- Upload Team Logo -->
-            <label for="team_logo">Team Logo</label>
-            <input type="file" name="team_logo" accept="image/jpeg, image/png">
+            <label for="team_picture">Team Logo</label>
+            <input type="file" name="team_picture" accept="image/jpeg, image/png">
 
             <!-- Display Existing Logo (if available) -->
             <?php
             $logoPath = "/assets/img/team_picture/" . $teamInfo['idteam'] . ".jpg";
+
+            // Cek apakah file logo ada
             if (file_exists(__DIR__ . $logoPath)) {
-                echo "<img src='$logoPath' alt='Team Logo' style='width: 100px; height: auto; margin-top: 10px;'><br>";
+                // Menambahkan query string dengan timestamp untuk menghindari cache
+                $logoPathWithCache = $logoPath . '?' . time();
+                echo "<img src='$logoPathWithCache' alt='Team Logo' style='width: 100px; height: auto; margin-top: 10px;'><br>";
             } else {
                 echo "<img src='/assets/img/team_picture/default.jpg' alt='Default Logo' style='width: 100px; height: auto; margin-top: 10px;'><br>";
-            } ?>
+            }
+            ?>
+
 
             <button name="submit" type="submit" class='btnsubmit'>Update</button>
         </form>

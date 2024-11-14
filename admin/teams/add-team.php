@@ -17,38 +17,45 @@ $games = $team->getAllGames();
 if (isset($_POST['submit'])) {
     $idgame = $_POST['idgame'];
     $team_name = $_POST['team_name'];
-    $idteam =  $row['idteam'].uniqid();//id unik
+    // Assuming you have already inserted the team data, so $idteam is available.
+    $idteam = $row['idteam'] ?? $team->getLastInsertedTeamId();
 
-    $uploadDir = __DIR__ . "/assets/img/team_picture/";
-    $uploadFile = $uploadDir . $idteam . ".jpg";
-    if (isset($_FILES['team_logo']) && $_FILES['team_logo']['error'] === UPLOAD_ERR_OK) {
-        // Validasi ukuran dan tipe file jika diperlukan
+    // Periksa apakah file diupload
+    if (isset($_FILES['team_picture']) && $_FILES['team_picture']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = __DIR__ . "/../../assets/img/team_picture/";
+        $finalFileName = $uploadDir . $idteam . ".jpg"; // Set final filename directly
+
+        // Validasi file
         $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-        $fileType = mime_content_type($_FILES['team_logo']['tmp_name']);
+        $fileType = mime_content_type($_FILES['team_picture']['tmp_name']);
+
+        // Debugging output untuk mengecek MIME type
+        error_log('File type detected: ' . $fileType);
         
         if (in_array($fileType, $allowedTypes)) {
-            // Pindahkan file yang diupload ke folder sementara
-            if (move_uploaded_file($_FILES['team_logo']['tmp_name'], $uploadFile)) {
-                // Dapatkan ID tim yang baru saja ditambahkan (idteam harus diperoleh setelah insert)
-                $idteam = $team->getLastInsertedTeamId(); // Pastikan fungsi ini mengembalikan ID terakhir
+            if (move_uploaded_file($_FILES['team_picture']['tmp_name'], $finalFileName)) {
+                $imgPath = "/assets/img/team_picture/" . $idteam . ".jpg?" . time();
 
-                // File yang telah di-upload, ganti namanya menjadi [idteam].jpg
-                $finalFileName = $uploadDir . $idteam . ".jpg"; // Nama file baru sesuai idteam
-
-                // Rename file yang telah diupload sesuai idteam.jpg
-                if (rename($uploadFile, $finalFileName)) {
-                    // Set the image path in the database if needed
-                    echo "<script>alert('Team registration successful with logo.'); window.location.href='/admin/teams/index.php';</script>";
-                } else {
-                    $error = "Error renaming the logo.";
-                }
+                echo "<script>
+                alert('Team registration successful with logo.');
+                window.location.href='/admin/teams/index.php?img={$imgPath}';
+            </script>";
             } else {
-                $error = "Error uploading the logo.";
+                $error = "Error moving the uploaded file to the target location.";
             }
         } else {
-            $error = "Invalid file type. Only JPG and PNG are allowed.";
+            $error = "Invalid file type. Only JPG and PNG files are allowed.";
         }
-    } 
+    } else {
+        $error = "No file uploaded or an upload error occurred. Error code: ";
+    }
+
+    // Jika terjadi error
+    if (isset($error)) {
+        echo "<script>alert('{$error}');</script>";
+    }
+
+
 
     if ($team->addTeam($idgame, $team_name)) {
         echo "<script>alert('Team registration successful.'); window.location.href='/admin/teams/index.php';</script>";
@@ -92,7 +99,7 @@ if (isset($_POST['submit'])) {
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo
-                '<div class="dropdown">
+                    '<div class="dropdown">
                     <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
                     </a>
@@ -106,7 +113,7 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>';
                 echo
-                '<div class="dropdown">
+                    '<div class="dropdown">
                     <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
                         <i class="fa fa-caret-down"></i>
                     </a>
@@ -121,7 +128,7 @@ if (isset($_POST['submit'])) {
     </nav>
     <!-- Form to Add New Team -->
     <div class="form">
-        <?php if (isset($error)) : ?>
+        <?php if (isset($error)): ?>
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" class="add-form" method="post">
@@ -132,7 +139,7 @@ if (isset($_POST['submit'])) {
                 <?php endforeach; ?>
             </select>
             <input name="team_name" type="text" placeholder="Team Name" required>
-            <input type="file" name="team_logo" accept="image/*">
+            <input type="file" name="team_picture" accept="image/*">
             <button name="submit" type="submit">Save Team</button><br>
         </form>
     </div>
