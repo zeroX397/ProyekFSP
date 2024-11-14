@@ -44,10 +44,10 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
         $uploadFile = $uploadDir . $idteam . ".jpg"; // Nama file baru sesuai idteam
 
         // Cek apakah file gambar diupload
-        if (isset($_FILES['team_logo']) && $_FILES['team_logo']['error'] === UPLOAD_ERR_OK) {
+        if (isset($_FILES['team_picture']) && $_FILES['team_picture']['error'] === UPLOAD_ERR_OK) {
             // Validasi tipe file
             $allowedTypes = ['image/jpeg', 'image/png'];
-            $fileType = mime_content_type($_FILES['team_logo']['tmp_name']);
+            $fileType = mime_content_type($_FILES['team_picture']['tmp_name']);
 
             if (in_array($fileType, $allowedTypes)) {
                 // Hapus gambar lama jika ada (agar hanya ada 1 gambar per tim)
@@ -56,7 +56,7 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
                 }
 
                 // Pindahkan file yang diupload ke folder tujuan dengan nama idteam.jpg
-                if (move_uploaded_file($_FILES['team_logo']['tmp_name'], $uploadFile)) {
+                if (move_uploaded_file($_FILES['team_picture']['tmp_name'], $uploadFile)) {
                     echo "<script>alert('Team updated successfully with new logo.'); window.location.href='/admin/teams/index.php';</script>";
                 } else {
                     $error = "Error uploading the logo.";
@@ -67,7 +67,7 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
         }
     }
     $maxFileSize = 2 * 1024 * 1024; // 2MB
-    if ($_FILES['team_logo']['size'] > $maxFileSize) {
+    if ($_FILES['team_picture']['size'] > $maxFileSize) {
         $error = "File size should not exceed 2MB.";
     }
 
@@ -159,17 +159,23 @@ if (isset($_POST['submit']) && isset($_POST['idteam'])) {
             <input name="team_name" type="text" placeholder="Team Name"
                 value="<?= htmlspecialchars($teamInfo['name']) ?>" required>
             <!-- Upload Team Logo -->
-            <label for="team_logo">Team Logo</label>
-            <input type="file" name="team_logo" accept="image/jpeg, image/png">
+            <label for="team_picture">Team Logo</label>
+            <input type="file" name="team_picture" accept="image/jpeg, image/png">
 
             <!-- Display Existing Logo (if available) -->
             <?php
             $logoPath = "/assets/img/team_picture/" . $teamInfo['idteam'] . ".jpg";
+
+            // Cek apakah file logo ada
             if (file_exists(__DIR__ . $logoPath)) {
-                echo "<img src='$logoPath' alt='Team Logo' style='width: 100px; height: auto; margin-top: 10px;'><br>";
+                // Menambahkan query string dengan timestamp untuk menghindari cache
+                $logoPathWithCache = $logoPath . '?' . time();
+                echo "<img src='$logoPathWithCache' alt='Team Logo' style='width: 100px; height: auto; margin-top: 10px;'><br>";
             } else {
                 echo "<img src='/assets/img/team_picture/default.jpg' alt='Default Logo' style='width: 100px; height: auto; margin-top: 10px;'><br>";
-            } ?>
+            }
+            ?>
+
 
             <button name="submit" type="submit" class='btnsubmit'>Update</button>
         </form>
