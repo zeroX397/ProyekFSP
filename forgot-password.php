@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 ?>
 
 <!DOCTYPE html>
@@ -63,9 +62,6 @@ session_start();
         }
         ?>
     </nav>
-    <main>
-
-    </main>
     <script src="/assets/js/script.js"></script>
 </body>
 

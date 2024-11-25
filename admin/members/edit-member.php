@@ -2,7 +2,7 @@
 session_start();
 require_once("member.php");
 
-$member = new Member(); 
+$member = new Member();
 
 // Check if user is logged in and is an admin
 if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
@@ -80,7 +80,7 @@ if (isset($_POST['submit']) && isset($_POST['id_member'])) {
             echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
@@ -94,7 +94,7 @@ if (isset($_POST['submit']) && isset($_POST['id_member'])) {
                         <a href="/admin/event_teams/">Manage Event-Teams</a>
                     </div>
                 </div>';
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
                         <i class="fa fa-caret-down"></i>
@@ -108,39 +108,25 @@ if (isset($_POST['submit']) && isset($_POST['id_member'])) {
         }
         ?>
     </nav>
-    <!-- Form to Edit Member -->
-    <div class="form">
-        <?php if (isset($error)) : ?>
-            <div style="color: red;"><?php echo $error; ?></div>
-        <?php endif; ?>
-        <form action="" method="post" class="edit-form">
-            <!-- Hidden input for member ID -->
-            <input type="hidden" name="id_member" value="<?php echo htmlspecialchars($memberData['idmember']); ?>">
-            <br><br><br>
-            <table class="edit-table">
-                <tr>
-                    <td><label for="username">Username</label></td>
-                    <td><input name="username" type="text" placeholder="Username" value="<?php echo htmlspecialchars($memberData['username']); ?>" required></td>
-                </tr>
-                <tr>
-                    <td><label for="fname">First Name</label></td>
-                    <td><input name="fname" type="text" placeholder="First Name" value="<?php echo htmlspecialchars($memberData['fname']); ?>" required></td>
-                </tr>
-                <tr>
-                    <td><label for="lname">Last Name</label></td>
-                    <td><input name="lname" type="text" placeholder="Last Name" value="<?php echo htmlspecialchars($memberData['lname']); ?>" required></td>
-                </tr>
-                <tr>
-                    <td><label for="password">Password</label></td>
-                    <td><input name="password" type="password" placeholder="Enter new password (leave blank to keep current password)"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><button name="submit" type="submit" class='btnsubmit'>Update</button></td>
-                </tr>
-            </table>
-        </form>
-    </div>
+    <main>
+        <h1 class="header-mssg">You are editing profile: <?php echo $memberData['idmember'] . ' - '. $memberData['username'] ?></h1>
+        <!-- Form to Edit Member -->
+        <div class="form">
+            <?php if (isset($error)) : ?>
+                <div style="color: red;"><?php echo $error; ?></div>
+            <?php endif; ?>
+            <form action="" method="post" class="edit-form">
+                <!-- Hidden input for member ID -->
+                <input type="hidden" name="id_member" value="<?php echo htmlspecialchars($memberData['idmember']); ?>">
+                <input name="username" type="text" placeholder="Username" value="<?php echo htmlspecialchars($memberData['username']); ?>" required>
+                <input name="fname" type="text" placeholder="First Name" value="<?php echo htmlspecialchars($memberData['fname']); ?>" required>
+                <input name="lname" type="text" placeholder="Last Name" value="<?php echo htmlspecialchars($memberData['lname']); ?>" required>
+                <input name="password" type="password" placeholder="Enter new password (leave blank to keep current)"></td>
+                <button name="submit" type="submit" class='btnsubmit'>Update</button></td>
+            </form>
+        </div>
+    </main>
+
     <script src="/assets/js/script.js"></script>
 </body>
 

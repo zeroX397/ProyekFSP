@@ -100,14 +100,14 @@ $result = mysqli_query($connection, $sql);
                         echo "<td>";
                         echo "<form action='join-team.php' method='post'>";
                         echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
-                        echo "<input type='submit' name='joinbtn' id='btn-join' class='button' value='Apply'>";
+                        echo "<input type='submit' id='btn-join' class='button' value='Apply'>";
                         echo "</form>";
                         echo "</td>";
                         // View Teams Details
                         echo "<td>";
                         echo "<form action='team-detail.php' method='get'>";
                         echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
-                        echo "<input type='submit' name='joinbtn' id='btn-join' class='button' value='Details'>";
+                        echo "<input type='submit' id='btn-join' class='button' value='Details'>";
                         echo "</form>";
                         echo "</td>";
                         echo "</tr>";

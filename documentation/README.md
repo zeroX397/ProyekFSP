@@ -6,9 +6,9 @@
   - [Part I: Guest](#part-i-guest)
   - [Part II: Member](#part-ii-member)
     - [• Joining a team](#-joining-a-team)
-    - [• Changing Profile Information](#-changing-profile-information)
   - [Part III: Admin](#part-iii-admin)
     - [• Teams](#-teams)
+    - [• Members](#-members)
 ## Part I: Guest
 
 "Guest" means users who do not have an account registered yet. Guest can explore the teams (including team's details), events, and about page only. It is indicating that Guest users have least access to the site. If users want to join a team, they must register an account through **Sign Up** page.
@@ -45,15 +45,8 @@ If password confirmation does not match with password field, users can not proce
 
   After you send the application, admins need to review it. Then decide to approve or reject the application. If the application is approved, you are one of the team's member. If rejected, you can apply again and may improved the application proposal. You can track application proposal in the profile page by clicking **Profile**, the green button (with your id - username) right side of **Logout** button. 
 
-  ![Application proposal status](unavailable.jpg)
+  ![Application proposal status](profile-application-status.png)
   *You can see you application status in **Profile** page.*
-
-### &bull; Changing Profile Information
-
-  User can change their personal information through **Edit** button in **Profile** page.
-
-  ![Edit personal information](unavailable.jpg)
-  *You can change your personal status here.*
 
 ## Part III: Admin
 
@@ -61,7 +54,7 @@ If password confirmation does not match with password field, users can not proce
 
 ### &bull; Teams
 
-When admin accessing /teams, the page will show all teams' name, alongside with two options: Edit and Delete.
+When admin accessing `/admin/teams`, the page will show all teams' name, alongside with two options: Edit and Delete.
 
 ![Manage Teams Page](manage-team-page.png)
 
@@ -70,4 +63,18 @@ You can choose which team you do want to edit or delete. To edit, simply click t
 ![Edit Teams Page](edit-team-page.png)
 
 You can change the team's main game and/or edit the team's name. After you are done with editing, click the **Update** button to save your change(s).
+
+### &bull; Members
+
+When admin accessing `/admin/members/`, the page will show all members' id, username, full name, and action either edit or delete the member. 
+
+![Manage Members Page](manage-member-page.png)
+
+In edit page, admin can change their username, first name, last name, or changing the password. If admin leave the password fill blank, the current password will remain not changed.
+
+![Edit Members Page](edit-member-page.png)
+
+If admin want to delete a member profile, click delete. And click OK to confirm deletion on pop-up alert.
+
+![Delete Members](delete-member-page.png)
 

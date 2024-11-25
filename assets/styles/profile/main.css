@@ -47,15 +47,19 @@ button {
     transform: translateY(4px);
 }
 
-#td-status-approved{
+.td-status {
+    color: #000;
+    font-weight: bold;
+}
+
+.approved {
     background-color: #90EE90;
-    color: #000;
 }
-#td-status-waiting{
+
+.waiting {
     background-color: #E9D502;
-    color: #000;
 }
-#td-status-rejected{
-    background-color: #FF4545;
-    color: #000;
+
+.rejected {
+    background-color: #ff5c5c;
 }

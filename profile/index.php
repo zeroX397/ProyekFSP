@@ -77,10 +77,6 @@ if ($idmember) {
 
     <main>
         <h1>Hello <?php echo $_SESSION['fname'] . " " . $_SESSION['lname'] ?></h1>
-        <span id="edit-profile-change-passwd-btn">
-            <button id="edit-profile-btn">Edit Profile</button>
-            <button id="change-passwd-btn">Change Password</button>
-        </span>
         <h2>Joined Team</h2>
         <table>
             <tr>
@@ -120,11 +116,11 @@ if ($idmember) {
                         <td><?php echo $row['team_name']; ?></td>
                         <?php
                         if ($row['status'] == 'approved') {
-                            echo "<td id='td-status-approved'>" . $row['status'] . "</td>";
-                        } else if ($row['status'] == 'waiting'){
-                            echo "<td id='td-status-waiting'>" . $row['status'] . "</td>";
-                        } else {
-                            echo "<td id='td-status-waiting'>" . $row['status'] . "</td>";
+                            echo "<td class='td-status approved'>" . strtoupper($row['status']) . "</td>";
+                        } else if ($row['status'] == 'waiting') {
+                            echo "<td class='td-status waiting'>" . strtoupper($row['status']) . "</td>";
+                        } else if ($row['status'] == 'rejected') {
+                            echo "<td class='td-status rejected'>" . strtoupper($row['status']) . "</td>";
                         }
                         ?>
                     </tr>

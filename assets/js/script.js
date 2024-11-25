@@ -20,17 +20,15 @@ window.onclick = function (e) {
     }
 }
 
+// Dropdown for proposal admin
 function proposalDropdown() {
     document.getElementById("proposalPage").classList.toggle("show");
 }
 
-
 // DELETE CONFIRMATION WHEN DELETING DATA
-
 function confirmDelete() {
     return confirm("Are you sure you want to delete this data?\nThis action cannot be undone!");
 }
-
 // CONFIRMATION BEFORE LOG OUT
 function confirmationLogout() {
     return confirm("Are you sure want to log out?");
