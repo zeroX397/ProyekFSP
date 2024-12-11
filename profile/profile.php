@@ -6,7 +6,7 @@ class Profile extends Database {
         parent::__construct();
     }
 
-    // Mendapatkan semua tim yang diikuti oleh anggota tertentu
+    // Get all team with member
     public function getJoinedTeams($idmember) {
         $query = "SELECT t.idteam, t.name as team_name
                   FROM team AS t
@@ -19,7 +19,7 @@ class Profile extends Database {
         return $stmt->get_result();
     }
 
-    // Mendapatkan semua proposal join yang sudah dikirimkan oleh anggota tertentu
+    // Get proposal
     public function getJoinProposals($idmember) {
         $query = "SELECT jp.idjoin_proposal, t.name as team_name, jp.status
                   FROM join_proposal AS jp
@@ -32,6 +32,7 @@ class Profile extends Database {
         return $stmt->get_result();
     }
 
+    // Get team detail
     public function getTeamDetails($idteam) {
         $query = "SELECT 
                     t.name AS TeamName,

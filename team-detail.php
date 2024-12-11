@@ -1,28 +1,12 @@
 <?php
 session_start();
-include("config.php");
+require_once("team-detail_class.php");
+
+$teamDetail = new TeamDetail();
 
 $idteam = isset($_GET['idteam']) ? intval($_GET['idteam']) : 0; // Default to 0 if not set
 
-// Query to get detail teams alongside with achievement and event
-$sql = "SELECT 
-            t.name AS TeamName,
-            e.name AS EventName,
-            e.date AS EventDate,
-            a.name AS AchievementName,
-            a.date AS AchievementDate
-        FROM 
-            team t
-            LEFT JOIN event_teams et ON t.idteam = et.idteam
-            LEFT JOIN event e ON et.idevent = e.idevent
-            LEFT JOIN achievement a ON a.idteam = t.idteam
-        WHERE 
-            t.idteam = ?;";
-
-$stmt = mysqli_prepare($connection, $sql);
-mysqli_stmt_bind_param($stmt, "i", $idteam);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+$result = $teamDetail->getTeamDetails($idteam);
 
 // Check if any results were returned
 if ($result && mysqli_num_rows($result) > 0) {
