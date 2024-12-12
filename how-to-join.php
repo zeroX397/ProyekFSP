@@ -71,10 +71,11 @@ session_start();
             <li>Go to the <a href="/teams.php">teams page</a>, and find a team you desired.</li>
             <li>You can check the team details first. It contains every detail of the team, including its members.</li>
             <li>If you happy enough, click the join button.</li>
-            <li>You will be asked to describe yourself. Provide useful information about you: e.g. your main heroes or agents, or you favorite roles. <br><em>Note: maximum <strong>100 characters.</strong></em></li>
+            <li>You will be asked to describe yourself. Provide useful information about you: e.g. your main heroes or agents, or you favorite roles. <br><em>Note</em>: maximum <strong>100 characters.</strong></li>
             <li>Click the <strong>Apply</strong> button. And please kindly wait for admin to decide your application.</li>
         </ol>
         <p>You may join more than 1 (one) team. So after you submit first application, you can submit another application to different team. But please take a note that admin can either <strong>accept or reject</strong> you application.</p>
+        <p>If you forgot your password, please kindly email to our admins. Please provide your email so we can informed your password reset instruction.</p>
         <p style="background-color: yellow;">Warning: Do not repeatedly send application (spamming), or admin will <strong>BAN</strong> and <strong>DELETE</strong> your account.</p>
     </section>
     <script src="/assets/js/script.js"></script>

@@ -1,0 +1,16 @@
+.td-status {
+    color: #000;
+    font-weight: bold;
+}
+
+.approved {
+    background-color: #90EE90;
+}
+
+.waiting {
+    background-color: #E9D502;
+}
+
+.rejected {
+    background-color: #ff5c5c;
+}

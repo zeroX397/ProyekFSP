@@ -76,7 +76,7 @@ if ($idmember) {
     </nav>
 
     <main>
-        <h1>Hello <?php echo $_SESSION['fname'] . " " . $_SESSION['lname'] ?></h1>
+        <h1>Hello <?php echo $_SESSION['fname'] . " " . $_SESSION['lname'] ?>!</h1>
         <h2>Joined Team</h2>
         <table>
             <tr>
@@ -116,18 +116,19 @@ if ($idmember) {
                         <td><?php echo $row['team_name']; ?></td>
                         <?php
                         if ($row['status'] == 'approved') {
-                            echo "<td class='td-status approved'>" . strtoupper($row['status']) . "</td>";
+                            $tdclass = 'approved';
                         } else if ($row['status'] == 'waiting') {
-                            echo "<td class='td-status waiting'>" . strtoupper($row['status']) . "</td>";
+                            $tdclass = 'waiting';
                         } else if ($row['status'] == 'rejected') {
-                            echo "<td class='td-status rejected'>" . strtoupper($row['status']) . "</td>";
+                            $tdclass = 'rejected';
                         }
+                        echo "<td class='td-status $tdclass'>" . strtoupper($row['status']) . "</td>";
                         ?>
                     </tr>
                 <?php endwhile; ?>
             <?php else : ?>
                 <tr>
-                    <td colspan='3'>No proposals found</td>
+                    <td colspan='3'>Sorry, no proposals found. Find a team <a href="/teams.php">here</a>.</td>
                 </tr>
             <?php endif; ?>
         </table>

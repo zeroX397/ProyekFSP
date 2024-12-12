@@ -30,7 +30,7 @@ $respondedProposals = $proposal->getRespondedProposals($start, $perPage);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/[CHANGE LATER].css">
+    <link rel="stylesheet" href="/assets/styles/admin/proposal/index.css">
     <title>Manage Join Proposals - Responded Proposal</title>
 </head>
 
@@ -105,7 +105,15 @@ $respondedProposals = $proposal->getRespondedProposals($start, $perPage);
                     echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
                     echo "<td>" . $row['team_name'] . "</td>";
                     echo "<td>" . $row['description'] . "</td>";
-                    echo "<td>" . $row['status'] . "</td>";
+                    // Code for checking 
+                    if ($row['status'] == 'approved') {
+                        $tdclass = 'approved';
+                    } else if ($row['status'] == 'waiting') {
+                        $tdclass = 'waiting';
+                    } else {
+                        $tdclass = 'rejected';
+                    }
+                    echo "<td class='td-status $tdclass'>" . $row['status'] . "</td>";
                     echo "</tr>";
                 }
             } else {
@@ -120,20 +128,20 @@ $respondedProposals = $proposal->getRespondedProposals($start, $perPage);
         <?php
         if ($page > 1) {
             $prev = $page - 1;
-            echo "<a href='responded.php?p=$prev'>Prev</a>"; 
+            echo "<a href='responded.php?p=$prev'>Prev</a>";
         }
 
         for ($i = 1; $i <= $totalPage; $i++) {
             if ($i == $page) {
-                echo "<strong>$i</strong>"; 
+                echo "<strong>$i</strong>";
             } else {
-                echo "<a href='responded.php?p=$i'>$i</a>"; 
+                echo "<a href='responded.php?p=$i'>$i</a>";
             }
         }
 
         if ($page < $totalPage) {
             $next = $page + 1;
-            echo "<a href='responded.php?p=$next'>Next</a>"; 
+            echo "<a href='responded.php?p=$next'>Next</a>";
         }
         ?>
     </div>

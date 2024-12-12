@@ -64,12 +64,16 @@ if (isset($_POST['submit'])) {
             echo '<a class="active" href="/login.php">Login</a>';
         } else {
             // User is logged in
+            echo "<script language='javascript'>
+                    alert('You are already logged in.');
+                    window.location.href = '/';
+                  </script>";
             $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
@@ -83,7 +87,7 @@ if (isset($_POST['submit'])) {
                         <a href="/admin/event_teams/">Manage Event-Teams</a>
                     </div>
                 </div>';
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
                         <i class="fa fa-caret-down"></i>
