@@ -57,7 +57,7 @@ $result = mysqli_query($connection, $sql);
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
             // To check whether is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
                         <i class="fa fa-caret-down"></i>
@@ -71,7 +71,7 @@ $result = mysqli_query($connection, $sql);
                         <a href="/admin/event_teams/">Manage Event-Teams</a>
                     </div>
                 </div>';
-                echo 
+                echo
                 '<div class="dropdown">
                     <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
                         <i class="fa fa-caret-down"></i>
@@ -87,43 +87,26 @@ $result = mysqli_query($connection, $sql);
     </nav>
     <section>
         <h1 class="hello-mssg">Hello! You can see full list of all members.</h1>
-        <div class="all-member">
-            <table>
-                <tr>
-                    <th>Member ID</th>
-                    <th>Username</th>
-                    <th>Member Name</th>
-                    <th>Detail</th>
-                </tr>
-                <?php
-                if ($result && mysqli_num_rows($result) > 0) {
-                    $current_game_id = null;
-
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        // If the game changes, print a new game name header
-                        if ($current_game_id !== $row['idmember']) {
-                            $current_game_id = $row['idmember'];
-                            // echo "<tr><td colspan='5'><strong>" . $row['idmember'] . "</strong></td></tr>";
-                        }
-                        // Print member data
-                        echo "<tr>";
-                        echo "<td>" . $row['idmember'] . "</td>";
-                        echo "<td>" . $row['username'] . "</td>";
-                        echo "<td>" . $row['member_name'] . "</td>";
-                        // View Member Details
-                        echo "<td>";
-                        echo "<form action='member-detail.php' method='post'>";
-                        echo "<input type='hidden' name='idmember' value='" . $row['idmember'] . "'>";
-                        echo "<button type='submit' name='joinbtn' id='btn-join' class='button'>Detail</button>";
-                        echo "</form>";
-                        echo "</td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='5'>No members found</td></tr>";
+        <div class="element">
+            <?php
+            if ($result && mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<div class='container'>";
+                    echo "<div>";
+                    echo "<div class='title'>" . htmlspecialchars($row['username']) . "</div>";
+                    echo "<div class='member-name'>" . "ID   : " . htmlspecialchars($row['idmember']) . "</div>";
+                    echo "<div class='member-name'>" . "Name : " . htmlspecialchars($row['member_name']) . "</div>";
+                    echo "</div>";
+                    echo "<form action='member-detail.php' method='get'>";
+                    echo "<input type='hidden' name='idmember' value='" . $row['idmember'] . "'>";
+                    echo "<button type='submit' class='detail-button'>Details</button>";
+                    echo "</form>";
+                    echo "</div>";
                 }
-                ?>
-            </table>
+            } else {
+                echo "<div>No members found</div>";
+            }
+            ?>
         </div>
         <!-- Paging -->
         <div class="paging">

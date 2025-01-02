@@ -5,10 +5,10 @@
   - [Table of Contents](#table-of-contents)
   - [Part I: Guest](#part-i-guest)
   - [Part II: Member](#part-ii-member)
-    - [• Joining a team](#-joining-a-team)
+    - [Joining a team](#joining-a-team)
   - [Part III: Admin](#part-iii-admin)
-    - [• Teams](#-teams)
-    - [• Members](#-members)
+    - [Teams](#teams)
+    - [Members](#members)
 ## Part I: Guest
 
 "Guest" means users who do not have an account registered yet. Guest can explore the teams (including team's details), events, and about page only. It is indicating that Guest users have least access to the site. If users want to join a team, they must register an account through **Sign Up** page.
@@ -29,7 +29,7 @@ If password confirmation does not match with password field, users can not proce
 
 "Member" is a default role when an account is registered. With a member account, users can do such as:
 
-### &bull; Joining a team
+###  Joining a team
   
   Users can apply to be on its personnel. To become one of the team member, one must select a click **Teams** from top navigation bar. In **Teams** page, there are lots of teams that available to join. Choose one of them, and click **Details** if neccessary, and then click **Apply** button. User will be taken to the application form, where they need to fill out an application proposal.
 
@@ -52,7 +52,7 @@ If password confirmation does not match with password field, users can not proce
 
 "Admin" is the most *powerful* role in this site. As admin, users can manage (create, update or edit, and delete) all categories in this site, such as: Teams, Members, Events, Games, Achievements, and Event-Teams (teams who joined specific events). Admins also have rights to revoke (or disband) teams, or delete and ban users. We have provided more detailed information for each categories below:
 
-### &bull; Teams
+###  Teams
 
 When admin accessing `/admin/teams`, the page will show all teams' name, alongside with two options: Edit and Delete.
 
@@ -64,7 +64,7 @@ You can choose which team you do want to edit or delete. To edit, simply click t
 
 You can change the team's main game and/or edit the team's name. After you are done with editing, click the **Update** button to save your change(s).
 
-### &bull; Members
+###  Members
 
 When admin accessing `/admin/members/`, the page will show all members' id, username, full name, and action either edit or delete the member. 
 
