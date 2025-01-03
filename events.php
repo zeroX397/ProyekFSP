@@ -1,24 +1,9 @@
 <?php
 session_start();
-require_once("proposal.php");
+include("config.php");
 
-// Check if user is logged in and is an admin
-if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
-    header('Location: /'); // Redirect non-admins to the homepage
-    exit();
-}
-
-// Paging configuration
-$perPage = 5;
-$page = isset($_GET['p']) ? $_GET['p'] : 1;
-$start = ($page - 1) * $perPage;
-
-$proposal = new Proposal();
-$totalData = $proposal->getTotalRespondedProposals();
-$totalPage = ceil($totalData / $perPage);
-
-// Fetch responded proposals
-$respondedProposals = $proposal->getRespondedProposals($start, $perPage);
+$sql = "SELECT event.idevent, event.name FROM `event`;";
+$result = mysqli_query($connection, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -29,9 +14,8 @@ $respondedProposals = $proposal->getRespondedProposals($start, $perPage);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/proposal/index.css">
-    <title>Manage Join Proposals - Responded Proposal</title>
+    <link rel="stylesheet" href="/assets/styles/[CHANGE LATER].css">
+    <title>Informatics E-Sport Club</title>
 </head>
 
 <body>
@@ -82,69 +66,28 @@ $respondedProposals = $proposal->getRespondedProposals($start, $perPage);
         }
         ?>
     </nav>
-
-    <div class="header-content">
-        <h1 class="welcome-mssg">Manage Join Proposals - Responded</h1>
-    </div>
-
-    <div class="all-proposals">
-        <table>
-            <tr>
-                <th>Proposal ID</th>
-                <th>Member Name</th>
-                <th>Team Name</th>
-                <th>Description</th>
-                <th>Status</th>
-            </tr>
+    <section>
+        <h1 class="hello-mssg">Hello! You can see the full list of events here.</h1>
+        <div class="element">
             <?php
-            // Ensure we have data to display
-            if (!empty($respondedProposals)) {
-                foreach ($respondedProposals as $row) {
-                    echo "<tr>";
-                    echo "<td>" . $row['idjoin_proposal'] . "</td>";
-                    echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
-                    echo "<td>" . $row['team_name'] . "</td>";
-                    echo "<td>" . $row['description'] . "</td>";
-                    // Code for checking 
-                    if ($row['status'] == 'approved') {
-                        $tdclass = 'approved';
-                    } else if ($row['status'] == 'waiting') {
-                        $tdclass = 'waiting';
-                    } else {
-                        $tdclass = 'rejected';
-                    }
-                    echo "<td class='td-status $tdclass'>" . $row['status'] . "</td>";
-                    echo "</tr>";
+            if ($result && mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<div class='container'>";
+                    echo "<div class='title'>" . htmlspecialchars($row['name']) . "</div>";
+                    echo "<div class='content'>Event ID: " . htmlspecialchars($row['idevent']) . "</div>";
+                    echo "<div class='content'>Event Name: " . htmlspecialchars($row['name']) . "</div>";
+                    echo "<form action='event-detail.php' method='get'>";
+                    echo "<input type='hidden' name='idevent' value='" . htmlspecialchars($row['idevent']) . "'>";
+                    echo "<button class='button'>Details</button>";
+                    echo "</form>";
+                    echo "</div>";
                 }
             } else {
-                echo "<tr><td colspan='5'>No proposals found</td></tr>";
+                echo "<div>No events found</div>";
             }
             ?>
-        </table>
-    </div>
-
-    <!-- Paging -->
-    <div class="paging">
-        <?php
-        if ($page > 1) {
-            $prev = $page - 1;
-            echo "<a href='responded.php?p=$prev'>Prev</a>";
-        }
-
-        for ($i = 1; $i <= $totalPage; $i++) {
-            if ($i == $page) {
-                echo "<strong>$i</strong>";
-            } else {
-                echo "<a href='responded.php?p=$i'>$i</a>";
-            }
-        }
-
-        if ($page < $totalPage) {
-            $next = $page + 1;
-            echo "<a href='responded.php?p=$next'>Next</a>";
-        }
-        ?>
-    </div>
+        </div>
+    </section>
 
     <script src="/assets/js/script.js"></script>
 </body>

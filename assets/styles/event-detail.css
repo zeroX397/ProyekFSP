@@ -1,0 +1,24 @@
+.title {
+    font-size: 2em;
+    /* Large font size for visibility */
+    color: #333;
+    /* Dark grey color for the text */
+}
+
+.event-id .event-date {
+    font-size: 1.2em;
+    color: #666;
+    /* Lighter text color */
+    margin-top: 5px;
+    /* Small top margin to stay close to the title */
+}
+
+.event-description {
+    font-size: 1em;
+    line-height: 1.6;
+    /* More readable line height */
+    margin-top: 20px;
+    /* Separated from the date */
+    text-align: justify;
+    /* Justifies the text for better alignment */
+}

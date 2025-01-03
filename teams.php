@@ -41,7 +41,7 @@ $result = mysqli_query($connection, $sql);
             $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
-            // To check whether is admin or not
+            // To check whether user is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo
                 '<div class="dropdown">
@@ -73,7 +73,7 @@ $result = mysqli_query($connection, $sql);
     </nav>
     <!-- Team(s) list with button "Apply Member" -->
     <section>
-        <h1 class="hello-mssg">Hello! You can see the full list of teams and join them.</h1>
+        <h1 class="hello-mssg">Hello! You can see the full list of teams and join them. You can also see its details before joining them.</h1>
         <div class="element">
             <?php
             $teamsData = [];
