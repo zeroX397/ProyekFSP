@@ -18,11 +18,6 @@ function handleFileUpload($file, $idteam) {
     $uploadDir = __DIR__ . "/../../assets/img/team_picture/";
     $finalFileName = $uploadDir . $idteam . ".jpg";
 
-    // Check if directory exists, if not create it
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-
     // Validate file type
     $allowedTypes = ['image/jpeg'];
     $fileType = mime_content_type($file['tmp_name']);
@@ -31,7 +26,7 @@ function handleFileUpload($file, $idteam) {
     if ($fileError === UPLOAD_ERR_OK) {
         if (in_array($fileType, $allowedTypes)) {
             if (move_uploaded_file($file['tmp_name'], $finalFileName)) {
-                return "/assets/img/team_picture/" . $idteam . ".jpg?" . time(); // Return file path with cache buster
+                return "/assets/img/team_picture/" . $idteam . ".jpg?" . time(); 
             } else {
                 throw new Exception("Failed to move the uploaded file.");
             }

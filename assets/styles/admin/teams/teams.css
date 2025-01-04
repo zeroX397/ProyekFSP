@@ -1,8 +1,3 @@
-.hello-mssg {
-    margin-top: 50px;
-    text-align: center;
-}
-
 /* Styles for each item in container */
 .container {
   background: #ffffff;
@@ -16,7 +11,7 @@
   box-sizing: border-box;
 }
 
-.all-member {
+.all-team {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -36,11 +31,11 @@
 
 .buttons {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   margin-top: 10px;
 }
 
-.detail-button{
+.edit {
   width: 100px;
   height: 40px;
   padding: 10px 20px;
@@ -54,9 +49,26 @@
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.detail-button:hover{
+.delete {
+  width: 100px;
+  height: 40px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #F08080;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.edit:hover {
   background-color: #008EF9;
-  transform: scale(1.05);
+}
+
+.delete:hover {
+  background-color: #F25050;
 }
 
 /* Responsive Adjustments */
@@ -69,7 +81,7 @@
   }
 
   .content {
-      max-width: 100%; /* Allow full width for member-info */
+      max-width: 100%; /* Allow full width for team-info */
       text-align: center; /* Center align text */
   }
 
@@ -82,7 +94,8 @@
       margin-top: 10px;
   }
 
-  .detail-button {
+  .edit,
+  .delete {
       width: 100px; /* Adjust button size for smaller screens */
       height: 35px;
       font-size: 14px; /* Adjust font size */

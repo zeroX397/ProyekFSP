@@ -1,66 +1,134 @@
-.hello-mssg {
-  margin-top: 50px;
+/* Styles for the overall container */
+.all-team {
+  display: flex;
+  flex-direction: column; /* Set as a column to stack game groups */
+  gap: 30px; /* Add spacing between game groups */
+  padding: 20px;
+}
+
+/* Styles for each game container */
+.game-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap if they exceed the row */
+  gap: 20px; /* Add spacing between teams */
+  justify-content: center; /* Center items horizontally */
+  align-items: center; /* Center items vertically */
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Game header styles */
+.game-header {
+  width: 100%;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
   text-align: center;
 }
 
-.button {
-  padding: 8px 15px;
+/* Styles for team cards */
+.container {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: calc(33.333% - 20px); /* Three columns layout */
+  max-width: 300px;
+  padding: 15px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Adjust logo inside the container */
+.team-logo {
+  width: 80px;
+  height: 80px;
+  margin: 10px auto;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* Styles for the content inside the team card */
+.content {
+  margin: 10px 0;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #444;
+}
+
+.details {
   font-size: 14px;
-  text-align: center;
-  cursor: pointer;
+  color: #666;
+}
+
+/* Buttons styles */
+.buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.edit, .delete {
+  padding: 8px 12px;
+  font-size: 14px;
   color: #fff;
-  background-color: #04AA6D;
+  background: #007bff;
   border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
 }
 
-.button:hover {
-  background-color: #3e8e41;
+.delete {
+  background: #dc3545;
 }
 
-.button:active {
-  background-color: #367a35;
-  box-shadow: 0 2px #666;
-  transform: translateY(2px);
+.edit:hover {
+  background: #0056b3;
 }
 
-.game-name{
-  margin-left: 50%;
+.delete:hover {
+  background: #a71d2a;
 }
 
-@media (max-width: 768px) {
-  .button {
-    padding: 10px 20px;
-    /* Larger padding for easier interaction on touch devices */
-    font-size: 16px;
-    /* Larger font size for better readability */
+/* Responsive Adjustments */
+@media (max-width: 950px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px; /* Reduce padding for smaller screens */
+    width: 90vw; /* Increase width to accommodate smaller screens */
   }
 
   .team-logo {
-    width: 80px;
-    /* Slightly smaller logos on smaller screens */
-    margin-right: 15px;
-    /* Adjust spacing */
-  }
-}
-
-@media (max-width: 480px) {
-  .button {
-    width: auto;
-    /* Allow button to expand as needed */
-    padding: 12px 24px;
-    /* Even larger padding for touch accessibility */
-    font-size: 18px;
-    /* Increase font size for visibility */
+    width: 80px; /* Adjust logo size for smaller screens */
+    height: 80px;
   }
 
-  .team-actions {
-    flex-direction: column;
-    /* Stack buttons vertically on very small screens */
-    align-items: center;
-    /* Center-align buttons for better aesthetics */
+  .details {
+    font-size: 12px; /* Adjust text size */
+    text-align: center; /* Center align text */
+  }
+
+  .buttons {
+    flex-direction: row; /* Arrange buttons horizontally */
     gap: 10px;
-    /* Add some space between stacked buttons */
+    justify-content: center; /* Center buttons */
+    align-items: center;
+    width: 100%; /* Make buttons section full width */
+    margin-top: 10px;
+  }
+
+  .button {
+    width: 80px; /* Adjust button size for smaller screens */
+    height: 35px;
+    font-size: 12px; /* Adjust font size */
   }
 }

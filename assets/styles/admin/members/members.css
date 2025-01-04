@@ -1,7 +1,3 @@
-.welcome-mssg {
-    text-align: center;
-}
-
 /* Styles for each item in container */
 .container {
     background: #ffffff;
@@ -33,78 +29,47 @@
     margin-bottom: 5px;
 }
 
-.description-area {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 14px;
-    color: #555;
-    max-height: 100px;
-    max-width: 600px;
-    margin-top: 10px;
-}
-
-.status-area {
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.td-status.waiting {
-    color: #FFA500; /* Orange for waiting */
-}
-
-.td-status.approved {
-    color: #32CD32; /* Green for approved */
-}
-
-.td-status.rejected {
-    color: #FF4500; /* Red for rejected */
-}
-
 .buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
 }
 
-.accept {
+.edit{
     width: 100px;
     height: 40px;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #32CD32; /* Green for Accept */
+    background-color: #2A9DF4;
     color: white;
     text-align: center;
     font-size: 16px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.reject {
+.delete {
     width: 100px;
     height: 40px;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #FF4500; /* Red for Reject */
+    background-color: #F08080;
     color: white;
     text-align: center;
     font-size: 16px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.accept:hover {
-    background-color: #28A745;
+.edit:hover{
+    background-color: #008EF9;
     transform: scale(1.05);
 }
 
-.reject:hover {
-    background-color: #DC3545;
+.delete:hover {
+    background-color: #F25050;
     transform: scale(1.05);
 }
 
@@ -118,7 +83,7 @@
     }
 
     .content {
-        max-width: 100%; /* Allow full width for content */
+        max-width: 100%; /* Allow full width for member-info */
         text-align: center; /* Center align text */
     }
 
@@ -131,8 +96,8 @@
         margin-top: 10px;
     }
 
-    .accept,
-    .reject {
+    .edit,
+    .delete {
         width: 100px; /* Adjust button size for smaller screens */
         height: 35px;
         font-size: 14px; /* Adjust font size */

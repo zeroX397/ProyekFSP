@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5;
+$perpage = 6;
 $page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
@@ -28,8 +28,7 @@ $result = $proposal->getAllProposals($start, $perpage);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/proposal/index.css">
-    <link rel="stylesheet" href="/assets/styles/admin/proposal/waiting.css">
+    <link rel="stylesheet" href="/assets/styles/admin/proposal/waiting.css?v=<?= time(); ?>">
     <title>Manage Join Proposals - Waiting for Approval</title>
 </head>
 
@@ -82,57 +81,50 @@ $result = $proposal->getAllProposals($start, $perpage);
         ?>
     </nav>
 
-    <div class="header-content">
-        <h1 class="welcome-mssg">Manage Join Proposals - Waiting Approval</h1>
-    </div>
+    <h1 class="welcome-mssg">Manage Join Proposals - Waiting Approval</h1>
 
-    <div class="all-proposals">
-        <table>
-            <tr>
-                <th>Proposal ID</th>
-                <th>Member Name</th>
-                <th>Team Name</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th colspan="2">Action</th>
-            </tr>
-            <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['idjoin_proposal'] . "</td>";
-                    echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
-                    echo "<td>" . $row['team_name'] . "</td>";
-                    echo "<td>" . $row['description'] . "</td>";
-                    echo "<td class='td-status waiting'>" . $row['status'] . "</td>";
+    <div class="all-member">
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+            echo "<div class='all-member'>";
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<div class='title'>Proposal ID: " . htmlspecialchars($row['idjoin_proposal']) . "</div>";
+                echo "<div class='details'>Member Name: " . htmlspecialchars($row['fname'] . " " . $row['lname']) . "</div>";
+                echo "<div class='details'>Team Name: " . htmlspecialchars($row['team_name']) . "</div>";
+                echo "<div class='description-area'>Description: " . htmlspecialchars($row['description']) . "</div>";
+                echo "<div class='status-area'>Status: <span class='td-status " . htmlspecialchars($row['status']) . "'>" . htmlspecialchars($row['status']) . "</span></div>";
+                echo "</div>";
 
-                    if ($row['status'] == 'waiting') {
-                        // Accept button 
-                        echo "<td>";
-                        echo "<form method='post' action='approve-proposal.php'>"; 
-                        echo "<input type='hidden' name='idjoin_proposal' value='" . $row['idjoin_proposal'] . "'>";
-                        echo "<button type='submit' name='accept' class='accept'>Accept</button>";
-                        echo "</form>";
-                        echo "</td>";
+                if ($row['status'] == 'waiting') {
+                    echo "<div class='buttons'>";
+                    // Accept button
+                    echo "<form action='approve-proposal.php' method='post'>";
+                    echo "<input type='hidden' name='idjoin_proposal' value='" . htmlspecialchars($row['idjoin_proposal']) . "'>";
+                    echo "<button type='submit' name='accept' class='accept'>Accept</button>";
+                    echo "</form>";
 
-                        // Reject button
-                        echo "<td>";
-                        echo "<form method='post' action='reject-proposal.php'>"; 
-                        echo "<input type='hidden' name='idjoin_proposal' value='" . $row['idjoin_proposal'] . "'>";
-                        echo "<button type='submit' name='reject' class='reject'>Reject</button>";
-                        echo "</form>";
-                        echo "</td>";
-                    } else {
-                        // Display approved or rejected
-                        echo "<td colspan='2'>" . $row['status'] . "</td>";
-                    }
-                    echo "</tr>";
+                    // Reject button
+                    echo "<form action='reject-proposal.php' method='post'>";
+                    echo "<input type='hidden' name='idjoin_proposal' value='" . htmlspecialchars($row['idjoin_proposal']) . "'>";
+                    echo "<button type='submit' name='reject' class='reject'>Reject</button>";
+                    echo "</form>";
+                    echo "</div>";
+                } else {
+                    // Display approved or rejected
+                    echo "<div class='buttons'>";
+                    echo "<span>" . htmlspecialchars(ucfirst($row['status'])) . "</span>";
+                    echo "</div>";
                 }
-            } else {
-                echo "<tr><td colspan='7'>No proposals found</td></tr>";
+
+                echo "</div>"; // Close container
             }
-            ?>
-        </table>
+            echo "</div>"; // Close all-member
+        } else {
+            echo "<div>No proposals found</div>";
+        }
+        ?>
     </div>
 
     <!-- Paging -->

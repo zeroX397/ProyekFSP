@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Delete game
-if (isset($_POST['deletebtn']) && isset($_POST['id_game'])) {
+if (isset($_POST['id_game'])) {
     $idgame = $_POST['id_game'];
 
     $game = new Game();

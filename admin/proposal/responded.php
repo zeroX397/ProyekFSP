@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perPage = 5;
+$perPage = 6;
 $page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perPage;
 
@@ -30,7 +30,7 @@ $respondedProposals = $proposal->getRespondedProposals($start, $perPage);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/proposal/index.css">
+    <link rel="stylesheet" href="/assets/styles/admin/proposal/waiting.css?v=<?= time(); ?>">
     <title>Manage Join Proposals - Responded Proposal</title>
 </head>
 
@@ -83,44 +83,37 @@ $respondedProposals = $proposal->getRespondedProposals($start, $perPage);
         ?>
     </nav>
 
-    <div class="header-content">
-        <h1 class="welcome-mssg">Manage Join Proposals - Responded</h1>
-    </div>
+    <h1 class="welcome-mssg">Manage Join Proposals - Responded</h1>
 
-    <div class="all-proposals">
-        <table>
-            <tr>
-                <th>Proposal ID</th>
-                <th>Member Name</th>
-                <th>Team Name</th>
-                <th>Description</th>
-                <th>Status</th>
-            </tr>
-            <?php
-            // Ensure we have data to display
-            if (!empty($respondedProposals)) {
-                foreach ($respondedProposals as $row) {
-                    echo "<tr>";
-                    echo "<td>" . $row['idjoin_proposal'] . "</td>";
-                    echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
-                    echo "<td>" . $row['team_name'] . "</td>";
-                    echo "<td>" . $row['description'] . "</td>";
-                    // Code for checking 
-                    if ($row['status'] == 'approved') {
-                        $tdclass = 'approved';
-                    } else if ($row['status'] == 'waiting') {
-                        $tdclass = 'waiting';
-                    } else {
-                        $tdclass = 'rejected';
-                    }
-                    echo "<td class='td-status $tdclass'>" . $row['status'] . "</td>";
-                    echo "</tr>";
+
+    <div class="all-member">
+        <?php
+        // Ensure we have data to display
+        if (!empty($respondedProposals)) {
+            foreach ($respondedProposals as $row) {
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<div class='details'><strong>ID:</strong> " . htmlspecialchars($row['idjoin_proposal']) . "</div>";
+                echo "<div class='details'><strong>Name:</strong> " . htmlspecialchars($row['fname'] . " " . $row['lname']) . "</div>";
+                echo "<div class='details'><strong>Team:</strong> " . htmlspecialchars($row['team_name']) . "</div>";
+                echo "<div class='description-area'>" . htmlspecialchars($row['description']) . "</div>";
+
+                // Status
+                $statusClass = 'waiting'; // Default class for waiting
+                if ($row['status'] === 'approved') {
+                    $statusClass = 'approved';
+                } elseif ($row['status'] === 'rejected') {
+                    $statusClass = 'rejected';
                 }
-            } else {
-                echo "<tr><td colspan='5'>No proposals found</td></tr>";
+                echo "<div class='status-area'><strong>Status:</strong> <span class='td-status $statusClass'>" . htmlspecialchars($row['status']) . "</span></div>";
+
+                echo "</div>"; // End of content
+                echo "</div>"; // End of container
             }
-            ?>
-        </table>
+        } else {
+            echo "<div class='no-proposals'>No proposals found</div>";
+        }
+        ?>
     </div>
 
     <!-- Paging -->

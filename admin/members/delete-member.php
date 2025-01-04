@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Delete member
-if (isset($_POST['deletebtn']) && isset($_POST['id_member'])) {
+if ( isset($_POST['id_member'])) {
     $idmember = $_POST['id_member'];
 
     // Use class in member to delete member

@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5;
+$perpage = 6;
 $page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
@@ -28,9 +28,7 @@ $result = $game->getAllGames($start, $perpage);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/teams/home.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/index.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/edit-member.css">
+    <link rel="stylesheet" href="/assets/styles/admin/games/games.css">
     <title>Manage Games</title>
 </head>
 
@@ -92,40 +90,35 @@ $result = $game->getAllGames($start, $perpage);
     <!-- Top Navigation Bar -->
 
     <div class="all-member">
-        <table>
-            <tr>
-                <th>Game ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Edit Member</th>
-                <th>Delete Member</th>
-            </tr>
-            <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['id_game'] . "</td>";
-                    echo "<td>" . $row['name'] . "</td>";
-                    echo "<td>" . $row['description'] . "</td>";
-                    echo "<td>";
-                    echo "<form method='post' action='edit-game.php'>";
-                    echo "<input type='hidden' name='id_game' value='" . $row['id_game'] . "'>";
-                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "<td>";
-                    echo "<form action='delete-game.php' method='post' onsubmit='return confirmDelete()'>";
-                    echo "<input type='hidden' name='id_game' value='" . $row['id_game'] . "'>";
-                    echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='3'>No game found</td></tr>";
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+            echo "<div class='all-member'>";
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<div class='title'>" . htmlspecialchars($row['name']) . "</div>";
+                echo "<div class='details'>ID: " . htmlspecialchars($row['id_game']) . "</div>";
+                echo "<div class='description-area'>" . htmlspecialchars($row['description']) . "</div>";
+                echo "</div>";
+
+                echo "<div class='buttons'>";
+                echo "<form action='edit-game.php' method='post'>";
+                echo "<input type='hidden' name='id_game' value='" . $row['id_game'] . "'>";
+                echo "<button type='submit' class='edit'>Edit</button>";
+                echo "</form>";
+
+                echo "<form action='delete-game.php' method='post' onsubmit='return confirmDelete()'>";
+                echo "<input type='hidden' name='id_game' value='" . $row['id_game'] . "'>";
+                echo "<button type='submit'class='delete'>Delete</button>";
+                echo "</form>";
+                echo "</div>";
+                echo "</div>";
             }
-            ?>
-        </table>
+            echo "</div>";
+        } else {
+            echo "<div>No game found</div>";
+        }
+        ?>
     </div>
 
     <!-- Paging -->

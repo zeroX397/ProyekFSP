@@ -78,60 +78,96 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/teams/team.css">
+    <link rel="stylesheet" href="/assets/styles/admin/teams/edit-team.css">
     <title>Edit Team - Informatics E-Sport Club</title>
 </head>
 
 <body>
-    <nav class="topnav">
+<nav class="topnav">
         <a class="active" href="/">Homepage</a>
         <a href="/teams.php">Teams</a>
         <a href="/members.php">Members</a>
         <a href="/events.php">Events</a>
         <a href="/about.php">About Us</a>
         <a href="/how-to-join.php">How to Join</a>
-        <?php if (isset($_SESSION['username'])): ?>
-            <a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>
-            <a class="active" href="/profile"><?= htmlspecialchars($_SESSION['username']) ?></a>
-        <?php else: ?>
-            <a class="active" href="/login.php">Login</a>
-        <?php endif; ?>
+        <?php
+        if (!isset($_SESSION['username'])) {
+            echo '<a class="active" href="/login.php">Login</a>';
+        } else {
+            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username'];
+            echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
+            echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
+            if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
+                echo
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="dd-admin-page">
+                        <a href="/admin/teams/">Manage Teams</a>
+                        <a href="/admin/members/">Manage Members</a>
+                        <a href="/admin/events/">Manage Events</a>
+                        <a href="/admin/games/">Manage Games</a>
+                        <a href="/admin/achievements/">Manage Achievements</a>
+                        <a href="/admin/event_teams/">Manage Event-Teams</a>
+                    </div>
+                </div>';
+                echo
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="proposalPage">
+                        <a href="/admin/proposal/waiting.php">Waiting Approval</a>
+                        <a href="/admin/proposal/responded.php">Responded</a>
+                    </div>
+                </div>';
+            }
+        }
+        ?>
     </nav>
 
     <div class="form">
-        <?php if (isset($error)): ?>
-            <div style="color: red;"><?= htmlspecialchars($error) ?></div>
+        <?php if (isset($error)) : ?>
+            <div style="color: red;"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
         <form action="" method="post" enctype="multipart/form-data" class="edit-form">
-            <input type="hidden" name="idteam" value="<?= htmlspecialchars($teamInfo['idteam']) ?>">
-            
-            <label for="idgame">Select Game</label>
+            <!-- Hidden input for team ID -->
+            <input type="hidden" name="idteam" value="<?php echo htmlspecialchars($teamInfo['idteam']); ?>">
+
+            <!-- Team Name -->
+            <input name="team_name" type="text" placeholder="Team Name" value="<?php echo htmlspecialchars($teamInfo['name'] ?? ''); ?>" required>
+
+            <!-- Select Game -->
             <select name="idgame" required>
-                <?php foreach ($games as $game): ?>
-                    <option value="<?= htmlspecialchars($game['idgame']) ?>" <?= $teamInfo['idgame'] == $game['idgame'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($game['name']) ?>
+                <?php foreach ($games as $game) : ?>
+                    <option value="<?php echo htmlspecialchars($game['idgame']); ?>" <?php echo ($teamInfo['idgame'] == $game['idgame']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($game['name']); ?>
                     </option>
                 <?php endforeach; ?>
             </select>
 
-            <label for="team_name">Team Name</label>
-            <input name="team_name" type="text" value="<?= htmlspecialchars($teamInfo['name']) ?>" required>
-
+            <!-- Team Logo -->
             <label for="team_picture">Team Logo (JPG only)</label>
             <input type="file" name="team_picture" accept="image/jpeg">
 
+            <!-- Display current team logo -->
             <?php
             $logoPath = "/assets/img/team_picture/" . $teamInfo['idteam'] . ".jpg";
             $defaultLogo = "/assets/img/team_picture/default.jpg";
 
             $logoSrc = file_exists(__DIR__ . $logoPath) ? $logoPath : $defaultLogo;
-            echo "<img src='$logoSrc' alt='Team Logo' style='width: 100px; height: auto; margin-top: 10px;'><br>";
             ?>
+            <img src="<?php echo $logoSrc; ?>" alt="Team Logo" style="width: 100px; height: auto; margin-top: 10px;">
 
-            <button name="submit" type="submit">Update</button>
+            <!-- Submit button -->
+             <div>
+                <button name="submit" type="submit" class="btnsubmit">Update</button>
+             </div>
         </form>
     </div>
+
 </body>
 
 </html>

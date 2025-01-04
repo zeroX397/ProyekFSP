@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Delete team
-if (isset($_POST['deletebtn']) && isset($_POST['idteam'])) {
+if (isset($_POST['idteam'])) {
     $idTeam = $_POST['idteam'];
     $uploadDir = __DIR__ . "/../../assets/img/team_picture/"; // Directory for team images
     $teamLogo = $uploadDir . $idTeam . ".jpg";

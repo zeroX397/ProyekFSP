@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Delete achievement
-if (isset($_POST['deletebtn']) && isset($_POST['idachievement'])) {
+if ( isset($_POST['idachievement'])) {
     $idachievement = $_POST['idachievement'];
 
     // Menggunakan instance class achievement untuk delete achievement

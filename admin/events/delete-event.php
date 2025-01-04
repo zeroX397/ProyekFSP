@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Delete event
-if (isset($_POST['deletebtn']) && isset($_POST['idevent'])) {
+if ( isset($_POST['idevent'])) {
     $idevent = $_POST['idevent'];
 
     // Menggunakan instance class event untuk delete event

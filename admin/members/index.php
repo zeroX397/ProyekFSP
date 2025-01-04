@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5;
+$perpage = 6;
 $page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
@@ -28,6 +28,7 @@ $result = $member->getAllMembers($start, $perpage);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
+    <link rel="stylesheet" href="/assets/styles/admin/members/members.css">
     <title>Manage Members</title>
 
 </head>
@@ -90,41 +91,37 @@ $result = $member->getAllMembers($start, $perpage);
     </header>
 
     <div class="all-member">
-        <table>
-            <tr>
-                <th>User ID</th>
-                <th>Username</th>
-                <th>Member Name</th>
-                <th>Edit Member</th>
-                <th>Delete Member</th>
-            </tr>
-            <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['id_member'] . "</td>";
-                    echo "<td>" . $row['username'] . "</td>";
-                    echo "<td>" . $row['member_name'] . "</td>";
-                    echo "<td>";
-                    echo "<form action='edit-member.php' method='post'>";
-                    echo "<input type='hidden' name='id_member' value='" . $row['id_member'] . "'>";
-                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "<td>";
-                    echo "<form action='delete-member.php' method='post' onsubmit='return confirmDelete()'>";
-                    echo "<input type='hidden' name='id_member' value='" . $row['id_member'] . "'>";
-                    echo "<button type='submit' name='deletebtn' id='btn-editdelete' id='btn-editdelete' class='delete'>Delete</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='3'>No member found</td></tr>";
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+            echo "<div class='all-member'>"; // Start main container
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<div class='title'>" . htmlspecialchars($row['username']) . "</div>";
+                echo "<div class='details'>ID: " . htmlspecialchars($row['id_member']) . "</div>";
+                echo "<div class='details'>Name: " . htmlspecialchars($row['member_name']) . "</div>";
+                echo "</div>";
+
+                echo "<div class='buttons'>";
+                echo "<form action='edit-member.php' method='post'>";
+                echo "<input type='hidden' name='id_member' value='" . htmlspecialchars($row['id_member']) . "'>";
+                echo "<button type='submit' class='edit'>Edit</button>";
+                echo "</form>";
+
+                echo "<form action='delete-member.php' method='post' onsubmit='return confirmDelete()'>";
+                echo "<input type='hidden' name='id_member' value='" . htmlspecialchars($row['id_member']) . "'>";
+                echo "<button type='submit' class='delete'>Delete</button>";
+                echo "</form>";
+                echo "</div>";
+                echo "</div>";
             }
-            ?>
-        </table>
+            echo "</div>"; // End main container
+        } else {
+            echo "<div>No members found</div>";
+        }
+        ?>
     </div>
+
 
     <!-- Paging -->
     <div class="paging">

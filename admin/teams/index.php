@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5;
+$perpage = 6;
 $page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
@@ -29,6 +29,7 @@ $result = $team->getAllTeams($start, $perpage);
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/teams/team_picture.css">
+    <link rel="stylesheet" href="/assets/styles/admin/teams/teams.css">
     <title>Manage Teams</title>
 </head>
 
@@ -90,49 +91,42 @@ $result = $team->getAllTeams($start, $perpage);
     </header>
 
     <div class="all-team">
-        <table>
-            <tr>
-                <th>Team Logo</th>
-                <th>Team ID</th>
-                <th>Team Name</th>
-                <th>Game</th>
-                <th>Edit Team</th>
-                <th>Delete Team</th>
-            </tr>
-            <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $idteam = $row['idteam'];
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+            echo "<div class='all-team'>"; // Start main container
+            while ($row = mysqli_fetch_assoc($result)) {
+                $idteam = $row['idteam'];
                 $logoPath = "/assets/img/team_picture/$idteam.jpg";
                 $defaultPath = "/assets/img/team_picture/default.jpg";
 
-                // Check if the logo file exists
-                echo "<tr>";
-                echo "<td><img src='$logoPath' alt='Team Logo' class='team-logo' onerror=\"this.onerror=null;this.src='$defaultPath';\"></td>";
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<img src='$logoPath' alt='Team Logo' class='team-logo' onerror=\"this.onerror=null;this.src='$defaultPath';\">";
+                echo "<div class='title'>" . htmlspecialchars($row['team_name']) . "</div>";
+                echo "<div class='details'>ID: " . htmlspecialchars($row['idteam']) . "</div>";
+                echo "<div class='details'>Game: " . htmlspecialchars($row['game_name']) . "</div>";
+                echo "</div>";
 
-                echo "<td>" . $row['idteam'] . "</td>";
-                    echo "<td>" . $row['team_name'] . "</td>";
-                    echo "<td>" . $row['game_name'] . "</td>";
-                    echo "<td>";
-                    echo "<form method='post' action='edit-team.php'>";
-                    echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
-                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "<td>";
-                    echo "<form action='delete-team.php' method='post' onsubmit='return confirmDelete()'>";
-                    echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
-                    echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='3'>No teams found</td></tr>";
+                echo "<div class='buttons'>";
+                echo "<form action='edit-team.php' method='post'>";
+                echo "<input type='hidden' name='idteam' value='" . htmlspecialchars($row['idteam']) . "'>";
+                echo "<button type='submit' class='edit'>Edit</button>";
+                echo "</form>";
+
+                echo "<form action='delete-team.php' method='post' onsubmit='return confirmDelete()'>";
+                echo "<input type='hidden' name='idteam' value='" . htmlspecialchars($row['idteam']) . "'>";
+                echo "<button type='submit' class='delete'>Delete</button>";
+                echo "</form>";
+                echo "</div>";
+                echo "</div>";
             }
-            ?>
-        </table>
+            echo "</div>"; // End main container
+        } else {
+            echo "<div>No teams found</div>";
+        }
+        ?>
     </div>
+
 
     <!-- Paging -->
     <div class="paging">

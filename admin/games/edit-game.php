@@ -101,6 +101,7 @@ if (isset($_POST['submit']) && isset($_POST['id_game'])) {
         }
         ?>
     </nav>
+    
     <!-- Form to Edit Game -->
     <div class="form">
         <?php if (isset($error)) : ?>

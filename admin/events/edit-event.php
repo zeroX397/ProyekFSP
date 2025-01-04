@@ -59,6 +59,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
+    <link rel="stylesheet" href="/assets/styles/admin/events/edit-event.css">
     <title>Informatics E-Sport Club - Edit Event</title>
 </head>
 
@@ -114,28 +115,14 @@ if (isset($_POST['submit'])) {
             <div style="color: red;"><?php echo $error; ?></div>
         <?php endif; ?>
         <form action="" method="post" class="edit-form">
-            <br><br><br>
-            <table class="edit-table">
-                <tr>
-                    <td><label for="name">Event Name</label></td>
-                    <td><input name="name" type="text" placeholder="Event Name" value="<?php echo htmlspecialchars($eventData['name']); ?>" required></td>
-                    <input type="hidden" name="idevent" value="<?php echo htmlspecialchars($idevent); ?>">
-                </tr>
-                <tr>
-                    <td><label for="date">Event Date</label></td>
-                    <td><input name="date" type="date" value="<?php echo htmlspecialchars($eventData['date']); ?>" required></td>
-                </tr>
-                <tr>
-                    <td><label for="description">Description</label></td>
-                    <td><textarea style="width: 500px;" name="description" placeholder="Event Description" rows="10" required><?php echo htmlspecialchars($eventData['description']); ?></textarea></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><button name="submit" type="submit" class="btnsubmit">Update Event</button></td>
-                </tr>
-            </table>
+            <input type="hidden" name="idevent" value="<?php echo htmlspecialchars($eventData['idevent']); ?>">
+            <input name="name" type="text" placeholder="Event Name" value="<?php echo htmlspecialchars($eventData['name'] ?? ''); ?>" required>
+            <input name="date" type="date" placeholder="Event Date" value="<?php echo htmlspecialchars($eventData['date'] ?? ''); ?>" required>
+            <textarea name="description" rows="10" placeholder="Event Description" required><?php echo htmlspecialchars($eventData['description'] ?? ''); ?></textarea>
+            <button name="submit" type="submit" class="btnsubmit">Update</button>
         </form>
     </div>
+
     <script src="/assets/js/script.js"></script>
 </body>
 

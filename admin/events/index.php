@@ -9,7 +9,7 @@ if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
 }
 
 // Paging configuration
-$perpage = 5;
+$perpage = 6;
 $page = isset($_GET['p']) ? $_GET['p'] : 1;
 $start = ($page - 1) * $perpage;
 
@@ -28,6 +28,7 @@ $result = $event->getAllEvents($start, $perpage);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
+    <link rel="stylesheet" href="/assets/styles/admin/events/events.css">
     <title>Manage Events</title>
 </head>
 
@@ -88,43 +89,39 @@ $result = $event->getAllEvents($start, $perpage);
     </header>
 
     <div class="all-member">
-        <table>
-            <tr>
-                <th>Event ID</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Edit Event</th>
-                <th>Delete Event</th>
-            </tr>
-            <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['idevent'] . "</td>";
-                    echo "<td>" . $row['name'] . "</td>";
-                    echo "<td>" . $row['date'] . "</td>";
-                    echo "<td>" . $row['description'] . "</td>";
-                    echo "<td>";
-                    echo "<form method='post' action='edit-event.php'>";
-                    echo "<input type='hidden' name='idevent' value='" . $row['idevent'] . "'>";
-                    echo "<button type='submit' name='editbtn' id='btn-editdelete' class='edit'>Edit</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "<td>";
-                    echo "<form action='delete-event.php' method='post' onsubmit='return confirmDelete()'>";
-                    echo "<input type='hidden' name='idevent' value='" . $row['idevent'] . "'>";
-                    echo "<button type='submit' name='deletebtn' id='btn-editdelete' class='delete'>Delete</button>";
-                    echo "</form>";
-                    echo "</td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='6'>No event found</td></tr>";
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+            echo "<div class='all-member'>";
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<div class='title'>" . htmlspecialchars($row['name']) . "</div>";
+                echo "<div class='details'>ID: " . htmlspecialchars($row['idevent']) . "</div>";
+                echo "<div class='details'>Date: " . htmlspecialchars($row['date']) . "</div>";
+                echo "<div class='description-area'>" . htmlspecialchars($row['description']) . "</div>";
+                echo "</div>";
+
+                echo "<div class='buttons'>";
+                echo "<form action='edit-event.php' method='post'>";
+                echo "<input type='hidden' name='idevent' value='" . $row['idevent'] . "'>";
+                echo "<button type='submit' name='editbtn' class='edit'>Edit</button>";
+                echo "</form>";
+
+                echo "<form action='delete-event.php' method='post' onsubmit='return confirmDelete()'>";
+                echo "<input type='hidden' name='idevent' value='" . $row['idevent'] . "'>";
+                echo "<button type='submit' name='deletebtn' class='delete'>Delete</button>";
+                echo "</form>";
+                echo "</div>";
+                echo "</div>";
             }
-            ?>
-        </table>
+            echo "</div>";
+        } else {
+            echo "<div>No events found</div>";
+        }
+        ?>
     </div>
+
+
 
     <!-- Paging -->
     <div class="paging">

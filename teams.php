@@ -18,7 +18,7 @@ $result = mysqli_query($connection, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="/assets/styles/teams.css">
+    <link rel="stylesheet" href="/assets/styles/teams.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="/assets/styles/admin/teams/team_picture.css">
     <title>All Teams List</title>
 </head>
@@ -41,6 +41,7 @@ $result = mysqli_query($connection, $sql);
             $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
             echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
             echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
+        }
             // To check whether user is admin or not
             if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
                 echo
@@ -68,61 +69,84 @@ $result = mysqli_query($connection, $sql);
                     </div>
                 </div>';
             }
-        }
         ?>
     </nav>
-    <!-- Team(s) list with button "Apply Member" -->
-    <section>
-        <h1 class="hello-mssg">Hello! You can see the full list of teams and join them. You can also see its details before joining them.</h1>
-        <div class="element">
-            <?php
-            $teamsData = [];
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $teamsData[] = $row;
-                }
-            } else {
-                echo "<div>No teams found</div>";
-            }
-            if (!empty($teamsData)) {
-                $current_game_id = null;
-                foreach ($teamsData as $row) {
-                    // If the game changes, print a new game name header
-                    if ($current_game_id !== $row['idgame']) {
-                        $current_game_id = $row['idgame'];
-                        echo "<strong class='game-name'>" . htmlspecialchars($row['game_name']) . "</strong>";
+    <h1 class="hello-mssg">Hello! You can see the full list of teams and join them.</h1>
+
+    <div class="all-team">
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+            $current_game_id = null;
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                if ($current_game_id !== $row['idgame']) {
+                    // Tutup div untuk game sebelumnya jika ada
+                    if ($current_game_id !== null) {
+                        echo "</div>"; // Tutup div.game-container
                     }
 
-                    // Define team logo path
-                    $idteam = $row['idteam'];
-                    $logoPath = "/assets/img/team_picture/$idteam.jpg";
-                    $defaultPath = "/assets/img/team_picture/default.jpg";
-
-                    // Print team data
-                    echo "<div class='container'>";
-                    echo "<div>";
-                    echo "<img class='team-logo' src='$logoPath' alt='Team Logo' class='team-logo' onerror=\"this.onerror=null;this.src='$defaultPath';\">";
-                    echo "<div class='title'>" . htmlspecialchars($row['team_name']) . "</div>";
-                    echo "<div class='content'>" . "Team ID   : " . htmlspecialchars($row['idteam']) . "</div>";
-                    echo "<div class='content'>" . "Team Game : " . htmlspecialchars($row['game_name']) . "</div>";
-                    echo "</div>";
-                    echo "<form action='join-team.php' method='post'>";
-                    echo "<input type='hidden' name='idteam' value='" . htmlspecialchars($idteam) . "'>";
-                    echo "<input type='submit' id='btn-join' class='button' value='Apply'>";
-                    echo "</form>";
-                    echo "<form action='team-detail.php' method='get'>";
-                    echo "<input type='hidden' name='idteam' value='" . htmlspecialchars($idteam) . "'>";
-                    echo "<input type='submit' id='btn-join' class='button' value='Details'>";
-                    echo "</form>";
-                    echo "</div>";
+                    // Mulai div baru untuk game yang berbeda
+                    $current_game_id = $row['idgame'];
+                    echo "<div class='game-container'>";
+                    echo "<h2 class='game-header'>" . htmlspecialchars($row['game_name']) . "</h2>";
                 }
-            } else {
-                echo "<tr><td colspan='6'>No teams found</td></tr>";
-            }
-            ?>
-        </div>
 
-    </section>
+                $idteam = $row['idteam'];
+                $logoPath = "/assets/img/team_picture/$idteam.jpg";
+                $defaultPath = "/assets/img/team_picture/default.jpg";
+
+                echo "<div class='container'>";
+                echo "<img src='$logoPath' alt='Team Logo' class='team-logo' onerror=\"this.onerror=null;this.src='$defaultPath';\">";
+                echo "<div class='content'>";
+                echo "<div class='title'>" . htmlspecialchars($row['team_name']) . "</div>";
+                echo "<div class='details'>Game: " . htmlspecialchars($row['game_name']) . "</div>";
+                echo "</div>";
+                echo "<div class='buttons'>";
+
+                echo "<form action='join-team.php' method='post'>";
+                echo "<input type='hidden' name='idteam' value='" . $idteam . "'>";
+                echo "<input type='submit' class='edit' value='Apply'>";
+                echo "</form>";
+
+                echo "<form action='team-detail.php' method='get'>";
+                echo "<input type='hidden' name='idteam' value='" . $idteam . "'>";
+                echo "<input type='submit' class='delete' value='Details'>";
+                echo "</form>";
+
+                echo "</div>"; // Tutup div.buttons
+                echo "</div>"; // Tutup div.container
+            }
+
+            // Tutup div terakhir untuk game
+            echo "</div>";
+        } else {
+            echo "<p>No teams found</p>";
+        }
+        ?>
+    </div>
+
+    !-- Paging -->
+    <div class="paging">
+        <?php
+        if ($page > 1) {
+            $prev = $page - 1;
+            echo "<a href='teams.php?p=$prev'>Prev</a>"; // Previous page 
+        }
+
+        for ($i = 1; $i <= $totalpage; $i++) {
+            if ($i == $page) {
+                echo "<strong>$i</strong>"; // Current page 
+            } else {
+                echo "<a href='teams.php?p=$i'>$i</a>"; // Other page 
+            }
+        }
+
+        if ($page < $totalpage) {
+            $next = $page + 1;
+            echo "<a href='teams.php?p=$next'>Next</a>"; // Next page 
+        }
+        ?>
+    </div>
     <script src="/assets/js/script.js"></script>
 </body>
 
