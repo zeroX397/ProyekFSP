@@ -67,6 +67,7 @@
 /* Edit Button */
 .edit {
     flex: 1;
+    width: 100%;
     min-width: 80px; /* Minimum button width */
     max-width: 120px; /* Limit button size */
     height: 40px;
@@ -85,6 +86,7 @@
 /* Delete Button */
 .delete {
     flex: 1;
+    width: 100%;
     min-width: 80px; /* Minimum button width */
     max-width: 120px; /* Limit button size */
     height: 40px;

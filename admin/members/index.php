@@ -28,7 +28,7 @@ $result = $member->getAllMembers($start, $perpage);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/members.css">
+    <link rel="stylesheet" href="/assets/styles/admin/members/members.css?v= time(), ?>">
     <title>Manage Members</title>
 
 </head>
