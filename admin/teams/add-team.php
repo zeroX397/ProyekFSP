@@ -78,26 +78,69 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/teams/add-team.css">
+    <link rel="stylesheet" href="/assets/styles/admin/teams/teams.css">
     <title>Add a Team</title>
 </head>
 
 <body>
-    <nav class="topnav">
-        <!-- Navbar Content -->
+<nav class="topnav">
+        <a class="active" href="/">Homepage</a>
+        <a href="/teams.php">Teams</a>
+        <a href="/members.php">Members</a>
+        <a href="/events.php">Events</a>
+        <a href="/about.php">About Us</a>
+        <a href="/how-to-join.php">How to Join</a>
+        <?php
+        if (!isset($_SESSION['username'])) {
+            echo '<a class="active" href="/login.php">Login</a>';
+        } else {
+            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
+            echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
+            echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
+            if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
+                echo 
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="dd-admin-page">
+                        <a href="/admin/teams/">Manage Teams</a>
+                        <a href="/admin/members/">Manage Members</a>
+                        <a href="/admin/events/">Manage Events</a>
+                        <a href="/admin/games/">Manage Games</a>
+                        <a href="/admin/achievements/">Manage Achievements</a>
+                        <a href="/admin/event_teams/">Manage Event-Teams</a>
+                    </div>
+                </div>';
+                echo 
+                '<div class="dropdown">
+                    <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <div class="dropdown-content" id="proposalPage">
+                        <a href="/admin/proposal/waiting.php">Waiting Approval</a>
+                        <a href="/admin/proposal/responded.php">Responded</a>
+                    </div>
+                </div>';
+            }
+        }
+        ?>
     </nav>
+
     <div class="form">
-        <?php if (isset($error)): ?>
-            <div style="color: red;"><?php echo $error; ?></div>
+        <?php if (isset($error)) : ?>
+            <div style="color: red;"> <?php echo $error; ?> </div>
         <?php endif; ?>
         <form action="" class="add-form" method="post" enctype="multipart/form-data">
             <select name="idgame" required>
                 <option value="">Select Game</option>
                 <?php foreach ($games as $game): ?>
-                    <option value="<?= $game['idgame'] ?>"><?= htmlspecialchars($game['name']) ?></option>
+                    <option value="<?= $game['idgame'] ?>"> <?= htmlspecialchars($game['name']) ?> </option>
                 <?php endforeach; ?>
             </select>
             <input name="team_name" type="text" placeholder="Team Name" required>
+            <textarea class="application-text" name="team_description" maxlength="100" rows="4"
+            placeholder="Team's description" required></textarea>
             <input type="file" name="team_picture" accept="image/jpeg,image/png">
             <button name="submit" type="submit">Save Team</button><br>
         </form>

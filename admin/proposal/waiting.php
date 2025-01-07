@@ -120,7 +120,7 @@ $result = $proposal->getAllProposals($start, $perpage);
 
                 echo "</div>"; // Close container
             }
-            echo "</div>"; // Close all-member
+            echo "</div>"; 
         } else {
             echo "<div>No proposals found</div>";
         }

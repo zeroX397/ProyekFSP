@@ -39,7 +39,7 @@ $teams = $event->getAllTeams();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/members/add-member.css">
+    <link rel="stylesheet" href="/assets/styles/admin/events/events.css">
     <title>Informatics E-Sport Club - Add Event</title>
 </head>
 
@@ -88,15 +88,14 @@ $teams = $event->getAllTeams();
         }
         ?>
     </nav>
+    
     <!-- Form to Add New Event -->
     <div class="form">
         <?php if (isset($error)) : ?>
-            <div style="color: red;"><?php echo $error; ?></div>
+            <div style="color: red;"> <?php echo $error; ?> </div>
         <?php endif; ?>
         <form action="" class="add-form" method="post">
-            <p>Enter Event Name</p>
             <input name="name" type="text" placeholder="Event Name" required>
-            <p>Enter Event Date</p>
             <input type="date" name="date" placeholder="Enter Event's Date" required>
             <textarea class="application-text" name="description" maxlength="100" rows="5" placeholder="Event Description" required></textarea>
             <select name="team" required>
@@ -111,11 +110,11 @@ $teams = $event->getAllTeams();
                 }
                 ?>
             </select>
-
             <button name="submit" type="submit">Save Event</button><br>
         </form>
     </div>
     <script src="/assets/js/script.js"></script>
+
 </body>
 
 </html>

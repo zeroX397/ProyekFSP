@@ -9,12 +9,17 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: calc(33% - 40px); /* Adjust for 3 containers per row */
-    max-width: 300px;
+    max-width: 400px;
     padding: 15px;
     text-align: center;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* Ensure consistent stacking */
+    justify-content: space-between; /* Keep all elements spaced properly */
+    align-items: center;
 }
 
+/* All Members Container */
 .all-member {
     display: flex;
     flex-wrap: wrap;
@@ -23,10 +28,12 @@
     gap: 20px;
 }
 
+/* Content Section */
 .content {
     margin-bottom: 15px;
 }
 
+/* Member Details */
 .details {
     font-size: 14px;
     color: #666;
@@ -66,7 +73,9 @@
 
 .buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around; /* Distribute buttons evenly */
+    gap: 10px;
+    width: 100%; /* Ensure buttons take full width inside container */
     margin-top: 10px;
 }
 
