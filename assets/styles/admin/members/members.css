@@ -5,12 +5,17 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: calc(33% - 40px); /* Adjust for 3 containers per row */
-    max-width: 300px;
+    max-width: 400px;
     padding: 15px;
     text-align: center;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* Ensure consistent stacking */
+    justify-content: space-between; /* Keep all elements spaced properly */
+    align-items: center;
 }
 
+/* All Members Container */
 .all-member {
     display: flex;
     flex-wrap: wrap;
@@ -19,51 +24,65 @@
     gap: 20px;
 }
 
+/* Content Section */
 .content {
     margin-bottom: 15px;
 }
 
+/* Member Details */
 .details {
     font-size: 14px;
     color: #666;
     margin-bottom: 5px;
 }
 
+/* Buttons Section */
 .buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around; /* Distribute buttons evenly */
+    gap: 10px;
+    width: 100%; /* Ensure buttons take full width inside container */
     margin-top: 10px;
 }
 
-.edit{
-    width: 100px;
+/* Edit Button */
+.edit {
+    flex: 1;
+    min-width: 80px; /* Minimum button width */
+    max-width: 120px; /* Limit button size */
     height: 40px;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     background-color: #2A9DF4;
     color: white;
+    font-size: 14px;
     text-align: center;
-    font-size: 16px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
 }
 
+/* Delete Button */
 .delete {
-    width: 100px;
+    flex: 1;
+    min-width: 80px; /* Minimum button width */
+    max-width: 120px; /* Limit button size */
     height: 40px;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     background-color: #F08080;
     color: white;
+    font-size: 14px;
     text-align: center;
-    font-size: 16px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
 }
 
-.edit:hover{
+/* Button Hover Effects */
+.edit:hover {
     background-color: #008EF9;
     transform: scale(1.05);
 }
@@ -76,30 +95,22 @@
 /* Responsive Adjustments */
 @media (max-width: 950px) {
     .container {
-        flex-direction: column;
-        align-items: center;
-        padding: 15px; /* Reduce padding for smaller screens */
-        width: 90vw; /* Increase width to accommodate smaller screens */
-    }
-
-    .content {
-        max-width: 100%; /* Allow full width for member-info */
-        text-align: center; /* Center align text */
+        width: 90%; /* Make container take up most of the viewport width */
+        max-width: 100%; /* Remove max-width limit */
+        padding: 15px;
     }
 
     .buttons {
-        flex-direction: row; /* Arrange buttons horizontally */
+        flex-direction: column; /* Stack buttons vertically */
         gap: 10px;
-        justify-content: center; /* Center buttons */
+        justify-content: center;
         align-items: center;
-        width: 100%; /* Make buttons section full width */
-        margin-top: 10px;
     }
 
     .edit,
     .delete {
-        width: 100px; /* Adjust button size for smaller screens */
-        height: 35px;
+        width: 100%; /* Make buttons full-width on smaller screens */
+        height: 35px; /* Reduce button height */
         font-size: 14px; /* Adjust font size */
     }
 }

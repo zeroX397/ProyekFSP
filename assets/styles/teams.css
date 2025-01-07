@@ -1,9 +1,11 @@
 /* Styles for the overall container */
+
 .all-team {
   display: flex;
   flex-direction: column; /* Set as a column to stack game groups */
   gap: 30px; /* Add spacing between game groups */
   padding: 20px;
+  justify-content: center;
 }
 
 /* Styles for each game container */
@@ -40,6 +42,8 @@
   padding: 15px;
   text-align: center;
   box-sizing: border-box;
+  flex-direction: column;
+  align-items: center; 
 }
 
 /* Adjust logo inside the container */
@@ -68,22 +72,22 @@
 }
 
 /* Buttons styles */
-.buttons {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-}
+
 
 .edit, .delete {
-  padding: 8px 12px;
-  font-size: 14px;
-  color: #fff;
-  background: #007bff;
+  flex: 1; 
+  max-width: 48%;
+  width: 40px;
+  height: 40px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
+  background-color: #2A9DF4;
+  color: white;
   text-align: center;
+  font-size: 16px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .delete {

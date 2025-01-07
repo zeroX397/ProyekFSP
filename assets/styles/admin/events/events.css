@@ -4,78 +4,103 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: calc(33% - 40px); /* Adjust for 3 containers per row */
-    max-width: 300px;
+    width: calc(33.33% - 20px); /* 3 containers per row */
+    max-width: 400px;
     padding: 15px;
     text-align: center;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* Ensure consistent stacking */
+    justify-content: space-between; /* Keep all elements spaced properly */
+    align-items: center;
 }
 
+/* All Members Container */
 .all-member {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: wrap; /* Allow wrapping */
+    justify-content: space-between; /* Center content */
     padding: 20px;
     gap: 20px;
+    align-content: flex-start; /* Ensure consistent alignment */
 }
 
+/* Fix for fewer cards (1 or 2 cards) */
+.all-member:has(.container:nth-child(2):last-child) {
+    justify-content: center;
+    .container {
+        width: calc(50% - 20px); 
+        max-width: 100%;
+        padding: 15px;
+    }
+}
+.all-member:has(.container:only-child) {
+    justify-content: center;
+    .container {
+        width: calc(100% - 20px);
+        max-width: 100%;
+    }
+}
+
+/* Content Section */
 .content {
-    margin-right: 15px;
+    margin-bottom: 15px;
 }
 
+/* Member Details */
 .details {
     font-size: 14px;
     color: #666;
     margin-bottom: 5px;
 }
 
-.description-area {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 14px;
-    color: #555;
-    max-height: 100px;
-    max-width: 600px;
-    margin-top: 10px;
-}
-
+/* Buttons Section */
 .buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around; /* Distribute buttons evenly */
+    gap: 10px;
+    width: 100%; /* Ensure buttons take full width inside container */
     margin-top: 10px;
 }
 
-.edit{
-    width: 100px;
+/* Edit Button */
+.edit {
+    flex: 1;
+    min-width: 80px; /* Minimum button width */
+    max-width: 120px; /* Limit button size */
     height: 40px;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     background-color: #2A9DF4;
     color: white;
+    font-size: 14px;
     text-align: center;
-    font-size: 16px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
 }
 
+/* Delete Button */
 .delete {
-    width: 100px;
+    flex: 1;
+    min-width: 80px; /* Minimum button width */
+    max-width: 120px; /* Limit button size */
     height: 40px;
-    padding: 10px 20px;
+    padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     background-color: #F08080;
     color: white;
+    font-size: 14px;
     text-align: center;
-    font-size: 16px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, background-color 0.2s;
 }
 
-.edit:hover{
+/* Button Hover Effects */
+.edit:hover {
     background-color: #008EF9;
     transform: scale(1.05);
 }
@@ -88,35 +113,15 @@
 /* Responsive Adjustments */
 @media (max-width: 950px) {
     .container {
-        flex-direction: column;
-        align-items: center;
-        padding: 15px; /* Reduce padding for smaller screens */
-        width: 90vw; /* Increase width to accommodate smaller screens */
+        width: calc(50% - 20px); 
+        max-width: 100%;
+        padding: 15px;
     }
+}
 
-    .content {
-        max-width: 100%; /* Allow full width for member-info */
-        text-align: center; /* Center align text */
-    }
-
-    .description-area {
-        max-width: 100%; /* Allow full width for member-info */
-        text-align: center; /* Center align text */
-    }
-
-    .buttons {
-        flex-direction: row; /* Arrange buttons horizontally */
-        gap: 10px;
-        justify-content: center; /* Center buttons */
-        align-items: center;
-        width: 100%; /* Make buttons section full width */
-        margin-top: 10px;
-    }
-
-    .edit,
-    .delete {
-        width: 100px; /* Adjust button size for smaller screens */
-        height: 35px;
-        font-size: 14px; /* Adjust font size */
+@media (max-width: 600px) {
+    .container {
+        width: calc(100% - 20px);
+        max-width: 100%;
     }
 }
