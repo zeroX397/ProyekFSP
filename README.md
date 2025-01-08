@@ -96,6 +96,6 @@ You can access the website through this link:
 
 This project would not have done without these great collabolators. Special thanks to our members:
 
-1. 160422042 – [Oakley Levinson Gunawan](https://github.com/KaisarTomat)
+1. 160422040 – [Oakley Levinson Gunawan](https://github.com/KaisarTomat)
 2. 160422029 – [Stanley Alexander Gondowardojo](https://github.com/S10li909)
 3. 160422073 – [Christopher Pengalilla](https://github.com/zeroX397)
