@@ -52,7 +52,7 @@ if (isset($_POST['submit']) && isset($_POST['id_game'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/games/edit-game.css">
+    <link rel="stylesheet" href="/assets/styles/admin/games/games.css">
     <title>Informatics E-Sport Club - Edit Game</title>
 </head>
 

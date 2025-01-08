@@ -256,3 +256,11 @@ select {
   min-width: 15em;
 }
 
+.header-content {
+  display: flex; /* Aktifkan Flexbox */
+  flex-direction: column; /* Atur elemen menjadi kolom */
+  justify-content: center; /* Rata tengah secara vertikal */
+  align-items: center; /* Rata tengah secara horizontal */
+  text-align: center; /* Untuk memastikan teks juga berada di tengah */
+  height: 200px; /* Contoh tinggi header-content (sesuaikan kebutuhan) */
+}

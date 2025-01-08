@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
     <link rel="stylesheet" href="/assets/styles/admin/main.css">
-    <link rel="stylesheet" href="/assets/styles/admin/achievements/edit-achievement.css">
+    <link rel="stylesheet" href="/assets/styles/admin/achievements/achievements.css">
     <title>Informatics E-Sport Club - Edit Achievement</title>
 </head>
 
@@ -117,35 +117,26 @@ if (isset($_POST['submit'])) {
     </nav>
 
     <!-- Edit Achievement Form -->
-    <div class="container">
-        <h2>Edit Achievement</h2>
+    <div class="form">
+        <?php if (isset($error)) : ?>
+            <div style="color: red;"> <?php echo $error; ?> </div>
+        <?php endif; ?>
         <form action="edit-achievement.php" method="post" class="edit-form">
-            <input type="hidden" name="idachievement" value="<?php echo $achievementData['idachievement']; ?>">
-            <div class="form-group">
-                <label for="idteam">Team</label>
-                <select name="idteam" id="idteam">
-                    <?php foreach ($teams as $team): ?>
-                        <option value="<?php echo $team['idteam']; ?>" <?php if ($achievementData['idteam'] == $team['idteam']) echo 'selected'; ?>>
-                            <?php echo $team['name']; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="achievement_name">Achievement Name</label>
-                <input type="text" name="achievement_name" id="achievement_name" value="<?php echo $achievementData['name']; ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="achievement_date">Achievement Date</label>
-                <input type="date" name="achievement_date" id="achievement_date" value="<?php echo $achievementData['date']; ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="achievement_description">Description</label>
-                <textarea name="achievement_description" id="achievement_description" required><?php echo $achievementData['description']; ?></textarea>
-            </div>
+            <input type="hidden" name="idachievement" value="<?php echo htmlspecialchars($achievementData['idachievement']); ?>">
+            <select name="idteam" required>
+                <?php foreach ($teams as $team): ?>
+                    <option value="<?php echo htmlspecialchars($team['idteam']); ?>" <?php if ($achievementData['idteam'] == $team['idteam']) echo 'selected'; ?>>
+                        <?php echo htmlspecialchars($team['name']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <input name="achievement_name" type="text" placeholder="Achievement Name" value="<?php echo htmlspecialchars($achievementData['name']); ?>" required>
+            <input type="date" name="achievement_date" value="<?php echo htmlspecialchars($achievementData['date']); ?>" required>
+            <textarea name="achievement_description" rows="10" placeholder="Achievement Description" required><?php echo htmlspecialchars($achievementData['description']); ?></textarea>
             <button name="submit" type="submit" class="btnsubmit">Update</button>
         </form>
     </div>
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>

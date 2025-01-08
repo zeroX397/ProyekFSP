@@ -1,4 +1,15 @@
-/* style for add game */
+.filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;            
+    text-align: center;       
+}
+
+.filter label {
+    font-size: 25px; 
+}
+
 .form {
     position: relative;
     background: #FFFFFF;

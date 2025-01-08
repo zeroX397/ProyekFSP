@@ -2,7 +2,25 @@
 session_start();
 include("config.php");
 
-$sql = "SELECT event.idevent, event.name FROM `event`;";
+
+// Paging configuration
+$perpage = 6; // Number sql per page
+if (isset($_GET['p'])) {
+    $page = $_GET['p'];
+} else {
+    $page = 1;
+}
+$start = ($page - 1) * $perpage;
+
+$sql_count = "SELECT COUNT(*) AS total FROM event";
+$result_count = mysqli_query($connection, $sql_count);
+$row_count = mysqli_fetch_assoc($result_count);
+$totaldata = $row_count['total'];
+$totalpage = ceil($totaldata / $perpage);
+
+$sql = "SELECT event.idevent, event.name 
+        FROM `event` 
+        LIMIT $start, $perpage;";
 $result = mysqli_query($connection, $sql);
 ?>
 
@@ -20,75 +38,104 @@ $result = mysqli_query($connection, $sql);
 
 <body>
     <!-- Top Navigation Bar -->
-    <nav class="topnav">
-        <a class="active" href="/">Homepage</a>
-        <a href="/teams.php">Teams</a>
-        <a href="/members.php">Members</a>
-        <a href="/events.php">Events</a>
-        <a href="/about.php">About Us</a>
-        <a href="/how-to-join.php">How to Join</a>
-        <?php
-        if (!isset($_SESSION['username'])) {
-            // User is not logged in
-            echo '<a class="active" href="/login.php">Login</a>';
-        } else {
-            // User is logged in
-            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
-            echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
-            echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
-            // To check whether user is admin or not
-            if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo
-                '<div class="dropdown">
-                    <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
-                        <i class="fa fa-caret-down"></i>
-                    </a>
-                    <div class="dropdown-content" id="dd-admin-page">
-                        <a href="/admin/teams/">Manage Teams</a>
-                        <a href="/admin/members/">Manage Members</a>
-                        <a href="/admin/events/">Manage Events</a>
-                        <a href="/admin/games/">Manage Games</a>
-                        <a href="/admin/achievements/">Manage Achievements</a>
-                        <a href="/admin/event_teams/">Manage Event-Teams</a>
-                    </div>
-                </div>';
-                echo
-                '<div class="dropdown">
-                    <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
-                        <i class="fa fa-caret-down"></i>
-                    </a>
-                    <div class="dropdown-content" id="proposalPage">
-                        <a href="/admin/proposal/waiting.php">Waiting Approval</a>
-                        <a href="/admin/proposal/responded.php">Responded</a>
-                    </div>
-                </div>';
-            }
-        }
-        ?>
-    </nav>
-    <section>
-        <h1 class="hello-mssg">Hello! You can see the full list of events here.</h1>
-        <div class="element">
+     <header>
+        <nav class="topnav">
+            <a class="active" href="/">Homepage</a>
+            <a href="/teams.php">Teams</a>
+            <a href="/members.php">Members</a>
+            <a href="/events.php">Events</a>
+            <a href="/about.php">About Us</a>
+            <a href="/how-to-join.php">How to Join</a>
             <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<div class='container'>";
-                    echo "<div class='title'>" . htmlspecialchars($row['name']) . "</div>";
-                    echo "<div class='content'>Event ID: " . htmlspecialchars($row['idevent']) . "</div>";
-                    echo "<div class='content'>Event Name: " . htmlspecialchars($row['name']) . "</div>";
-                    echo "<form action='event-detail.php' method='get'>";
-                    echo "<input type='hidden' name='idevent' value='" . htmlspecialchars($row['idevent']) . "'>";
-                    echo "<button class='button'>Details</button>";
-                    echo "</form>";
-                    echo "</div>";
-                }
+            if (!isset($_SESSION['username'])) {
+                // User is not logged in
+                echo '<a class="active" href="/login.php">Login</a>';
             } else {
-                echo "<div>No events found</div>";
+                // User is logged in
+                $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
+                echo '<a class="logout" href="/logout.php" onclick="return confirmationLogout()">Logout</a>';
+                echo '<a class="active" href="/profile">' . htmlspecialchars($displayName) . '</a>';
+                // To check whether user is admin or not
+                if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
+                    echo
+                    '<div class="dropdown">
+                        <a class="dropbtn" onclick="adminpageDropdown()">Admin Sites
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <div class="dropdown-content" id="dd-admin-page">
+                            <a href="/admin/teams/">Manage Teams</a>
+                            <a href="/admin/members/">Manage Members</a>
+                            <a href="/admin/events/">Manage Events</a>
+                            <a href="/admin/games/">Manage Games</a>
+                            <a href="/admin/achievements/">Manage Achievements</a>
+                            <a href="/admin/event_teams/">Manage Event-Teams</a>
+                        </div>
+                    </div>';
+                    echo
+                    '<div class="dropdown">
+                        <a class="dropbtn" onclick="proposalDropdown()">Join Proposal
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <div class="dropdown-content" id="proposalPage">
+                            <a href="/admin/proposal/waiting.php">Waiting Approval</a>
+                            <a href="/admin/proposal/responded.php">Responded</a>
+                        </div>
+                    </div>';
+                }
             }
             ?>
-        </div>
-    </section>
+        </nav>
+        <h1 class="hello-mssg">Hello! You can see the full list of events here.</h1>
+     </header>
+    
+     <div class="all-member">
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+            echo "<div class='all-member'>";
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<div>";
+                echo "<div class='title'>" . htmlspecialchars($row['name']) . "</div>";
+                echo "<div class='details'>" . "Event ID   : " . htmlspecialchars($row['idevent']) . "</div>";
+                echo "</div>";
+                
+                echo "<form action='event-detail.php' method='get'>";
+                echo "<input type='hidden' name='idevent' value='" . htmlspecialchars($row['idevent']) . "'>";
+                echo "<button type='submit' class='detail-button'>Details</button>";
+                echo "</form>";
+                echo "</div>";
+                echo "</div>";
+            }
+            echo "</div>";
+        } else {
+            echo "<div>No events found</div>";
+        }
+        ?>
+    </div>
 
+    <!-- Paging -->
+    <div class="paging">
+        <?php
+        if ($page > 1) {
+            $prev = $page - 1;
+            echo "<a href='events.php?p=$prev'>Prev</a>"; // Previous page 
+        }
+
+        for ($i = 1; $i <= $totalpage; $i++) {
+            if ($i == $page) {
+                echo "<strong>$i</strong>"; // Current page 
+            } else {
+                echo "<a href='events.php?p=$i'>$i</a>"; // Other page 
+            }
+        }
+
+        if ($page < $totalpage) {
+            $next = $page + 1;
+            echo "<a href='events.php?p=$next'>Next</a>"; // Next page 
+        }
+        ?>
+    </div>
     <script src="/assets/js/script.js"></script>
 </body>
 

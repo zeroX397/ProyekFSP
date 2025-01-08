@@ -1,3 +1,25 @@
+.filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;            
+    text-align: center;       
+}
+
+.filter label {
+    font-size: 25px; 
+}
+
+.form {
+    position: relative;
+    background: #FFFFFF;
+    max-width: 360px;
+    margin: 200px auto 100px;
+    padding: 50px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  }
+
 /* Styles for each item in container */
 .container {
     background: #ffffff;

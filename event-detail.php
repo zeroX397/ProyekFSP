@@ -20,7 +20,7 @@ $result = mysqli_stmt_get_result($stmt);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="/assets/styles/event-detail.css">
+    <link rel="stylesheet" href="/assets/styles/event-detail.css?v= time(), ?>">
     <title>Informatics E-Sport Club</title>
 </head>
 
@@ -73,24 +73,29 @@ $result = mysqli_stmt_get_result($stmt);
         ?>
     </nav>
 
-    <section>
-    <div class="element">
-            <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<div class='container'>";
-                    echo "<div class='title'>" . htmlspecialchars($row['name']) . "</div>";
-                    echo "<div class='event-id'>Event ID: " . htmlspecialchars($row['idevent']) . "</div>";
-                    echo "<div class='event-date'>Event Date: " . htmlspecialchars($row['formatted_date']) . "</div>";
-                    echo "<div class='event-description'>Event Date: " . htmlspecialchars($row['description']) . "</div>";
-                    echo "</div>";
-                }
-            } else {
-                echo "<div>No events found</div>";
+
+    <div class="all-member">
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+            echo "<div class='all-member'>";
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<div>";
+                echo "<div class='title'>" . htmlspecialchars($row['name']) . "</div>";
+                echo "<div class='event-id'>Event ID: " . htmlspecialchars($row['idevent']) . "</div>";
+                echo "<div class='event-date'>Event Date: " . htmlspecialchars($row['formatted_date']) . "</div>";
+                echo "<div class='event-description'>Event Date: " . htmlspecialchars($row['description']) . "</div>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
             }
-            ?>
-        </div>
-    </section>
+            echo "</div>";
+        } else {
+            echo "<div>No events found</div>";
+        }
+        ?>
+    </div>
     <script src="/assets/js/script.js"></script>
 </body>
 

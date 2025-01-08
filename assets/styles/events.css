@@ -1,0 +1,93 @@
+.hello-mssg {
+    margin-top: 50px;
+    text-align: center;
+}
+
+/* Styles for each item in container */
+.container {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: calc(33% - 40px); /* Adjust for 3 containers per row */
+  max-width: 300px;
+  padding: 15px;
+  text-align: center;
+  box-sizing: border-box;
+  flex-direction: column; 
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.all-member {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+.content {
+  margin-bottom: 15px;
+}
+
+.details {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.detail-button{
+  width: 100px;
+  height: 40px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #2A9DF4;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.detail-button:hover{
+  background-color: #008EF9;
+  transform: scale(1.05);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 950px) {
+  .container {
+      flex-direction: column;
+      align-items: center;
+      padding: 15px; /* Reduce padding for smaller screens */
+      width: 90vw; /* Increase width to accommodate smaller screens */
+  }
+
+  .content {
+      max-width: 100%; /* Allow full width for member-info */
+      text-align: center; /* Center align text */
+  }
+
+  .buttons {
+      flex-direction: row; /* Arrange buttons horizontally */
+      gap: 10px;
+      justify-content: center; /* Center buttons */
+      align-items: center;
+      width: 100%; /* Make buttons section full width */
+      margin-top: 10px;
+  }
+
+  .detail-button {
+      width: 100px; /* Adjust button size for smaller screens */
+      height: 35px;
+      font-size: 14px; /* Adjust font size */
+  }
+}
