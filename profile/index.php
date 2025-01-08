@@ -22,6 +22,7 @@ if ($idmember) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="/assets/styles/admin/proposal/waiting.css">
     <link rel="stylesheet" href="/assets/styles/profile/main.css">
     <title>Profile</title>
 </head>
@@ -78,60 +79,48 @@ if ($idmember) {
     <main>
         <h1>Hello <?php echo $_SESSION['fname'] . " " . $_SESSION['lname'] ?>!</h1>
         <h2>Joined Team</h2>
-        <table>
-            <tr>
-                <th>ID Team</th>
-                <th>Team Name</th>
-                <th>Action</th>
-            </tr>
-            <?php
-            if (isset($result) && $result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row['idteam'] . "</td>";
-                    echo "<td>" . $row['team_name'] . "</td>";
-                    echo "<td><form action='team-detail.php' method='get'>";
-                    echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
-                    echo "<input type='submit' id='detail-btn' value='Details'>";
-                    echo "</form></td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='3'>No teams found</td></tr>";
+        <?php
+        if ($result && mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<div class='title'>Team ID: " . htmlspecialchars($row['idteam']) . "</div>";
+                echo "<div class='details'>Team Name: " . htmlspecialchars($row['team_name']) . "</div>";
+                echo "<form action='team-detail.php' method='get'>";
+                echo "<input type='hidden' name='idteam' value='" . $row['idteam'] . "'>";
+                echo "<input type='submit' id='detail-btn' value='Details'>";
+                echo "</form>";
+                echo "</div>";
+                echo "</div>";
             }
-            ?>
-        </table>
-
+        } else {
+            echo "<div>No proposals found</div>";
+        }
+        ?>
         <h2>Your Proposal Status</h2>
-        <table>
-            <tr>
-                <th>Proposal ID</th>
-                <th>Team Name</th>
-                <th>Status</th>
-            </tr>
-            <?php if ($proposals->num_rows > 0) : ?>
-                <?php while ($row = $proposals->fetch_assoc()) : ?>
-                    <tr>
-                        <td><?php echo $row['idjoin_proposal']; ?></td>
-                        <td><?php echo $row['team_name']; ?></td>
-                        <?php
-                        if ($row['status'] == 'approved') {
-                            $tdclass = 'approved';
-                        } else if ($row['status'] == 'waiting') {
-                            $tdclass = 'waiting';
-                        } else if ($row['status'] == 'rejected') {
-                            $tdclass = 'rejected';
-                        }
-                        echo "<td class='td-status $tdclass'>" . strtoupper($row['status']) . "</td>";
-                        ?>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else : ?>
-                <tr>
-                    <td colspan='3'>Sorry, no proposals found. Find a team <a href="/teams.php">here</a>.</td>
-                </tr>
-            <?php endif; ?>
-        </table>
+        <?php
+        if ($result && mysqli_num_rows($proposals) > 0) {
+            while ($row = mysqli_fetch_assoc($proposals)) {
+                echo "<div class='container'>";
+                echo "<div class='content'>";
+                echo "<div class='title'>Proposal ID: " . htmlspecialchars($row['idjoin_proposal']) . "</div>";
+                echo "<div class='details'>Team Name: " . htmlspecialchars($row['team_name']) . "</div>";
+                if ($row['status'] == 'approved') {
+                    $tdclass = 'approved';
+                } else if ($row['status'] == 'waiting') {
+                    $tdclass = 'waiting';
+                } else if ($row['status'] == 'rejected') {
+                    $tdclass = 'rejected';
+                }
+                echo "<td class='td-status $tdclass'>" . strtoupper($row['status']);
+                echo "</form>";
+                echo "</div>";
+                echo "</div>";
+            }
+        } else {
+            echo "<div>Sorry, no proposals found. Find a team <a href='/teams.php'>here</a></div>";
+        }
+        ?>
     </main>
     <script src="/assets/js/script.js"></script>
 </body>

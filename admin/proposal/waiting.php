@@ -86,8 +86,8 @@ $result = $proposal->getAllProposals($start, $perpage);
     <div class="all-member">
         <?php
         if ($result && mysqli_num_rows($result) > 0) {
-            echo "<div class='all-member'>";
             while ($row = mysqli_fetch_assoc($result)) {
+                echo "<div class='all-member'>";
                 echo "<div class='container'>";
                 echo "<div class='content'>";
                 echo "<div class='title'>Proposal ID: " . htmlspecialchars($row['idjoin_proposal']) . "</div>";
@@ -120,7 +120,7 @@ $result = $proposal->getAllProposals($start, $perpage);
 
                 echo "</div>"; // Close container
             }
-            echo "</div>"; 
+            echo "</div>";
         } else {
             echo "<div>No proposals found</div>";
         }
@@ -132,20 +132,20 @@ $result = $proposal->getAllProposals($start, $perpage);
         <?php
         if ($page > 1) {
             $prev = $page - 1;
-            echo "<a href='waiting.php?p=$prev'>Prev</a>"; 
+            echo "<a href='waiting.php?p=$prev'>Prev</a>";
         }
 
         for ($i = 1; $i <= $totalpage; $i++) {
             if ($i == $page) {
-                echo "<strong>$i</strong>"; 
+                echo "<strong>$i</strong>";
             } else {
-                echo "<a href='waiting.php?p=$i'>$i</a>"; 
+                echo "<a href='waiting.php?p=$i'>$i</a>";
             }
         }
 
         if ($page < $totalpage) {
             $next = $page + 1;
-            echo "<a href='waiting.php?p=$next'>Next</a>"; 
+            echo "<a href='waiting.php?p=$next'>Next</a>";
         }
         ?>
     </div>
