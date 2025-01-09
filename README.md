@@ -1,100 +1,101 @@
-# Full-Stack Programming Project
+Full-Stack Programming Project
+=====
 
-## Table of Contents
+# Table of Contents
 - [Full-Stack Programming Project](#full-stack-programming-project)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Part I: What is this project about?](#part-i-what-is-this-project-about)
-  - [Part II: How about the Database?](#part-ii-how-about-the-database)
-  - [Part III: How does the system work?](#part-iii-how-does-the-system-work)
-  - [Part IV: Where is the link?](#part-iv-where-is-the-link)
-  - [Part V: Seunik Mungkin](#part-v-seunik-mungkin)
+- [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
+- [Part I: What is this project about?](#part-i-what-is-this-project-about)
+- [Part II: How about the Database?](#part-ii-how-about-the-database)
+- [Part III: How does the system work?](#part-iii-how-does-the-system-work)
+- [Part IV: Where is the link?](#part-iv-where-is-the-link)
+- [Part V: Seunik Mungkin](#part-v-seunik-mungkin)
 
-## Introduction
+# Introduction
 
 This project serves as the Capstone for the Full-Stack Programming course at the University of Surabaya for the odd semester of the 2024/2025 academic year. It is designed to demonstrate a comprehensive application of modern web development techniques and technologies.
 
-Utilising PHP and MySQL, the backbone of our web application supports robust data interactions, while front-end development with JavaScript and jQuery enhances the user experience by making the interface dynamic and responsive. The implementation of Responsive Web Design (RWD) ensures that our application is accessible and efficient across a variety of devices, providing an optimal viewing experience for users on both mobile and desktop platforms.
+Utilizing PHP and MySQL as the core of our web application, we enable robust data interactions, while front-end development with JavaScript and jQuery enhances the user experience by making the interface dynamic and responsive. The implementation of Responsive Web Design (RWD) ensures that our application is accessible and efficient across a variety of devices, providing an optimal viewing experience for users on both mobile and desktop platforms.
 
-## Part I: What is this project about?
+# Part I: What is this project about?
 
-Our group is being tasked with creating a website for the E-Sport Management System, where users can create an account, apply and join teams, participate in events, and get achievements. In this system, user access is divided into two roles:
+Our group is tasked with creating a website for the E-Sport Management System, where users can create accounts, apply for and join teams, participate in events, and earn achievements. In this system, user access is divided into two roles:
 
 1. Admin
 
-    This is the user's role with most access. Admin can manage every single category in the website. Admin cannot be registered unless they have access to the database and change the role's value. (We will discuss DB later)
+    This is the user's role with the most access. Admins can manage every single category on the website. Admin accounts cannot be registered normally; they require access to the database to change the role's value. (We will discuss the database later.)
 
 2. Member
    
-    This is the user's role with regular access. A user can register for an account and be automatically assigned as a member. A member can join a team by submitting an **Application Form**. After submitting, Admin can decide the application whether it will be accepted or rejected. A member can join more than 1 (one) team.
+    This is the user's role with regular access. A user can register for an account and is automatically assigned the role of a member. Members can join a team by submitting an **Application Form**. Once submitted, the Admin can decide whether to accept or reject the application. A member can join more than one team.
 
-One team can be registered to ONE game only. But representatives of the team may contact the Admin if they want to play another game. Admin can a create new team with the same name, but a different game assigned to it. 
+Each team can only be registered for one game. However, team representatives may contact the Admin if they want to participate in another game. Admins can create a new team with the same name but assign it to a different game.
 
-## Part II: How about the Database?
+# Part II: How about the Database?
 
-As we mentioned before, this project is using MySQL as the database. We also provide the Entity Relational Diagram (ERD) below:
+As mentioned earlier, this project uses MySQL as the database. Below is the Entity Relationship Diagram (ERD):
 
 ![ERD of Database](/markdown-assets/ERD.png)
-*Picture of ERD Structure of Database.*
+*Picture of ERD Structure of the Database.*
 
-As shown above, a member can join into many teams because many-to-many relation between `member` table and `team` table. But before a member apply to team, they need to make a "Join Proposal" to the desired team. We can see in `join_proposal` table, there are ID, member ID, team ID, description, and status of the proposal. The description field contains member's reason why they would like to join the team. It is limited by 100 characters only. The status field is ENUM, consist `waiting` (as default value when applying), `accepted` when admin accept the proposal, and `rejected` when admin denied the proposal.
+As shown above, a member can join multiple teams due to the many-to-many relationship between the `member` table and the `team` table. However, before a member applies to join a team, they need to submit a "Join Proposal" for the desired team. In the `join_proposal` table, there are fields for ID, member ID, team ID, description, and status of the proposal. The description field contains the member's reason for joining the team, limited to 100 characters. The status field is an ENUM type, with values `waiting` (default when applying), `accepted` (when the Admin approves), and `rejected` (when the Admin denies the proposal).
 
-The `team` has another many-to-many relation to `event`, which means an event can be attended by many teams, and a team can attend many event. This will be recoreded in `event_teams` and will be shown in teams' detail page, alongside with team's member.
+The `team` table also has a many-to-many relationship with the `event` table, meaning an event can include multiple teams, and a team can participate in multiple events. This relationship is recorded in the `event_teams` table and displayed on the team's detail page, alongside the team's members.
 
-Also if you want to get the SQL script of relational database, you can get it here: [SQL script](/markdown-assets/fsp-project-sql.sql)
+If you want to download the SQL script for the relational database, you can get it here: [SQL script](/markdown-assets/fsp-project-sql.sql).
 
-## Part III: How does the system work?
+# Part III: How does the system work?
 
-For documentation read [here](/documentation/README.md)
+For detailed documentation, read [here](/documentation/README.md).
 
-We must clarify at first that this is **Full-Stack** Programming, NOT **Web-Framework** Programming. So there is no Laravel, CakePHP, CodeIgniter, or even Phalcon here. But we tried our best to implement the concept of Model, View, and Controller (MVC) into this project. We will explain two things from this project:
+First, we must clarify that this is a **Full-Stack Programming** project, NOT **Web-Framework Programming**. Thus, frameworks like Laravel, CakePHP, CodeIgniter, or Phalcon are not used. However, we have tried to implement the Model, View, and Controller (MVC) concept in this project. Below, we explain two key features:
 
 1. Navigation Bar (Navbar)
 
-    The navigation bar remains the same in every page. But at the same time, it is also dynamic depends on *"user behavior"*. For the example, if we login to the website, profile section will adjust according to our user ID and username.
+    The navigation bar remains consistent across all pages but dynamically adjusts based on *user behavior*. For example, when logged into the website, the profile section updates to reflect the user's ID and username.
 
     ![Profile in Navigation Bar](/markdown-assets/profile-navbar.png)
     ![Profile in Navigation Bar](/markdown-assets/profile-navbar2.png)
-    *The profile section will adjust based on logged in users.*
+    *The profile section updates based on logged-in users.*
 
 2. Admin Section
 
-    *Of course we care about system's security. What do you think we are? MENKOMINF..<strong>[REDACTED]</strong>*
+    *Of course, we care about system security. What do you think we are? MENKOMINF..<strong>[REDACTED]</strong>*  
 
-    Still on navbar, when user with Member role logged in to the site, they can not access the admin site, no matter what they are trying. But if admin logged in to the site, "Admin Site" and "Join Proposal" will appear at the most right side of the navbar.
+    On the navbar, when a user with the Member role logs in, they cannot access the admin site regardless of their attempts. However, when an Admin logs in, "Admin Site" and "Join Proposal" options appear on the far right side of the navbar.
 
     ![Admin Site](/markdown-assets/admin-navbar.png)
-    *Admin Site and Join Proposal will appear if admin is logged in.*
+    *Admin Site and Join Proposal options appear for Admin users only.*
 
-    Admin Site is a dropdown contains every page of administration of each category. While Join Proposal is a dropdown to member's proposal management.
+    The Admin Site dropdown contains links to all category management pages, while the Join Proposal dropdown leads to the member proposal management page.
 
     ![Admin Site dropdown](/markdown-assets/adminsite-dd.png)
-    *Admin Site dropdown contains every page of category management.*
+    *Admin Site dropdown contains links for managing categories.*
 
     ![Join Proposal dropdown](/markdown-assets/joinproposal-dd.png)
-    *Join Proposal dropdown contains proposal management page.*
+    *Join Proposal dropdown contains proposal management pages.*
 
-    Also the administration page will check user's role. The system will check whether user is admin or not, (line 4 to 7, at all page under `/admin` directory) using these lines of code:
+    Additionally, the system verifies the user's role for all administration pages. The following code checks if a user is an Admin (present on all pages under the `/admin` directory):
 
     ```php
-    // Check if user is logged in and is an admin
+    // Check if the user is logged in and is an admin
     if (!isset($_SESSION['profile']) || $_SESSION['profile'] !== 'admin') {
         header('Location: /'); // Redirect non-admins to the homepage
         exit();
     }
     ```
 
-    As shown above, if user is not an admin, they will be redirected to homepage. 
+    If the user is not an Admin, they are redirected to the homepage.
 
-## Part IV: Where is the link?
+# Part IV: Where is the link?
 
 You can access the website through this link:
 
-*Link still unavailable yet.*
+*Link is currently unavailable.*
 
-## Part V: Seunik Mungkin
+# Part V: Seunik Mungkin
 
-This project would not have done without these great collabolators. Special thanks to our members:
+This project would not have been possible without these great collaborators. Special thanks to our members:
 
 1. 160422040 – [Oakley Levinson Gunawan](https://github.com/KaisarTomat)
 2. 160422029 – [Stanley Alexander Gondowardojo](https://github.com/S10li909)
